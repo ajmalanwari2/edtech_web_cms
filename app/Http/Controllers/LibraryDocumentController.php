@@ -206,12 +206,14 @@ class LibraryDocumentController extends Controller
                         ld.id as id,
                         s.name as title,
                         ld.description,
-                        count(ldc.id) as document_content_count
+                        (
+                            SELECT count(ldc.id) as count
+                            FROM library_document_contents AS ldc
+                            where ld.id = ldc.library_document_id
+                        ) AS count
                     from library_documents as ld
                     left join subjects as s
-                        on s.id = ld.subject_id
-                    left join library_document_contents as ldc
-                        on ld.id = ldc.library_document_id    
+                        on s.id = ld.subject_id    
                     where ld.language = \''.$grade_language.'\''
                     );
 
