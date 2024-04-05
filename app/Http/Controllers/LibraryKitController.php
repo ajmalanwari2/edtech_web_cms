@@ -206,14 +206,16 @@ class LibraryKitController extends Controller
                         lk.id as id,
                         lk.name as title,
                         lk.description,
-                        count(lkc.id) as audio_content_count
+                        (
+                            SELECT count(lkc.id) as count
+                            FROM library_kit_contents AS lkc
+                            where lk.id = lkc.library_kit_id
+                        ) AS count
                     from library_kits as lk
-                        left join library_kit_contents as lkc
-                        on lk.id = lkc.library_kit_id
                     where lk.language = \''.$grade_language.'\''
                     );
 
-                if($subjects == []){
+                    if($subjects == []){
                     return response(['message' => 'There is not any library kit list exist'], 422)
                         ->header('Content-Type', 'text/json');
                 }else{

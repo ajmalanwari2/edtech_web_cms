@@ -211,16 +211,18 @@ class LibraryAudioController extends Controller
                         la.id as id,
                         s.name as title,
                         la.description,
-                        count(lac.id) as audio_content_count
+                        (
+                            SELECT count(lac.id) as count
+                            FROM library_audio_contents AS lac
+                            where la.id = lac.library_audio_id
+                        ) AS count
                     from library_audios as la
                     left join subjects as s
-                        on s.id = la.subject_id
-                    left join library_audio_contents as lac
-                        on la.id = lac.library_audio_id    
+                        on s.id = la.subject_id  
                     where la.language = \''.$grade_language.'\''
                     );
 
-                if($subjects == []){
+                    if($subjects == []){
                     return response(['message' => 'There is not any library audio list exist'], 422)
                         ->header('Content-Type', 'text/json');
                 }else{
