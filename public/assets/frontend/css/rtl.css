@@ -1,0 +1,85 @@
+@font-face {
+    font-family: "Noori";
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/noori/Noori-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Noori";
+    font-style: normal;
+    font-weight: bold;
+    src: url("fonts/noori/Noori-Bold.ttf") format("truetype");
+}
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9 {float: right; direction: rtl}
+.container {direction: rtl;}
+body {direction: rtl;font-family: Noori;font-size: 90%;line-height: 1.4em;}
+.logo {float:right !important;}
+.language {float: left;}
+.menusection {float: right;}
+.posted {margin: 0.5em 0; }
+.topnav .about {margin:0; padding:0; border:0; margin-right:13px; padding-right:5px; border-right:1px solid #666;}
+.topnav .icons form {float: left;margin-top: 4px;margin-right: 10px;}
+.slideshow .position-relative {direction: ltr;}
+.slideshow .carousel-caption {direction: rtl;}
+.totals-box .box .item img {margin:0 1rem}
+.one-large-four-small .four-small:before {right:unset; left:0}
+.one-large-four-small .four-small .box h4 {margin-right:0; margin-left:-1rem; font-size: 1.3rem}
+.one-large-four-small .four-small .box img {float:right; margin-right:0; margin-left:0.5rem}
+.vid-item .vid-details table tr td {border-right:0; border-left:1px solid #ddd}
+.vid-item .vid-details table tr td:last-child {border-left:0}
+.sm-clean a .sub-arrow {right:unset; left:4px;}
+
+
+.large_news .titles h2 {font-size:2rem; }
+.acme-news-ticker {max-height:2em; margin:0 3rem 0 0}
+.header input {float: left}
+.large_news .list .item .image {margin: 0;}
+.large_news .list .item p {margin-top: -5px; line-height: 1.4em;}
+.large_news .list .item .posted {font-size: 0.9em; margin-top: 5px;}
+.large_news .titles .item {padding: 0.6rem 0.5rem; }
+.large_news .titles .item .number {display: none; margin:0 0 0 0.8rem; }
+h2.news-title .title {padding: 0 0 0 0.5rem; }
+h2.news-title .more a{float: left;margin-left:-6px;font-size: 0.45em;padding-right:10px;border-radius: 0 38px  0 0;}
+h1, h2, h3, h4 {font-weight: bold; }
+.first-large-news .item .image, .listing-news .item .image {margin:0 0 0 1rem; }
+.small-img-news img {float:right; margin: 0 0 0 1rem; }
+.sm-clean a {text-align: right;direction:rtl;transition:0.2s;;}
+.sm-clean a i {position:relative;top: 3px;color: transparent;display: inline-block;left: 3px;transition:0.2s;color: #fff;}
+.sm-clean ul a i {color:#333}
+.sm-clean ul a:hover i{color:#333}
+.large_news .titles {font-weight: bold; }
+.sm-clean a:hover i {color: #fff;transform: scale(1.2);opacity: 0.8;}
+.large_news .list .item .posted .category {display: inline-block; margin-right: 10px;}
+.small-img-news .list .item {margin-bottom: 1.13rem; }
+.footer ul li::before {margin-left: 10px}
+.small-img-news2 .list .item {margin-bottom: 1.5rem}
+.small-img-news2 img{width: 35%}
+.footer .search input {padding:5px 15px;height: 3rem;margin: 0;border-radius: 0;border: 1px solid #ccc;float: right;width: 72%;border-left: 0;font-weight: bold;}
+.footer .icons a i {padding-top: 6px;display: block;}
+.footer .end {direction: ltr;}
+.footer .logo {margin-right:0; margin-left:1rem}
+
+/*  Medium devices  */
+@media (max-width: 991.98px) {
+    .sm-clean a {padding: 10px 6px;}
+}
+
+
+ /*  Small devices - if screen width <= 767.98 */
+@media (max-width: 767.98px) {
+    .logo {float:left !important}
+    .slideshow .carousel-caption {direction:rtl; text-align: right !important}
+    .h-news .list .item .image {margin:0 0 0 15px;}
+    .h-items .list .item .image {margin:0}
+}
+
+ /*  Menu Responsive  */
+@media (min-width: 767.98px) {
+    .sm-clean > li:first-child a {margin-left:0; margin-right: unset;}
+    .sm-clean li {float: right; }
+    .topnav .about {margin-right:5px; padding-right:1px;}
+
+}
+
+.footer .contact-list .list {direction: ltrl;text-align: right; height:2.3rem; }
+.footer .contact-list .item .icon {float:right;margin-right:-7px;}

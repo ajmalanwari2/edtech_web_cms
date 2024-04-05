@@ -1,0 +1,58 @@
+@extends('layouts.frontend.master')
+@section('title')
+    <title>SCA</title>
+@endsection
+@section('content')
+    <div class="page-inner">
+        <div class="container">
+
+            <h2>{{ __('contact.contact') }}</h2>
+            <p>{{ __('contact.contact_message') }}</p>
+            <p style="color:red">{{ (session('msg') != '')?session('msg'):'' }}</p>
+            @php
+            session(['msg'=>'']);
+            @endphp
+            <div class="form-group subscribe_popup contactform">
+              <form action="/{{ $lang }}/contact_submit" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                    <input name="name" type="text" class="form-control form-control-lg" 
+                        placeholder="{{ __('contact.full_name') }}" >
+                    <input name="email" class="form-control form-control-lg" type="email" required 
+                        placeholder="{{ __('contact.email') }}" >
+                    <input name="subject" class="form-control form-control-lg" type="subject" 
+                        placeholder="{{ __('contact.subject') }}" >
+                    <select name="province_id" class="form-control form-control-lg" required
+                        >
+                        <option selected>Select {{ __('request_form.province') }}</option>
+                        @foreach ($provinces as $province)
+                            <option {{ old('province_id') == $province->id ? 'selected' : '' }} value="{{ $province->id }}">
+                                {{ $province->name }}</option>
+                        @endforeach
+                    </select>
+                    <select name="district_id" class="form-control form-control-lg" required
+                        >
+                        <option selected>Select {{ __('request_form.district') }}</option>
+                        @foreach ($districts as $district)
+                            <option {{ old('district_id') == $district->id ? 'selected' : '' }}
+                                value="{{ $district->id }}">
+                                {{ $district->name }}</option>
+                        @endforeach
+                    </select>
+                    <textarea name="message" placeholder="{{ __('contact.message') }}" class="form-control" style="width: 900px"
+                        rows="10"></textarea>
+                    <input class="btn btn-primary" type="submit" value="{{ __('contact.send') }}" >
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+@endsection
+@section('styles')
+
+@stop
+@section('scripts')
+
+@stop
