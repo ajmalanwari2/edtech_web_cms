@@ -199,9 +199,11 @@ class DistrictController extends Controller
 
     public function getDistrictsThroughProvinceMobile(Request $request){
         
-        $pro_id = $request->province_id;
-        $districts = DB::table('districts')->where('province_id', $pro_id)->get();
-        return response()->json($districts, 200);
+        $pro_id = intval($request->province_id);
+    $districts = DB::table('districts')->where('province_id', $pro_id)
+                                      ->select(DB::raw('CAST(id AS UNSIGNED) AS id'), 'number', 'name', 'status', 'is_center', 'province_id', 'created_at', 'updated_at')
+                                      ->get();
+    return response()->json($districts, 200);
 
     }
 
