@@ -51,7 +51,7 @@ use App\Http\Controllers\LibraryKitBookmarkController;
 */
 
 Route::group(['domain' => config('app.app_admin_domain')], function () {
-    Route::get('student-list-based-on-school/{school_id}', [StudentController::class, 'getStudentList']);
+    Route::get('student-list-based-on-district/{district_id}', [StudentController::class, 'getStudentList']);
     Route::get('start-quiz/subject_id',[QuizController::class, 'startQuizMobile']);
     
     Route::get('provinces', [ProvinceController::class, 'getProvinces']);

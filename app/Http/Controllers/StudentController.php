@@ -742,7 +742,7 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
 
    
     public function getStudentList(Request $request){
-        $school_id = $request->school_id;
+        $district_id = $request->district_id;
      $grades = [];
         $grades = DB::select('
         select 
@@ -751,9 +751,9 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
         from users as u
             left join students as st
                 on u.id = st.user_id
-            left join schools as s
-                on s.id = st.school_id
-        where st.school_id = '.$school_id.'    
+            left join districts as d
+                on d.id = st.district_id
+        where st.district_id = '.$district_id.'    
         ');
         return response()->json($grades, 200);
 
