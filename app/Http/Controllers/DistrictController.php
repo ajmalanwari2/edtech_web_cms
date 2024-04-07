@@ -221,11 +221,11 @@ class DistrictController extends Controller
 
     }
 
-    public function getSchoolThroughDistrictMobile(Request $request){
+        public function getSchoolThroughDistrictMobile(Request $request){
         
         $district_id = $request->district_id;
         // $school = DB::table('schools')->where('district_id', $district_id)->get();
-        $school = DB::table('schools')->first();
+        $school = School::first();
         return response()->json($school, 200);
 
     }
