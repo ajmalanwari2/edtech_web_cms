@@ -395,6 +395,7 @@ class UserCreationRequestController extends Controller
                         'province_id' => ['required', new ExistsProvinceForeignKey],
                         'district_id' => ['required', new ExistsDistrictForeignKey],
                         'school_id' => ['required', new ExistsSchoolForeignKey],
+                        'grade_id' => ['required', new ExistsGradeForeignKey],
                     ]);
                 } elseif($request->role === 'parent'){
                     $validator = Validator::make($request->all(), [
