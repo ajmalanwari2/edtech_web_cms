@@ -127,7 +127,13 @@ class TeacherController extends Controller
         }
         $subjects = DB::select('select 
         distinct g.id as grade_id,
-                       g.name as grade_name
+                       g.name as grade_name,
+                       g.language as language,
+                       (select count(s.id) as count
+                       from subjects as s
+                       join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id) as count
                     from users as u
                        left join teachers as t
                        on u.id = t.user_id
@@ -139,6 +145,7 @@ class TeacherController extends Controller
                        on g.id = gis.grade_id
                        left join subjects_in_grades as sig
                            on g.id = sig.grade_id
+                        
                    where u.id = '.$user_id .'
                    and sh.id= '.$school_id.'
                    and g.language = \''.$grade_language.'\'');
