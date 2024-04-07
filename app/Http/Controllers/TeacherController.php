@@ -128,7 +128,11 @@ class TeacherController extends Controller
         $subjects = DB::select('select 
         distinct g.id as grade_id,
                        g.name as grade_name,
-                       g.language as language,
+                       CASE
+                        WHEN g.language = "en" THEN "English"
+                        WHEN g.language = "da" THEN "Dari"
+                        ELSE "Pashto"
+                    END AS language,
                        (select count(s.id) as count
                        from subjects as s
                        join subjects_in_grades as inner_sig
@@ -186,16 +190,23 @@ class TeacherController extends Controller
             $subjects = DB::select('SELECT 
                 DISTINCT s.id as subject_id,
                 s.name as subject_name,
-                sig.grade_id as grade_id
+                sig.grade_id as grade_id,
+                CASE
+            WHEN g.language = "en" THEN "English"
+            WHEN g.language = "da" THEN "Dari"
+            ELSE "Pashto"
+        END AS language
             FROM subjects AS s
             LEFT JOIN subjects_in_grades AS sig ON s.id = sig.subject_id
-            WHERE sig.grade_id = ' . $grade_id);
+            LEFT JOIN grades AS g ON g.id = sig.grade_id
+            WHERE g.id = ' . $grade_id);
     
             foreach ($subjects as $subject) {
                 if (!isset($subjectGroups[$subject->subject_id])) {
                     $subjectGroups[$subject->subject_id] = [
                         'subject_id' => $subject->subject_id,
                         'grade_id' => $subject->grade_id,
+                        'language' => $subject->language,
                         'subject' => $subject->subject_name,
                         'chapters' => [],
                     ];
@@ -203,7 +214,22 @@ class TeacherController extends Controller
     
                 $chapters = DB::select('SELECT
                     c.id AS chapter_id,
-                    c.name AS chapter_name
+                    c.name AS chapter_name,
+                    (
+                    SELECT COUNT(sll.id)
+                    FROM subject_lessons AS sll
+                    WHERE sll.type = \'video\' AND sll.chapter_id = c.id
+                ) AS video_lesson_count,
+                (
+                    SELECT COUNT(sll.id)
+                    FROM subject_lessons AS sll
+                    WHERE sll.type = \'audio\' AND sll.chapter_id = c.id
+                ) AS audio_lesson_count,
+                (
+                    SELECT COUNT(sll.id)
+                    FROM subject_lessons AS sll
+                    WHERE sll.type = \'file\' AND sll.chapter_id = c.id
+                ) AS file_lesson_count
                 FROM chapters AS c
                 WHERE c.subject_id = ' . $subject->subject_id . ' 
                 AND c.grade_id = ' . $grade_id);
