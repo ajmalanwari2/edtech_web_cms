@@ -104,9 +104,23 @@ class TeacherController extends Controller
         } else {
             $user->update(['last_seen' => date("Y-m-d H:i:s")]);
         }
+
+
         if($user->role === 'teacher'){
-        $school_id = Teacher::select('school_id')->where('user_id', $user_id)->get();
-        $school_id = $school_id && $school_id[0] ? $school_id[0]->school_id : NULL;
+            $language = Teacher::select('language')->where('user_id', $user_id)->get();
+            $grade_language = $language && $language[0] ? $language[0]->language : NULL;
+            if($user == NULL || $language == NULL){
+                return response(['message' => 'The user is not registered'], 400)
+                    ->header('Content-Type', 'text/json');
+            }
+        }
+
+
+
+        if($user->role === 'teacher'){
+        $teacher = Teacher::select('school_id', 'language')->where('user_id', $user_id)->get();
+        $school_id = $teacher && $teacher[0] ? $teacher[0]->school_id : NULL;
+        $grade_language = $teacher && $teacher[0] ? $teacher[0]->language : NULL;
         if($user == NULL || $school_id == NULL){
             return response(['message' => 'The user is not registered'], 400)
                 ->header('Content-Type', 'text/json');
@@ -126,7 +140,8 @@ class TeacherController extends Controller
                        left join subjects_in_grades as sig
                            on g.id = sig.grade_id
                    where u.id = '.$user_id .'
-                   and sh.id= '.$school_id.'');
+                   and sh.id= '.$school_id.'
+                   and g.language = \''.$grade_language.'\'');
 
                 if($subjects == []){
                     return response(['message' => 'The teacher is not registered'], 422)
