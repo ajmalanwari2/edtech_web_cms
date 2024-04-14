@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizResult;
+use App\Models\StudentTrackingChapter;
 use App\Models\Content;
 use App\Models\Chapter;
 use App\Models\ChapterState;
