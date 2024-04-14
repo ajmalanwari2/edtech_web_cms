@@ -165,7 +165,7 @@ class NoticeController extends Controller
         $user = User::find($user_id);
         if($user->role === 'student'){
         $notices = DB::select('SELECT
-        n.id AS notice_id, n.number, n.title, n.description, n.role, 
+        n.id AS notice_id, n.number, n.title, n.description, n.role, n.created_at as notice_created_datetime, 
         IF(rn.notice_read_datetime IS NOT NULL, \'true\', \'false\') AS read_state
     FROM
         notices AS n
