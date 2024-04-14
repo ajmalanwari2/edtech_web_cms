@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\CourseQuiz;
+use App\Models\CourseState;
 use App\Models\CourseQuizAnswer;
 use App\Models\CourseQuizResult;
 use App\Models\CourseContent;
@@ -403,6 +404,21 @@ class CourseQuizController extends Controller
         $course = Course::findOrFail($courseId);
         $course->state = '1';
         $course->save();
+
+        $courseState = CourseState::where('course_id', $courseId)->where('user_id',  $user_id)->first();
+    
+        if(!empty($courseState)){
+        
+         $courseState->state = '1';
+         $courseState->save();
+        }else{
+         $course_state = [
+             'course_id' =>  $chapterId,
+             'user_id' =>  $user_id,
+             'state' => '1',
+         ];
+         CourseState::create($course_state);
+        }
         // Return a response
         return response()->json(['message' => 'Quiz submitted successfully'], 200);
     }

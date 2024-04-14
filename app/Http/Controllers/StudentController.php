@@ -568,14 +568,15 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                             count(q.id) as total_question,
                             c.total_quiz_time,
                             s.name as subject,
-                            qr.state as quiz_status
+                            cs.state as quiz_status
                     from chapters as c
                         left join quizes as q
                             on c.id = q.chapter_id
                         left join subjects as s
                         	on s.id = c.subject_id
                     left join quiz_results as qr
-                        on c.id = qr.chapter_id                  
+                        on c.id = qr.chapter_id 
+                    LEFT JOIN chapter_states AS cs ON c.id = cs.chapter_id and cs.user_id = '.$user_id.'                    
                         WHERE c.id = ?
                         GROUP BY c.id, c.total_quiz_time, s.name, c.state, qr.state', [$chapter_id]);
 

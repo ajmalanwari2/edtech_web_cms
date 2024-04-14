@@ -392,12 +392,13 @@ $courseCount = DB::select('select
                             count(cq.id) as total_question,
                             c.name as course_name,
                             c.total_quiz_time,
-                            cqr.state as quiz_status
+                            cs.state as quiz_status
                     from courses as c
                         left join course_quizes as cq
                             on c.id = cq.course_id
                     left join course_quiz_results as cqr
-                        on c.id = cqr.course_id                  
+                        on c.id = cqr.course_id
+                    LEFT JOIN course_states AS cs ON c.id = cs.course_id and cs.user_id = '.$user_id.'                      
                         WHERE c.id = ?
                         GROUP BY c.id, cqr.state', [$course_id]);
 

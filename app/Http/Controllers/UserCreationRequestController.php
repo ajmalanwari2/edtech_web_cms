@@ -697,7 +697,12 @@ class UserCreationRequestController extends Controller
                 s.gender,
                 s.dob,
                 sh.name as school,
-                g.name as grade
+                g.name as grade,
+                CASE
+                WHEN s.language = "en" THEN "English"
+                WHEN s.language = "da" THEN "Dari"
+                ELSE "Pashto"
+            END AS language
              from users as u
                join students as s
                 on u.id = s.user_id
@@ -724,7 +729,12 @@ class UserCreationRequestController extends Controller
                 u.profile_image,
                 concat(p.name, " ", d.name) as address,
                 t.gender,
-                t.dob
+                t.dob,
+                CASE
+                WHEN t.language = "en" THEN "English"
+                WHEN t.language = "da" THEN "Dari"
+                ELSE "Pashto"
+                END AS language
              from users as u
                 left join teachers as t
                 on u.id = t.user_id
