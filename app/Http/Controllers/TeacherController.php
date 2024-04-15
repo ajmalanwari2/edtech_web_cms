@@ -137,7 +137,22 @@ class TeacherController extends Controller
                        from subjects as s
                        join subjects_in_grades as inner_sig
                         on s.id = inner_sig.subject_id
-                        where inner_sig.grade_id = sig.grade_id) as count
+                        where inner_sig.grade_id = sig.grade_id) as count,
+                        (select count(sl.id) from subject_lessons as sl
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                        where ch.subject_id = sub.id
+                        and sl.type = \'video\') as video_count,
+                           (select count(sl.id) from subject_lessons as sl
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                        where ch.subject_id = sub.id
+                        and sl.type = \'file\') as doc_count,
+                           (select count(sl.id) from subject_lessons as sl
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                        where ch.subject_id = sub.id
+                        and sl.type = \'audio\') as audio_count
                     from users as u
                        left join teachers as t
                        on u.id = t.user_id
@@ -149,7 +164,8 @@ class TeacherController extends Controller
                        on g.id = gis.grade_id
                        left join subjects_in_grades as sig
                            on g.id = sig.grade_id
-                        
+                        left join subjects as sub
+                        on sub.id = sig.subject_id  
                    where u.id = '.$user_id .'
                    and sh.id= '.$school_id.'
                    and g.language = \''.$grade_language.'\'');
@@ -192,14 +208,32 @@ class TeacherController extends Controller
                 s.name as subject_name,
                 sig.grade_id as grade_id,
                 CASE
-            WHEN g.language = "en" THEN "English"
-            WHEN g.language = "da" THEN "Dari"
-            ELSE "Pashto"
-        END AS language
-            FROM subjects AS s
-            LEFT JOIN subjects_in_grades AS sig ON s.id = sig.subject_id
-            LEFT JOIN grades AS g ON g.id = sig.grade_id
-            WHERE g.id = ' . $grade_id);
+                    WHEN g.language = "en" THEN "English"
+                    WHEN g.language = "da" THEN "Dari"
+                    ELSE "Pashto"
+                END AS language,
+                s.icon as subject_icon,
+                (select count(sl.id) from subject_lessons as sl
+                    join chapters as ch
+                    on ch.id = sl.chapter_id
+                    where ch.subject_id = sub.id
+                    and sl.type = \'video\') as video_count,
+                (select count(sl.id) from subject_lessons as sl
+                    join chapters as ch
+                    on ch.id = sl.chapter_id
+                    where ch.subject_id = sub.id
+                    and sl.type = \'file\') as doc_count,
+                (select count(sl.id) from subject_lessons as sl
+                    join chapters as ch
+                    on ch.id = sl.chapter_id
+                    where ch.subject_id = sub.id
+                    and sl.type = \'audio\') as audio_count
+                FROM subjects AS s
+                LEFT JOIN subjects_in_grades AS sig ON s.id = sig.subject_id
+                LEFT JOIN grades AS g ON g.id = sig.grade_id
+                left join subjects as sub
+                    on sub.id = sig.subject_id  
+                WHERE g.id = ' . $grade_id);
     
             foreach ($subjects as $subject) {
                 if (!isset($subjectGroups[$subject->subject_id])) {
@@ -208,7 +242,12 @@ class TeacherController extends Controller
                         'grade_id' => $subject->grade_id,
                         'language' => $subject->language,
                         'subject' => $subject->subject_name,
+                        'subject_icon' => $subject->subject_icon,
+                        'video_count' => $subject->video_count,
+                        'doc_count' => $subject->doc_count,
+                        'audio_count' => $subject->audio_count,
                         'chapters' => [],
+                        'textbook' => [], // Initialize textbook to null
                     ];
                 }
     
@@ -216,23 +255,23 @@ class TeacherController extends Controller
                     c.id AS chapter_id,
                     c.name AS chapter_name,
                     (
-                    SELECT COUNT(sll.id)
-                    FROM subject_lessons AS sll
-                    WHERE sll.type = \'video\' AND sll.chapter_id = c.id
-                ) AS video_lesson_count,
-                (
-                    SELECT COUNT(sll.id)
-                    FROM subject_lessons AS sll
-                    WHERE sll.type = \'audio\' AND sll.chapter_id = c.id
-                ) AS audio_lesson_count,
-                (
-                    SELECT COUNT(sll.id)
-                    FROM subject_lessons AS sll
-                    WHERE sll.type = \'file\' AND sll.chapter_id = c.id
-                ) AS file_lesson_count
-                FROM chapters AS c
-                WHERE c.subject_id = ' . $subject->subject_id . ' 
-                AND c.grade_id = ' . $grade_id);
+                        SELECT COUNT(sll.id)
+                        FROM subject_lessons AS sll
+                        WHERE sll.type = \'video\' AND sll.chapter_id = c.id
+                    ) AS video_lesson_count,
+                    (
+                        SELECT COUNT(sll.id)
+                        FROM subject_lessons AS sll
+                        WHERE sll.type = \'audio\' AND sll.chapter_id = c.id
+                    ) AS audio_lesson_count,
+                    (
+                        SELECT COUNT(sll.id)
+                        FROM subject_lessons AS sll
+                        WHERE sll.type = \'file\' AND sll.chapter_id = c.id
+                    ) AS file_lesson_count
+                    FROM chapters AS c
+                    WHERE c.subject_id = ' . $subject->subject_id . ' 
+                    AND c.grade_id = ' . $grade_id);
     
                 foreach ($chapters as $chapter) {
                     $chapterContents = DB::select('SELECT
@@ -247,6 +286,19 @@ class TeacherController extends Controller
     
                 if ($chapters) {
                     $subjectGroups[$subject->subject_id]['chapters'] = $chapters;
+                }
+    
+                $textbook = DB::select('SELECT
+                    ldc.title as document_title,
+                    ldc.body as document_content_path
+                    FROM library_document_contents as ldc
+                    JOIN library_documents as ld
+                    ON ld.id = ldc.library_document_id
+                    WHERE ld.subject_id = ' . $subject->subject_id . '
+                    AND ldc.is_main = \'1\'');
+    
+                if ($textbook) {
+                    $subjectGroups[$subject->subject_id]['textbook'] = $textbook;
                 }
             }
     
