@@ -323,8 +323,8 @@ $courseCount = DB::select('select
     $totalCoursePassedLessons = DB::select('select
     count(c.id) as total_course_passed_lessons
     from courses as c
-    where c.state = \'1\'
-    and c.language = \''.$grade_language.'\'');
+    JOIN course_states AS cs ON c.id = cs.course_id and cs.user_id = '.$user_id.'
+    where c.language = \''.$grade_language.'\'');
     $courses['total_course_passed_lessons'] = $totalCoursePassedLessons[0]->total_course_passed_lessons;
         $courses['courses'] = DB::select('select 
                         c.id,
