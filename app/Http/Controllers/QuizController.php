@@ -558,9 +558,16 @@ public function quizAnswer(Request $request){
         ChapterState::create($chapter_state);
        }
 
-        $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)->where('chapter_id', $chapterId);
+
+        $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)
+        ->where('chapter_id', $chapterId)
+        ->first(); // Retrieve the model instance using "first()" or "firstOrFail()"
+    
+    if ($studentTrackingChapter) {
         $studentTrackingChapter->chapter_end_date = date("Y-m-d H:i:s");
         $studentTrackingChapter->save();
+    }
+
         // Return a response
         return response()->json(['message' => 'Quiz submitted successfully'], 200);
     }
