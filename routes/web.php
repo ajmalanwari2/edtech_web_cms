@@ -115,7 +115,7 @@ Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCh
     });
     Route::prefix('content')->name('content.')->group(function () {
         Route::get('index', [ContentController::class, 'index'])->name('index');
-        Route::get('show/{chapter_id}', [ContentController::class, 'show'])->name('show');
+        Route::get('show/{subject_id}/{chapter_id}', [ContentController::class, 'show'])->name('show');
     });
 
     Route::prefix('notice')->name('notice.')->group(function () {
@@ -131,7 +131,7 @@ Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCh
     });
 
     Route::prefix('quiz')->name('quiz.')->group(function () {
-        Route::get('list/{chapter_id}', [QuizController::class, 'index'])->name('show');
+        Route::get('list/{subject_id}/{chapter_id}', [QuizController::class, 'index'])->name('show');
         Route::get('start/{chapter_id}', [QuizController::class, 'startQuiz'])->name('start');
         Route::get('answer/{chapter_id}', [QuizController::class, 'quizAnswer'])->name('answer');
         Route::post('submit_answare', [QuizController::class, 'submitAnsware'])->name('submit_answare');

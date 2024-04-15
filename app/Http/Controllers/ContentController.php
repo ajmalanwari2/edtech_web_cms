@@ -175,8 +175,9 @@ class ContentController extends Controller
 
      public function show(Request $request)
      {
+        $subject_id = $request->subject_id;
          $chapter_id = $request->chapter_id;
-         return view('pages.setting.content.content_index', compact('chapter_id'));
+         return view('pages.setting.content.content_index', compact('subject_id', 'chapter_id'));
      }
 
      public function showContent(Request $request)

@@ -26,13 +26,14 @@ class QuizController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($chapter_id)
+    public function index($subject_id,$chapter_id)
     {
+        $subject_id = $subject_id;
         $chapter_id = $chapter_id;
         $references = Content::where('chapter_id',$chapter_id)->get();
         // dd($references[0]->title);
 
-        return view('pages.setting.content.quiz_index', compact('chapter_id','references'));
+        return view('pages.setting.content.quiz_index', compact('subject_id', 'chapter_id','references'));
     }
 
 

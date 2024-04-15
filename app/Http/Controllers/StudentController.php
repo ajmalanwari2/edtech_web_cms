@@ -461,7 +461,7 @@ $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
         LEFT JOIN subjects AS sub ON sub.id = sig.subject_id
         LEFT JOIN chapters AS c ON sub.id = c.subject_id
         LEFT JOIN chapter_states AS cs ON c.id = cs.chapter_id and cs.user_id = '.$user_id.'
-        left join bookmarks as b on c.id = b.chapter_id and b.state = \'1\'  
+        left join bookmarks as b on c.id = b.chapter_id and b.state = \'1\' and b.user_id = '.$user_id.'
     WHERE
         c.subject_id = '.$subject_id.'
         AND sig.grade_id = '.$grade_id.'

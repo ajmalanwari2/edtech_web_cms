@@ -17,7 +17,7 @@
                         <div class="card-subtitle text-muted">List of Lesson Contents</div>
                     </div>
                     <!-- <a href="{{ route('quiz.start', $chapter_id) }}" style="margin-right: 5px;" class="btn btn-primary" >Quiz</a> -->
-                    <a class="btn btn-danger" href="{{route('content.index')}}"
+                    <a class="btn btn-danger" href="{{route('subject.content_index', $subject_id)}}"
                         style="margin-right: 5px;">Back</a>
                     <button type="button" class="btn btn-primary" data-toggle="modal"
                         data-target="#modal-form">Add New
