@@ -556,7 +556,6 @@ class UserCreationRequestController extends Controller
                     'province_id' => $userCreationRequest->province_id,
                     'district_id' => $userCreationRequest->district_id,
                     'school_id' => $userCreationRequest->school_id,
-                    'grade_id' => $userCreationRequest->grade_id,
                     'language' => $userCreationRequest->language,
                 ];
                 Teacher::create($teacher);
