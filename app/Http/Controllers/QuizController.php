@@ -558,7 +558,7 @@ public function quizAnswer(Request $request){
         ChapterState::create($chapter_state);
        }
 
-        $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)->where('chapter_id', $chapter_id);
+        $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)->where('chapter_id', $chapterId);
         $studentTrackingChapter->chapter_end_date = date("Y-m-d H:i:s");
         $studentTrackingChapter->save();
         // Return a response
