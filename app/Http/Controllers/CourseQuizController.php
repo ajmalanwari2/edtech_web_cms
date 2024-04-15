@@ -413,7 +413,7 @@ class CourseQuizController extends Controller
          $courseState->save();
         }else{
          $course_state = [
-             'course_id' =>  $chapterId,
+             'course_id' =>  $courseId,
              'user_id' =>  $user_id,
              'state' => '1',
          ];
