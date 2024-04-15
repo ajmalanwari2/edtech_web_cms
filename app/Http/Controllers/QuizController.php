@@ -586,6 +586,7 @@ public function quizAnswer(Request $request){
 
 
     public function quizAnswers(Request $request){
+         $user_id = auth()->user()->id;
         $chapter_id = $request->chapter_id;
         $quizAnswers = DB::select('select 
                         qa.question_id,
@@ -595,7 +596,8 @@ public function quizAnswer(Request $request){
                         on q.id = qa.question_id
                     left join chapters as c
                         on c.id = q.chapter_id
-                    where c.id = '.$chapter_id .'');
+                    where c.id = '.$chapter_id .'
+                    and qa.created_by = '.$user_id .'');
 
                 if($quizAnswers == []){
                     return response(['message' => 'There is no submitted quiz for this chapter'], 422)

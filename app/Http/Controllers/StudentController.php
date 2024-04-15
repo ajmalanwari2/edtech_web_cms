@@ -635,15 +635,16 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
             }
         }
               
-                    $quizAnswers = DB::select('select 
+                   $quizAnswers = DB::select('select 
                                     qa.question_id,
                                     qa.answer
                                 from quiz_answers as qa    
-                                left join quizes as q
+                                join quizes as q
                                     on q.id = qa.question_id
-                                left join chapters as c
+                                join chapters as c
                                     on c.id = q.chapter_id
-                                where c.id = '.$chapter_id .'');
+                                where c.id = '.$chapter_id .'
+                                and qa.created_by = '.$user_id.'');
                                 $content['answers'] = $quizAnswers;
 
                             // if($quizAnswers == []){
