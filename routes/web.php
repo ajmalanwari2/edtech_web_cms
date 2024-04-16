@@ -48,7 +48,7 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
 
     // Route::get('/', [HomeController::class, 'landing'])->name('home');
     // Route::get('/{lang?}', [FrontEndController::class, 'index'])->name('home');
-    Route::prefix('/{lang?}')->name('frontend.')->group(function(){
+    Route::prefix('/front/{lang?}')->name('frontend.')->group(function(){
         Route::get('/', [FrontEndController::class, 'index'])->name('/');
         Route::get('aboutus', [FrontEndController::class, 'aboutus'])->name('aboutus');
         Route::get('content', [FrontEndController::class, 'content'])->name('content');
@@ -60,6 +60,9 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
         Route::post('request_form_submit', [FrontEndController::class, 'request_form_submit'])->name('request_form_submit');
     });
     
+    Route::get('/', function () {
+        return view('underconstruction');
+    });
 
     Route::prefix('landing')->name('landing.')->group(function(){
 
