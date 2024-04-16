@@ -6,9 +6,9 @@
             </a>
         </div>
         <div class="language">
-            <a href="/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>
-            <a href="/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>
-            <a href="/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>
+            <a href="/front/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>
+            <a href="/front/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>
+            <a href="/front/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>
             <a class="login" href="{{ route('admin_home') }}">Login</a>
         </div>
 
@@ -24,9 +24,9 @@
 
                     <!-- Menu List Names Start -->
                     <ul class="sm sm-clean" id="main-menu">
-                        <li><a href="/{{ $lang }}">صفحه نخست</a></li>
-                        <li><a href="/{{ $lang }}/aboutus">در باره ما</a></li>
-                        <li><a href="/{{ $lang }}/content">فهرست</a>
+                        <li><a href="/front/{{ $lang }}">صفحه نخست</a></li>
+                        <li><a href="/front/{{ $lang }}/aboutus">در باره ما</a></li>
+                        <li><a href="/front/{{ $lang }}/content">فهرست</a>
                                       {{-- <ul>
                           <li><a href="contents_rtl.html">فهرست اول</a></li>
                           <li><a href="contents_rtl.html">فهرست دوم</a></li>
@@ -38,8 +38,8 @@
                                 <li><a href="#">اندروید</a></li>
                             </ul>
                         </li>
-                        <li><a href="/{{ $lang }}/contact">تماس</a></li>
-                        <li><a href="/{{ $lang }}/request_form">درخواست</a></li>
+                        <li><a href="/front/{{ $lang }}/contact">تماس</a></li>
+                        <li><a href="/front/{{ $lang }}/request_form">درخواست</a></li>
                     </ul>
                     <!-- Menu List Names Start -->
 

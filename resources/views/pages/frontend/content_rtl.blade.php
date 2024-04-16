@@ -20,7 +20,7 @@
     <div class="vid-item"><!-- Video Item Started -->
         <div class="row">
             <div class="col-md-4 video-wrap">
-                <a href="/{{$lang}}/grade/{{$g->grade_id}}">
+                <a href="/front/{{$lang}}/grade/{{$g->grade_id}}">
                     <div class="video_no_youtube vid_album">
                         <img src="{{ asset('assets/frontend/images/pic'.$pic.'.jpg') }}">
                     </div>

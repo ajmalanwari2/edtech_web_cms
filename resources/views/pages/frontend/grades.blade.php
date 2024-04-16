@@ -19,7 +19,7 @@
       <div class="col-md-3">
         <div class="vid-item vid-grade">
           <div class="video-wrap">
-            <a href="/{{$lang}}/grade/{{$s->grade_id}}/subject/{{$s->subject_id}}">
+            <a href="/front/{{$lang}}/grade/{{$s->grade_id}}/subject/{{$s->subject_id}}">
               <div class="video_no_youtube vid_album">
               <img src="{{ asset('storage/uploads/icon/' . $s->subject_icon) }}">
               </div>

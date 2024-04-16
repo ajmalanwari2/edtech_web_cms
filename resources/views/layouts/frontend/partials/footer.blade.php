@@ -18,10 +18,10 @@
         <div class="col-md-2 col-sm-6" data-aos="fade-up">
           <h3>Overview</h3>
           <ul>
-            <li><a href="/{{$lang}}">Home</a></li>
-            <li><a href="/{{$lang}}/aboutus">About Us</a></li>
-            {{-- <li><a href="/{{$lang}}/">Download</a></li> --}}
-            <li><a href="/{{$lang}}/contactus">Contact Us</a></li>
+            <li><a href="/front/{{$lang}}">Home</a></li>
+            <li><a href="/front/{{$lang}}/aboutus">About Us</a></li>
+            {{-- <li><a href="/front/{{$lang}}/">Download</a></li> --}}
+            <li><a href="/front/{{$lang}}/contactus">Contact Us</a></li>
           </ul>
         </div><!-- Column End -->
 
