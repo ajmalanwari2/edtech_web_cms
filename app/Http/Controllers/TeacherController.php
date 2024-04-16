@@ -141,31 +141,41 @@ class TeacherController extends Controller
                         (select count(sl.id) from subject_lessons as sl
                         join chapters as ch
                         on ch.id = sl.chapter_id
-                        where ch.subject_id = sub.id
+                         join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
                         and sl.type = \'video\') as video_count,
                            (select count(sl.id) from subject_lessons as sl
                         join chapters as ch
                         on ch.id = sl.chapter_id
-                        where ch.subject_id = sub.id
+                         join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
                         and sl.type = \'file\') as doc_count,
                            (select count(sl.id) from subject_lessons as sl
                         join chapters as ch
                         on ch.id = sl.chapter_id
-                        where ch.subject_id = sub.id
+                        join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
                         and sl.type = \'audio\') as audio_count
                     from users as u
-                       left join teachers as t
+                       join teachers as t
                        on u.id = t.user_id
-                       left join schools as sh
+                       join schools as sh
                        on sh.id = t.school_id
-                       left join grades_in_schools as gis
+                       join grades_in_schools as gis
                            on sh.id = gis.school_id
-                       left join grades as g
+                       join grades as g
                        on g.id = gis.grade_id
                        left join subjects_in_grades as sig
-                           on g.id = sig.grade_id
-                        left join subjects as sub
-                        on sub.id = sig.subject_id  
+                           on g.id = sig.grade_id   
                    where u.id = '.$user_id .'
                    and sh.id= '.$school_id.'
                    and g.language = \''.$grade_language.'\'');
