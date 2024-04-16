@@ -212,7 +212,10 @@ class TeacherController extends Controller
                     WHEN g.language = "da" THEN "Dari"
                     ELSE "Pashto"
                 END AS language,
-                s.icon as subject_icon,
+                CASE
+                       WHEN s.icon != "" THEN CONCAT("storage/uploads/icon/", s.icon)
+                   ELSE NULL
+                   END AS subject_icon,
                 (select count(sl.id) from subject_lessons as sl
                     join chapters as ch
                     on ch.id = sl.chapter_id
