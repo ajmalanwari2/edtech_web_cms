@@ -417,8 +417,13 @@ class TeacherController extends Controller
 {
     $user_id = auth()->user()->id;
     $user = User::find($user_id);
-
     if ($user->role === 'teacher') {
+        $district_id = Teacher::select('district_id')->where('user_id', $user_id)->get();
+        $district_id = $district_id && $district_id[0] ? $district_id[0]->district_id : NULL;
+        if($user == NULL || $district_id == NULL){
+            return response(['message' => 'The user is not registered'], 400)
+                ->header('Content-Type', 'text/json');
+        }
         $studentGroups = [];
 
         $students = DB::select('SELECT 
@@ -429,9 +434,8 @@ class TeacherController extends Controller
         FROM users as u
         JOIN students as s ON u.id = s.user_id
         JOIN grades as g ON g.id = s.grade_id
-        JOIN teachers as t ON g.id = t.grade_id
-        WHERE t.user_id = ' . $user_id);
-
+        JOIN teachers as t ON t.district_id = s.district_id
+        WHERE t.district_id = ' . $district_id);
         foreach ($students as $student) {
 
             if (!isset($studentGroups[$student->student_user_id])) {
