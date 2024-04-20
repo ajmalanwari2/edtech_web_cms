@@ -125,6 +125,7 @@ class BookmarkController extends Controller
         c.name AS chapter_name,
         c.subject_id,
         c.state AS chapter_state,
+        sub.name as subject_name,
         COALESCE(b.state, 0) AS bookmark_state,
         COUNT(q.id) AS quiz_count,
         (
