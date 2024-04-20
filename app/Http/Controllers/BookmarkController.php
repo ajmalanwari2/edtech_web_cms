@@ -151,7 +151,7 @@ class BookmarkController extends Controller
         LEFT JOIN subjects AS sub ON sub.id = sig.subject_id
         LEFT JOIN chapters AS c ON sub.id = c.subject_id
         LEFT JOIN quizes AS q ON c.id = q.chapter_id
-        LEFT JOIN bookmarks AS b ON c.id = b.chapter_id  
+        LEFT JOIN bookmarks AS b ON c.id = b.chapter_id and b.user_id = '.$user_id.' 
     WHERE
         u.id = '.$user_id.'
         AND g.id = '.$grade_id->grade_id.'
