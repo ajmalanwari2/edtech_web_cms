@@ -61,6 +61,7 @@ class BookmarkController extends Controller
         }
         
         $bookmark->state = $request->state;
+        $bookmark->chapter_state = $request->chapter_state;
         $result = $bookmark->save();
     
         if ($result) {
@@ -124,7 +125,7 @@ class BookmarkController extends Controller
         c.id AS chapter_id,
         c.name AS chapter_name,
         c.subject_id,
-        cs.state AS chapter_state,
+        b.chapter_state AS chapter_state,
         sub.name as subject_name,
         COALESCE(b.state, 0) AS bookmark_state,
         COUNT(q.id) AS quiz_count,
@@ -158,7 +159,7 @@ class BookmarkController extends Controller
         u.id = '.$user_id.'
         AND g.id = '.$grade_id->grade_id.'
     GROUP BY
-        b.id, c.id, c.name, c.subject_id, cs.state
+        b.id, c.id, c.name, c.subject_id, cs.state, b.chapter_state
     HAVING
         bookmark_id IS NOT NULL
         AND bookmark_state = 1
