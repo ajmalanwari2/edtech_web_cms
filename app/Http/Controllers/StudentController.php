@@ -762,8 +762,8 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
     }     
 
     public function studentProfile($id){
-
-        
+        $rec = [];
+        try{
         // $grade_id = $request->grade_id;
         $user_id = $id;
         $user = User::find($user_id);
@@ -961,6 +961,9 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
              //dd($rec['grades'][0]['subjects'][0]['quizzes'][0]['number_attempted_quizzes']);
 
         return view('pages.profile.index',compact('rec'));
+        }catch(Exception $e){
+            return view('pages.profile.index',compact('rec'));
+        }
     }
 
     

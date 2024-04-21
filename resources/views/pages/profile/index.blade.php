@@ -210,15 +210,18 @@
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a href="/report/index">Users</a></li>
+        <li class="breadcrumb-item"><a href="/report/index">User</a></li>
         <li class="breadcrumb-item active" aria-current="page">User Profile</li>
       </ol>
     </nav>
     <!-- /Breadcrumb -->
+    @if(!empty($rec))
     <div class="row" style="background: white">
       <div class="col-md-4">
+          
         <img src="{{asset($rec['profile_image'])}}" alt="Admin" class="rounded-circle" width="150"
           style="margin-top:30px;margin-left:30px;">
+         
       </div>
       <div class="col-md-8">
         <div class="row">
@@ -285,7 +288,7 @@
             </div>
       </div>
       <div class="row" style="margin-left: 0px;">
-      @for ($b = 0; $b < count($rec['grades'][0]['subjects']) ; $b++)
+          @for ($b = 0; $b < count($rec['grades'][0]['subjects']) ; $b++)
             <div class="col-sm-3">
               {{$rec['grades'][0]['subjects'][$b]['subject_name']}}
             </div>
@@ -300,6 +303,10 @@
             </div>
             @endfor
       </div>
+    </div>
+    @endif
+    <div class="row" style="background: white">
+      There was an issue with record.
     </div>
   </div>
 
