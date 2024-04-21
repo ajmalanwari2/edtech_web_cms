@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Exception;
 
 class StudentController extends Controller
 {
@@ -963,7 +964,7 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
              //dd($rec['grades'][0]['subjects'][0]['quizzes'][0]['number_attempted_quizzes']);
 
         return view('pages.profile.index',compact('rec'));
-        }catch(Exception $e){
+        }catch(\Exception $e){
             return view('pages.profile.index',compact('rec'));
         }
     }
