@@ -785,7 +785,8 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                 u.profile_image,
                 u.identity_number,
                 s.gender as student_gender,
-                u.last_seen 
+                s.dob as dob,
+                u.sync_datetime  as last_sync
 
             FROM users as u
             JOIN students as s ON u.id = s.user_id
@@ -811,7 +812,7 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                 'profile_image'=>$students['profile_image'],
                 'identity_number'=>$students['identity_number'],
                 'student_gender'=>$students['student_gender'],
-                'last_seen'=>$students['last_seen'],
+                'last_sync'=>$students['last_sync'],
                 'grade_name' => $students['grade_name'],
                 'student_user_id' => $students['student_user_id'],
                 "school_name"=>$students['school_name'],
@@ -819,6 +820,7 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                 "district_name"=>$students['district_name'],
                 "student_email"=>$students['student_email'],
                 "parent_name"=>$students['parent_name'],
+                "dob"=>$students['dob'],
                 "grades"=>[],
                 // 'subjects' => [],
                 // 'progress' => [], // Initialize the subjects array
@@ -862,6 +864,29 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
 
                 foreach ($subjects as $subject) {
                     $chapters = DB::select('select name,state from chapters where grade_id='.$students['grades'][$i]['grade_id'].' and subject_id='.$subject->subject_id.'');
+                 $total_chapters = DB::select('select
+                    count(ch.id) as count
+                from chapters as ch
+                join subjects as s
+                on s.id = ch.subject_id
+                join subjects_in_grades as sig
+                on s.id = sig.subject_id
+                join grades as g
+                on g.id = sig.grade_id
+                where s.id='.$subject->subject_id.' and sig.grade_id = '.$students['grades'][$i]['grade_id'].';
+                ');
+                    $total_completed_chapters = DB::select('select
+                    count(ch.id) as count
+                from chapters as ch
+                JOIN chapter_states AS cs ON ch.id = cs.chapter_id and cs.user_id = '.$user_id.'
+                join subjects as s
+                on s.id = ch.subject_id
+                join subjects_in_grades as sig
+                on s.id = sig.subject_id
+                join grades as g
+                on g.id = sig.grade_id
+                WHERE s.id='.$subject->subject_id.' and sig.grade_id = '.$students['grades'][$i]['grade_id']);
+//dd($total_completed_chapters[0]->count);
                     // Add subject_name to the subjects array
                     $subjectData = [
                         'subject_name' => $subject->subject_name,
@@ -869,6 +894,8 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                         // 'isRead' => $subject->isRead,
                         'chapters'=>json_decode(json_encode($chapters), true),
                         'quizzes' => [], // Initialize the quizzes array
+                        'total_chapters' =>$total_chapters[0]->count,
+                        'total_completed_chapters' =>$total_completed_chapters[0]->count,
                     ];
 
                     $totalQuizzes = DB::select('SELECT COUNT(DISTINCT q.chapter_id) AS total_quizzes
@@ -930,7 +957,8 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                 $rec['grades'][$i]['progress'][] = $progressData;
 
             }
-            // dd($rec);
+             //dd($rec);
+             //dd($rec['grades'][0]['subjects'][0]['quizzes'][0]['number_attempted_quizzes']);
 
         return view('pages.profile.index',compact('rec'));
     }
