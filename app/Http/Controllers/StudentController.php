@@ -790,13 +790,13 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                 u.sync_datetime  as last_sync
 
             FROM users as u
-            JOIN students as s ON u.id = s.user_id
-            JOIN schools as sc ON sc.id = s.school_id
-            JOIN student_in_parents as sip ON s.id = sip.student_id
-            JOIN student_parents as sp ON sp.id = sip.student_parent_id
-            JOIN grades as g ON g.id = s.grade_id
-            JOIN provinces as pr ON pr.id= s.province_id
-            JOIN districts as dis ON dis.id= s.district_id
+            LEFT JOIN students as s ON u.id = s.user_id
+            LEFT JOIN schools as sc ON sc.id = s.school_id
+            LEFT JOIN student_in_parents as sip ON s.id = sip.student_id
+            LEFT JOIN student_parents as sp ON sp.id = sip.student_parent_id
+            LEFT JOIN grades as g ON g.id = s.grade_id
+            LEFT JOIN provinces as pr ON pr.id= s.province_id
+            LEFT JOIN districts as dis ON dis.id= s.district_id
             WHERE u.id = ' . $user_id);
             if(empty($students))
                 throw new Exception('Profile cant not be found');
