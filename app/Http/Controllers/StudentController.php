@@ -797,9 +797,11 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
             JOIN provinces as pr ON pr.id= s.province_id
             JOIN districts as dis ON dis.id= s.district_id
             WHERE u.id = ' . $user_id);
+            if(empty($students))
+                throw new Exception('Profile cant not be found');
 
             $students = json_decode(json_encode($students[0]), true);            
-// dd($students);
+            
             
             $students['grades'] = DB::select('select grade_id from student_logs where user_id='.$user_id.' group by grade_id order by grade_id desc');
             $students['grades'] = json_decode(json_encode($students['grades']), true);

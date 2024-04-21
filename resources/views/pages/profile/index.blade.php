@@ -305,9 +305,11 @@
       </div>
     </div>
     @endif
+    @if(empty($rec))
     <div class="row" style="background: white">
       There was an issue with record.
     </div>
+    @endif
   </div>
 
 </div>
