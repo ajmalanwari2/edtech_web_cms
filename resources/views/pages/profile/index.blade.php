@@ -296,7 +296,7 @@
               {!! $rec['grades'][0]['subjects'][$b]['quizzes'][0]['number_attempted_quizzes'] . '/'. $rec['grades'][0]['subjects'][$b]['quizzes'][0]['total_quizzes'] !!}
             </div>
             <div class="col-sm-3">
-              {{ ($rec['grades'][0]['subjects'][$b]['quizzes'][0]['total_quizzes']==$rec['grades'][0]['subjects'][$b]['quizzes'][0]['number_attempted_quizzes'])?'completed':'in-progress' }}
+              {{ ($rec['grades'][0]['subjects'][$b]['total_completed_chapters']==$rec['grades'][0]['subjects'][$b]['total_chapters'])?'completed':'in-progress' }}
             </div>
             @endfor
       </div>
