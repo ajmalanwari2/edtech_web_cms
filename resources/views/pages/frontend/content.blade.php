@@ -18,13 +18,12 @@
     @endphp
     @foreach($data as $g)
     <div class="vid-item"><!-- Video Item Started -->
+    <a href="/front/{{$lang}}/grade/{{$g->grade_id}}">
         <div class="row">
             <div class="col-md-4 video-wrap">
-                <a href="/front/{{$lang}}/grade/{{$g->grade_id}}">
                     <div class="video_no_youtube vid_album">
                         <img src="{{ asset('assets/frontend/images/pic'.$pic.'.jpg') }}">
                     </div>
-                </a>
             </div>
             <div class="col-md-7 details-wrap">
                 <div class="vid-details">
@@ -49,6 +48,7 @@
                 </div>
             </div>
         </div>
+        </a> 
     </div><!-- Video Item Ended -->
     @php
     $pic = ($pic % 12) + 1;

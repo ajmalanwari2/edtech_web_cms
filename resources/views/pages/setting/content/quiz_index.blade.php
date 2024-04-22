@@ -107,7 +107,7 @@
                                             @foreach ($references as $reference)
                                                 <option {{ old('references') == $reference->id ? 'selected' : '' }}
                                                     value="{{ $reference->id }}">
-                                                    {{ $reference->title }}</option>
+                                                    {{ $reference->title }} - {{$reference->type}}</option>
                                             @endforeach
                                         </select>
                                         <div class="input-group-prepend">

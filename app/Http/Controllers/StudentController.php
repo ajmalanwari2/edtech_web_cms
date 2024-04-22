@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\Grade;
 use App\Models\User;
 use App\Models\Content;
+use App\Models\Chapter;
 use App\Models\StudentTrackingChapter;
 use Illuminate\Support\Facades\DB;
 use DataTables;
@@ -501,6 +502,8 @@ $chapters['textbook'] = DB::select('select
 
     public function studentChapterContentList(Request $request){
         $chapter_id = $request->chapter_id;
+        $visible_question = Chapter::select('visible_question')->where('id', $chapter_id)->get();
+        $visible_question = $visible_question && $visible_question[0] ? $visible_question[0]->visible_question : 0;
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $grade_id = Student::select('grade_id')->where('user_id', $user_id)->get();
@@ -586,44 +589,48 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                     $content['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
                     $content['quiz_status'] = $startQuiz[0]->quiz_status;
 
-        $questions = DB::select('
-        select
-                q.id as question_id,
-               q.question_text as question,
-               CASE
-                    WHEN q.question_image != "" THEN CONCAT("storage/uploads/q_image/", q.question_image)
-                ELSE NULL
-                END AS question_image,
-               q.option_a_text as optiona,
-               CASE
-                    WHEN q.option_a_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_a_image)
-                ELSE NULL
-                END AS option_a_image,
-               q.option_b_text as optionb,
-               CASE
-               WHEN q.option_b_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_b_image)
-           ELSE NULL
-           END AS option_b_image,
-               CASE
-               WHEN q.option_b_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_b_image)
-           ELSE NULL
-           END AS option_a_image,
-               q.option_b_text as optionc,
-               CASE
-               WHEN q.option_c_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_c_image)
-           ELSE NULL
-           END AS option_c_image,
-               q.option_d_text as optiond,
-               CASE
-               WHEN q.option_d_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_d_image)
-           ELSE NULL
-           END AS option_d_image,
-               q.correct_answer,
-               q.references
-        from chapters as c  
-            left join quizes as q
-                on c.id = q.chapter_id      
-        where  c.id = ?', [$chapter_id]);
+$questions = DB::select('
+        SELECT
+    q.id AS question_id,
+    q.question_text AS question,
+    CASE
+        WHEN q.question_image != "" THEN CONCAT("storage/uploads/q_image/", q.question_image)
+        ELSE NULL
+    END AS question_image,
+    q.option_a_text AS optiona,
+    CASE
+        WHEN q.option_a_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_a_image)
+        ELSE NULL
+    END AS option_a_image,
+    q.option_b_text AS optionb,
+    CASE
+        WHEN q.option_b_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_b_image)
+        ELSE NULL
+    END AS option_b_image,
+    CASE
+        WHEN q.option_c_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_c_image)
+        ELSE NULL
+    END AS option_c_image,
+    q.option_d_text AS optiond,
+    CASE
+        WHEN q.option_d_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_d_image)
+        ELSE NULL
+    END AS option_d_image,
+    q.correct_answer,
+    q.references
+FROM
+    chapters AS c
+    JOIN (
+        SELECT
+            inner_q.*
+        FROM
+            quizes AS inner_q
+        WHERE
+            inner_q.chapter_id = ?
+        ORDER BY
+            RAND()
+        LIMIT '.$visible_question.'
+    ) AS q ON c.id = q.chapter_id;', [$chapter_id]);
       
         if (!empty($questions)) {
             foreach ($questions as $q) {

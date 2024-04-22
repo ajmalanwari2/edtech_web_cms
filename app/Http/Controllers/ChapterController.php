@@ -193,6 +193,7 @@ class ChapterController extends Controller
             $chapter->number = $request->number;
             $chapter->name = $request->name;
             $chapter->total_quiz_time = $request->total_quiz_time;
+            $chapter->visible_question = $request->visible_question;
             $chapter->status = $request->status;
             $chapter->grade_id = $request->grade_id;
             $chapter->subject_id = $request->subject_id;

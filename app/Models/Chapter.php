@@ -9,7 +9,7 @@ class Chapter extends Model
 {
     use HasFactory;
 
-    protected $fillable  = ['id', 'number', 'name', 'total_quiz_time', 'state', 'grade_id', 'subject_id', 'status', 'created_by', 'updated_by'];
+    protected $fillable  = ['id', 'number', 'name', 'total_quiz_time', 'visible_question', 'state', 'grade_id', 'subject_id', 'status', 'created_by', 'updated_by'];
 
 
     public function grades()

@@ -122,11 +122,24 @@
                                 <label class="text-label" for="total_quiz_time_add">Total Quiz Time (min):</label>
                                 <div class="input-group input-group-merge">
                                     <input id="total_quiz_time_add" type="number" required=""
-                                        class="form-control form-control-prepended total_quize_time-field" placeholder="Total Quiz Time"
+                                        class="form-control form-control-prepended total_quiz_time-field" placeholder="Total Quiz Time"
                                         value="{{ old('total_quiz_time_add') }}">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <span class="fas fa-user-clock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 mb-3">
+                                <label class="text-label" for="visible_question_add">Number of Visible Questions:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="visible_question_add" type="number" required=""
+                                        class="form-control form-control-prepended visible_question-field" placeholder="Number of Visible Questions"
+                                        value="{{ old('visible_question_add') }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-list-ol"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -219,6 +232,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12 col-md-4 mb-3">
+                                <label class="text-label" for="number">Number of Visible Question:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="visible_question" type="number" required=""
+                                        class="form-control form-control-prepended" placeholder="Number of Visible Question"
+                                        value="{{ old('visible_question') }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-list-ol"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -272,6 +298,10 @@
                     <div class="col-md-6">
                         <div class="me-1">Total Quiz Time (min):</div>
                         <div id="chapter_total_quiz_time" class="text-muted"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="me-1">Number of Visible Question:</div>
+                        <div id="chapter_visible_question" class="text-muted"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
@@ -453,16 +483,18 @@ function saveForm() {
         var subject_id = subjectField.val();
         var statusField = row.find('.status-field');
         var status = statusField.val();
-        var totalQuizTimeField = row.find('.total_quize_time-field');
-        var total_quize_time = totalQuizTimeField.val();
-
+        var totalQuizTimeField = row.find('.total_quiz_time-field');
+        var total_quiz_time = totalQuizTimeField.val();
+        var visibleQuestionField = row.find('.visible_question-field');
+        var visible_question = visibleQuestionField.val();
         var data = {
             number: number,
             name: name,
             grade_id: grade_id,
             subject_id: subjectId,
             status: status,
-            total_quize_time: total_quize_time,
+            total_quiz_time: total_quiz_time,
+            visible_question: visible_question,
             _token: csrfToken // Include the CSRF token in the form data
         };
 
@@ -510,6 +542,7 @@ function editSaveForm(id) {
         subject_id: $('#subject_id').val(),
         status: $('#status').val(),
         total_quiz_time: $('#total_quiz_time').val(),
+        visible_question: $('#visible_question').val(),
     };
     if (!(id === undefined)) {
         url = site_url + 'api/chapter/update';
@@ -614,13 +647,26 @@ $(document).ready(function() {
             '</div>' +
             '<div class="col-12 col-md-3 mb-3">' +
             '<label class="text-label" for="' + formId +
-            '_description">Total Quiz Time (min):</label>' +
+            '_total_quiz_time">Total Quiz Time (min):</label>' +
             '<div class="input-group input-group-merge">' +
             '<input id="' + formId +
-            '_description" type="number" required="" class="form-control form-control-prepended total_quize_time-field" placeholder="Total Quiz Time" value="">' +
+            '_total_quiz_time" type="number" required="" class="form-control form-control-prepended total_quiz_time-field" placeholder="Total Quiz Time" value="">' +
             '<div class="input-group-prepend">' +
             '<div class="input-group-text">' +
             ' <span class="fas fa-user-clock"></span>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="col-12 col-md-3 mb-3">' +
+            '<label class="text-label" for="' + formId +
+            '_visible_question">Number of Visible Questions:</label>' +
+            '<div class="input-group input-group-merge">' +
+            '<input id="' + formId +
+            '_visible_question" type="number" required="" class="form-control form-control-prepended visible_question-field" placeholder="Number of Visible Questions" value="">' +
+            '<div class="input-group-prepend">' +
+            '<div class="input-group-text">' +
+            ' <span class="fas fa-list-ol"></span>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -672,12 +718,14 @@ function loadRecord(id) {
             $('#subject_name').text(data.subject_name);
             $('#chapter_status').text(data.chapter_status);
             $('#chapter_total_quiz_time').text(data.total_quiz_time);
+            $('#chapter_visible_question').text(data.visible_question);
             $('#number').val(data.number);
             $('#name').val(data.name);
             $('#grade_id').val(data.grade_id);
             $('#subject_id').val(data.subject_id);
             $('#status').val(data.status);
             $('#total_quiz_time').val(data.total_quiz_time);
+            $('#visible_question').val(data.visible_question);
             $("#editSaveBTN").attr("onclick", "editSaveForm(" + data.id + ")");
             $("#editSaveBTN").html("Save");
             $("#modal-form-title").html("Lesson");
