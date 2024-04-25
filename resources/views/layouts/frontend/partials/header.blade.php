@@ -9,7 +9,7 @@
             <a href="/front/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>
             <a href="/front/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>
             <a href="/front/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>
-            <a class="login" href="{{ route('admin_home') }}">Login</a>
+            <!-- <a class="login" href="{{ route('admin_home') }}">Login</a> -->
         </div>
 
         <!-- Menu Section Start -->
@@ -32,6 +32,7 @@
                             <li><a href="contents.html">Content Second</a></li>
                         </ul> --}}
                         </li>
+                        <li><a href="#">Courses</a></i>
                         <li><a href="#">Download</a>
                             <ul>
                                 <li><a href="#">Android</a></li>

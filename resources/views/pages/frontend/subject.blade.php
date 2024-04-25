@@ -14,7 +14,7 @@
             @if(empty($subjectContents))
             <p style="background-color: #f5d7d7">No Content is available for this subject.</p>
             @else
-            <div class="col-md-9 vid_subject">
+            <div class="col-md-8 vid_subject">
                 <!-- Video Play Section Start -->
                 <!-- if you are using youtube iframe -->
                 <div class="video_youtube">
@@ -34,15 +34,74 @@
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->title : '' }}</div>
             </div><!-- Video Play Section End -->
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <!-- Scroll Videos List Start -->
 
                 <!-- Scrollbar Plugin -->
+                <!-- new sidebar start -->
+                <div class="vid-box">
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">1</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">2</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">3</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">4</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">5</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">6</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">7</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">8</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">9</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">10</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                    <div class="d-flex inner-box">
+                        <div class="p-2 vid-number">11</div>
+                        <div class="p-2"><a href="">Lesson Title </a></div>
+                        <div class="ms-auto p-2"><a href=""><img src="http://learning.local/storage/uploads/icon/107-icon-1711815526.png">View Book</a></div>
+                    </div>
+                </div>
+                
 
-                <div id="video_list_scroll" class="rounded vid_list">
+                <!-- end new sidebar -->
+                <!-- <div id="video_list_scroll" class="rounded vid_list">
                     @foreach($subjectContents as $subjectContent)
                     <div class="vid-item">
-                        <!-- Video Item Started -->
                         <div class="row">
                             <div class="video-wrap">
                                 <a href="#">
@@ -70,9 +129,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div><!-- Video Item Ended -->
+                    </div>
                     @endforeach
-                </div>
+                </div> -->
                 <!-- Scroll Videos List End -->
 
                 <!--ADD PERFECT SCROLLBAR TO CONTAINER-->

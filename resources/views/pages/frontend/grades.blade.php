@@ -18,9 +18,9 @@
    @foreach($subjects as $s)
       <div class="col-md-3">
         <div class="vid-item vid-grade">
-          <div class="video-wrap">
+          <div class="video-wrap imgWrap">
             <a href="/front/{{$lang}}/grade/{{$s->grade_id}}/subject/{{$s->subject_id}}">
-              <div class="video_no_youtube vid_album">
+              <div class="video_no_youtube vid_album iconImg">
               <img src="{{ asset('storage/uploads/icon/' . $s->subject_icon) }}">
               </div>
             </a>

@@ -14,10 +14,10 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <!-- <h1 class="slide-title">Title of this slideshow 1</h1> -->
-                    <!-- <p>Description of this slider temporary testing here</p> -->
-                    <!-- <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a> -->
+                    <h1 class="slide-title">Title of this slideshow 1</h1>
+                    <p>Description of this slider temporary testing here</p>
+                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                            class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -29,10 +29,10 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <!-- <h1 class="slide-title">Second of this slideshow</h1> -->
-                    <!-- <p>Description of this slider temporary testing here</p> -->
-                    <!-- <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a> -->
+                    <h1 class="slide-title">Second of this slideshow</h1>
+                    <p>Description of this slider temporary testing here</p>
+                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                            class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -44,10 +44,10 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <!-- <h1 class="slide-title">Third Title of this slideshow</h1> -->
-                    <!-- <p>Description of this slider temporary testing here</p> -->
-                    <!-- <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a> -->
+                    <h1 class="slide-title">Third Title of this slideshow</h1>
+                    <p>Description of this slider temporary testing here</p>
+                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                            class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>

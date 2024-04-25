@@ -58,6 +58,15 @@ h1, h2, h3, h4 {font-weight: bold; }
 .footer .icons a i {padding-top: 6px;display: block;}
 .footer .end {direction: ltr;}
 .footer .logo {margin-right:0; margin-left:1rem}
+.sm-clean > li:last-child a {
+    right: 0;
+}
+.totals-box .box:last-child {
+    border-radius: 15px 0px 0px 15px;
+}
+.totals-box .box:first-child {
+    border-radius: 0px 15px 15px 0px;
+}
 
 /*  Medium devices  */
 @media (max-width: 991.98px) {
