@@ -394,9 +394,17 @@ public function quizAnswer(Request $request){
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Quiz $quize)
+    public function destroy(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $result = Quiz::destroy($request->id);
+            if (!empty($result))
+                return response([$result], 200)
+                    ->header('Content-Type', 'text/json');
+            else
+                return response([$result], 400)
+                    ->header('Content-Type', 'text/json');
+        }
     }
 
     // Mobile App API

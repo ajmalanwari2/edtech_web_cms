@@ -170,6 +170,13 @@
                         </a>
                         <span class="tooltip">FeedBack</span>
                     </li>
+                    <li class="accordion-body no-padding">
+                        <a href="{{ route('game.index') }}">
+                        <i class='bx bx-file'></i>
+                            <span class="links_name">Game</span>
+                        </a>
+                        <span class="tooltip">Game</span>
+                    </li>
                 </ul>
             </li>
    </ul>

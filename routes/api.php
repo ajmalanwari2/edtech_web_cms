@@ -32,6 +32,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\CourseBookmarkController;
 use App\Http\Controllers\LibraryDocumentBookmarkController;
@@ -139,6 +140,9 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     Route::post('submit-course-quiz', [CourseQuizController::class, 'submitCourseQuizQuesAnswareMobile']);
     Route::get('course-quiz-answers/{course_id}',[CourseQuizController::class, 'courseQuizAnswers']);
 
+
+    //Game API
+    Route::get('game-list',[GameController::class, 'gameList']);
     //RMO List as per province
 
     Route::get('rmo-based-on-province/{province_id}', [RegionalManagementOfficeController::class, 'getRMOThroughProvince']);
@@ -267,6 +271,14 @@ Route::group(['middleware' => 'auth:sanctum','domain' => config('app.app_admin_d
         Route::post('show',[NewsController::class, 'show']);
         Route::post('update',[NewsController::class, 'update']);
         Route::post('delete',[NewsController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'game'], function () {
+        Route::post('list',[GameController::class, 'list']);
+        Route::post('save',[GameController::class, 'store']);
+        Route::post('show',[GameController::class, 'show']);
+        Route::post('update',[GameController::class, 'update']);
+        Route::post('delete',[GameController::class, 'destroy']);
     });
 
     Route::group(['prefix' => 'feedback'], function () {

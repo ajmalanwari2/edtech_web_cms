@@ -31,7 +31,9 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Session;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +129,9 @@ Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCh
 
     Route::prefix('news')->name('news.')->group(function () {
         Route::get('index', [NewsController::class, 'index'])->name('index');
+    });
+    Route::prefix('game')->name('game.')->group(function () {
+        Route::get('index', [GameController::class, 'index'])->name('index');
     });
 
     Route::prefix('feedback')->name('feedback.')->group(function () {

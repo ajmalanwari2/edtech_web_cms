@@ -320,7 +320,7 @@
                 <div class="modal-body text-center p-4">
                     <i class="material-icons icon-40pt text-warning mb-2">warning</i>
                     <h6>Do you want to delete the record!</h6>
-                    <button type="button" class="btn btn-light" data-dsmiss="modal" i>No</button>
+                    <button type="button" class="btn btn-light" onclick="closeModal()">No</button>
                     <button type="button" class="btn btn-warning my-2" onclick="deleteRecord()">Yes</button>
                 </div> <!-- // END .modal-body -->
             </div> <!-- // END .modal-content -->
@@ -638,7 +638,7 @@
 
             $.ajax({
                 type: "POST",
-                url: site_url + 'api/content/delete',
+                url: site_url + 'api/quiz/delete',
                 data: {
                     id: deleteRecordID,
                     '_token': '{{ csrf_token() }}'
@@ -651,14 +651,21 @@
                     });
                 }),
                 success: (function(data) {
-
                     $.toaster({
                         priority: 'success',
                         title: 'Info',
                         message: 'Record has been removed.'
+                       
+                       
                     });
-                    $('#modal-confirm').modal('toggle');
+                   
+                    // $('#modal-confirm').modal('toggle');
+                    $('#modal-confirm').removeClass('show');
+                     $('.modal-backdrop').remove();
                     table.ajax.reload();
+                   
+                 
+                      
                 }),
                 dataType: 'json'
             });
