@@ -75,9 +75,12 @@ class LibraryDocumentContentController extends Controller
                     'created_by' => auth()->user()->id,
                     'created_at' => date("Y-m-d H:i:s"),
                 ];
-                if (isset($request->file) && $request->audio_file !== 'undefined') {
+                if ($request->hasFile('file')) {
                     $file = storePDFFiles($request, ['file'], $request->library_document_id);
-                    $data['body'] = $file['file'];
+                    $data['body'] = $file['file']['path']; // Store the file path
+    
+                    // You can also store the file size
+                    $data['file_size'] = $file['file']['size'];
                 } 
                 $res = LibraryDocumentContent::create($data);
                 DB::commit();
@@ -129,7 +132,8 @@ class LibraryDocumentContentController extends Controller
             $libraryDocumentContent->is_main  = $request->is_main;
             if (isset($request->file) && $request->file !== 'undefined') {
                 $file = storePDFFiles($request, ['file'], $request->id);
-                $libraryDocumentContent->body = $file['file'];
+                $libraryDocumentContent->body = $file['file']['path'];
+                $libraryDocumentContent->file_size = $file['file']['size'];
             } 
             $result = $libraryDocumentContent->save();
             if (!empty($result))

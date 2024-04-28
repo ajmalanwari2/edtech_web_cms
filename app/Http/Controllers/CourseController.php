@@ -381,7 +381,8 @@ $courseCount = DB::select('select
                         select
                             cc.title as content_title,
                             cc.type as content_type, 
-                            cc.body as course_content_path
+                            cc.body as course_content_path,
+                            cc.file_size
                         from course_contents as cc
                         where cc.course_id = '.$course_id .'');
 
@@ -449,7 +450,7 @@ $courseCount = DB::select('select
         if (!empty($questions)) {
             foreach ($questions as $q) {
                 if ($q->question_id !== null) {
-                    $q->references = CourseContent::select('title', 'type', 'body')->whereIn('id', explode(',', $q->references))->get();
+                    $q->references = CourseContent::select('title', 'type', 'body', 'file_size')->whereIn('id', explode(',', $q->references))->get();
                     $content['course_quiz_questions'][] = $q;
                 } else {
                     $content['course_quiz_questions'] = [];
@@ -484,7 +485,8 @@ $courseCount = DB::select('select
                 select
                     cc.title as content_title,
                     cc.type as content_type, 
-                    cc.body as course_content_path
+                    cc.body as course_content_path,
+                    cc.file_size
                 from course_contents as cc
                 where cc.course_id = '.$course_id .'');
 

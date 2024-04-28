@@ -69,7 +69,8 @@ class LibraryKitContentController extends Controller
                 ];
                 if (isset($request->file) && $request->file !== 'undefined') {
                     $file = storePDFFiles($request, ['file'], $request->library_kit_id);
-                    $data['body'] = $file['file'];
+                    $data['body'] = $file['file']['path'];
+                    $data['file_size'] = $file['file']['size'];
                 } 
                 $res = LibraryKitContent::create($data);
                 DB::commit();
@@ -118,7 +119,8 @@ class LibraryKitContentController extends Controller
             $libraryKitContent->title  = $request->title;
             if (isset($request->file) && $request->file !== 'undefined') {
                 $file = storePDFFiles($request, ['file'], $request->id);
-                $libraryKitContent->body = $file['file'];
+                $libraryKitContent->body = $file['file']['path'];
+                $libraryKitContent->file_size = $file['file']['size'];
             } 
             $result = $libraryKitContent->save();
             if (!empty($result))

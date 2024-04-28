@@ -250,7 +250,8 @@ class LibraryKitController extends Controller
         $library_kits = DB::select('select 
                     lkc.library_kit_id as id,                
                     lkc.title,
-                    lkc.body as file_path
+                    lkc.body as file_path,
+                    lkc.file_size
                     from library_kit_contents as lkc
                     where lkc.library_kit_id  = '.$library_kit_id .'');
 

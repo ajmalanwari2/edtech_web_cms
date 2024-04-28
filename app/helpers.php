@@ -76,38 +76,49 @@ if (!function_exists('mulistoreFiles')) {
     }
 }
 
+
 if (!function_exists('storePDFFiles')) {
     function storePDFFiles($request, $file_names, $document_id)
     {
+        
         $path_array = [];
-        foreach ($file_names as $type) {           
+        foreach ($file_names as $type) {
             if ($request->hasFile($type)) {
+
                 $path = 'storage/uploads/' . $type . '/';
+
                 $extension = $request->file($type)->getClientOriginalExtension();
+                $fileSize = $request->file($type)->getSize();
                 if (in_array($extension, ['PDF', 'pdf'])) {
+                    $file = $request->file($type);
                     $fileName = $document_id . '-' . time() . '.' . $extension;
                     //create the folder if it does not exist
                     if (!file_exists(base_path() . '/storage/app/public/uploads/' . $type)) {
                         mkdir(base_path() . '/storage/app/public/uploads/' . $type, 0777, true);
                     }
                     //then move the file
-                    $request->file($type)->move(
+                    $file->move(
                         base_path() . '/storage/app/public/uploads/' . $type,
                         $fileName
                     );
 
-                    $path_array[$type] = $path . $fileName;
-                }else{
-                    throw new \Exception('file type is not supported only PDF file is allowed');
+                    $path_array[$type] = [
+                        'path' => $path . $fileName,
+                        'size' => $fileSize,
+                    ];
+                } else {
+                    throw new \Exception('file type is not supported');
                 }
-            }else{
-                throw new \Exception('there is not file attached');
+            } else {
+                throw new \Exception('there is no file attached');
             }
         }
-        
+
         return $path_array;
     }
 }
+
+
 
 if (!function_exists('storeAudioFiles')) {
     function storeAudioFiles($request, $file_names, $document_id)
@@ -117,6 +128,7 @@ if (!function_exists('storeAudioFiles')) {
             if ($request->hasFile($type)) {
                 $path = 'storage/uploads/' . $type . '/';
                 $extension = $request->file($type)->getClientOriginalExtension();
+                $fileSize = $request->file($type)->getSize();
                 if (in_array($extension, ['mp3'])) {
                     $fileName = $document_id . '-' . time() . '.' . $extension;
                     //create the folder if it does not exist
@@ -129,7 +141,10 @@ if (!function_exists('storeAudioFiles')) {
                         $fileName
                     );
 
-                    $path_array[$type] = $path . $fileName;
+                    $path_array[$type] = [
+                        'path' => $path . $fileName,
+                        'size' => $fileSize,
+                    ];
                 }else{
                     throw new \Exception('file type is not supported only MP3 file is allowed');
                 }

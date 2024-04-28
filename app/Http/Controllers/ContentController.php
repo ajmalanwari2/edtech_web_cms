@@ -107,15 +107,21 @@ class ContentController extends Controller
                 if ($request->type == "file" && isset($request->file)) {
                     $file = storePDFFiles($request, ['file'], $request->chapter_id);
 
-                    $data['body'] = $file['file'];
+                    $data['body'] = $file['file']['path']; // Store the file path
+    
+                    // You can also store the file size
+                    $data['file_size'] = $file['file']['size'];
                 } elseif ($request->type == "audio" && isset($request->audio_file)) {
-                    $audio_file = storeFiles($request, ['audio_file'], $request->chapter_id);
+                    $audio_file = storeAudioFiles($request, ['audio_file'], $request->chapter_id);
 
-                    $data['body'] = $audio_file['audio_file'];
+                    $data['body'] = $audio_file['audio_file']['path']; // Store the file path
+    
+                    // You can also store the file size
+                    $data['file_size'] = $audio_file['audio_file']['size'];
                 } elseif ($request->type == "picture" && isset($request->picture_file)) {
-                    $audio_file = storeFiles($request, ['picture_file'], $request->chapter_id);
+                    $picture_file = storeFiles($request, ['picture_file'], $request->chapter_id);
 
-                    $data['body'] = $audio_file['picture_file'];
+                    $data['body'] = $picture_file['picture_file'];
                 }
                 else{
                     $data['body'] = $request->body;
@@ -134,44 +140,6 @@ class ContentController extends Controller
             return redirect(route('content.index'))->with('error', $e->getMessage());
         }
     }
-    // public function store(Request $request)
-    // {
-
-    //     try {
-    //         if ($request->ajax()) {
-    //             DB::beginTransaction();
-    //             $data = [
-    //                 'title' => $request->title,
-    //                 'type' => $request->type,
-    //                 'chapter_id' => $request->chapter_id,
-    //                 'created_by' => auth()->user()->id,
-    //                 'created_at' => date("Y-m-d H:i:s"),
-    //             ];
-    //             if ($request->type == "file" && isset($request->file)) {
-    //                 $file = storeFiles($request, ['file'], $request->chapter_id);
-    //                 $data['body'] = $file['file'];
-    //             } else{
-    //                 $data['body'] = $request->body;
-    //             }
-    //             $res = Content::create($data);
-    //             DB::commit();
-
-
-
-    //             if (!empty($res->id)) {
-    //                 return response(['id' => $res->id], 201)
-    //                     ->header('Content-Type', 'text/json');
-    //             }
-    //         }
-    //     } catch (Exception $e) {
-    //         DB::rollBack();
-    //         return redirect(route('content.index'))->with('error', $e->getMessage());
-    //     }
-    // }
-
-    /**
-     * Display the specified resource.
-     */
 
      public function show(Request $request)
      {
@@ -194,42 +162,6 @@ class ContentController extends Controller
          }
      }
 
-    // public function show(Request $request)
-    // {
-
-    //         $data = DB::select("
-    //         select sl.*
-    //         from subject_lessons as sl
-    //         where sl.chapter_id = ".$request->id
-    //     );
-    //     return Datatables::of($data)
-    //         ->addIndexColumn()
-    //         ->addColumn('body', function ($row) {
-    //             if($row->type == 'file'){
-    //                 $contentBody = '<a href="'.asset($row->body).'"> <i class="material-icons"; style="color:primary">assignment_returned
-    //                 </i></a>';
-    //                 return $contentBody;
-    //             }elseif($row->type == 'video'){
-    //                $contentBody = '<a href="'.asset($row->body).'" target="_blank">Download Video
-    //                </a>';
-    //                return $contentBody;
-    //             }else{
-    //                 return $row->body;
-    //             }
-
-    //         })
-    //         ->addColumn('actions', function ($row) {
-    //             $actionBtn = ' <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-confirm"
-    //             onclick="deleteRecordID=' . $row->id . ';"> <i class="material-icons"; style="color:darkorange">delete</i></a>';
-
-    //             return $actionBtn;
-    //         })
-    //         ->rawColumns(['actions', 'body'])
-    //         ->make(true);
-
-
-
-    // }
     public function download($filename)
     {
 
@@ -252,10 +184,12 @@ class ContentController extends Controller
             $chapterContent->type = $request->type;
             if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {
                 $file = storePDFFiles($request, ['file'], $request->id);
-                $chapterContent->body = $file['file'];
+                $chapterContent->body = $file['file']['path'];
+                $chapterContent->file_size = $file['file']['size'];
             } if ($request->type == "audio" && isset($request->audio_file) && $request->audio_file !== 'undefined') {
-                $audio_file = storeFiles($request, ['audio_file'], $request->id);
-                $chapterContent->body = $audio_file['audio_file'];
+                $audio_file = storeAudioFiles($request, ['audio_file'], $request->id);
+                $chapterContent->body = $audio_file['audio_file']['path'];
+                $chapterContent->file_size = $audio_file['audio_file']['size'];
             } if ($request->type == "picture" && isset($request->picture_file) && $request->picture_file !== 'undefined') {
                 $picture_file = storeFiles($request, ['picture_file'], $request->id);
                 $chapterContent->body = $picture_file['picture_file'];

@@ -69,7 +69,10 @@ class LibraryAudioContentController extends Controller
                 ];
                 if ($request->hasFile('file') && $request->file('file') !== 'undefined') {
                     $file = storeAudioFiles($request, ['file'], $request->library_audio_id);
-                    $data['body'] = $file['file'];
+                    $data['body'] = $file['file']['path']; // Store the file path
+    
+                    // You can also store the file size
+                    $data['file_size'] = $file['file']['size'];
                 } 
                 $res = LibraryAudioContent::create($data);
                 DB::commit();
@@ -118,7 +121,8 @@ class LibraryAudioContentController extends Controller
             $libraryAudioContent->title  = $request->title;
             if (isset($request->file) && $request->file !== 'undefined') {
                 $file = storeAudioFiles($request, ['file'], $request->id);
-                $libraryAudioContent->body = $file['file'];
+                $libraryAudioContent->body = $file['file']['path'];
+                $libraryAudioContent->file_size = $file['file']['size'];
             } 
             $result = $libraryAudioContent->save();
             if (!empty($result))

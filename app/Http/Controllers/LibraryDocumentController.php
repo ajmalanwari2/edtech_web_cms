@@ -252,7 +252,8 @@ class LibraryDocumentController extends Controller
         $library_documents = DB::select('select 
                         ldc.library_document_id as id,                
                         ldc.title,
-                        ldc.body as file_path
+                        ldc.body as file_path,
+                        ldc.file_size
                     from library_document_contents as ldc
                     where ldc.library_document_id  = '.$library_document_id .'');
 
@@ -293,7 +294,8 @@ class LibraryDocumentController extends Controller
                         $library_documents = DB::select('select 
                         ldc.library_document_id as id,                
                         ldc.title,
-                        ldc.body as path
+                        ldc.body as path,
+                        ldc.file_size
                     from library_document_contents as ldc
                     where ldc.library_document_id  = '.$documentId.'');
                     }else{
@@ -347,7 +349,8 @@ class LibraryDocumentController extends Controller
                         $library_audios = DB::select('select 
                         ldc.library_audio_id as id,                
                         ldc.title,
-                        ldc.body as path
+                        ldc.body as path,
+                        ldc.file_size
                     from library_audio_contents as ldc
                     where ldc.library_audio_id  = '.$audioId.'');
                     }else{

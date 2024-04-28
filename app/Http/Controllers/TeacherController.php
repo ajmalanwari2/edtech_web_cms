@@ -290,7 +290,8 @@ class TeacherController extends Controller
                     $chapterContents = DB::select('SELECT
                          sl.title as content_title,
                             sl.type as content_type, 
-                            sl.body as chapter_content_path
+                            sl.body as chapter_content_path,
+                            sl.file_size
                     FROM subject_lessons AS sl
                     WHERE sl.chapter_id = ' . $chapter->chapter_id);
     

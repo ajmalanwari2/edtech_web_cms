@@ -11,7 +11,7 @@ class Content extends Model
     public $timestamps = true;
     public $table = 'subject_lessons';
 
-    protected $fillable  = ['id', 'chapter_id', 'title', 'body', 'type', 'created_by', 'updated_by'];
+    protected $fillable  = ['id', 'chapter_id', 'title', 'body', 'file_size', 'type', 'created_by', 'updated_by'];
 
     public function chapters()
     {

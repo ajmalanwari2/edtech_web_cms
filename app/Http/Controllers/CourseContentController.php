@@ -79,11 +79,13 @@ class CourseContentController extends Controller
                 if ($request->type == "file" && isset($request->file)) {
                     $file = storePDFFiles($request, ['file'], $request->chapter_id);
 
-                    $data['body'] = $file['file'];
+                    $data['body'] = $file['file']['path'];
+                    $data['file_size'] = $file['file']['size'];
                 } elseif ($request->type == "audio" && isset($request->audio_file)) {
-                    $audio_file = storeFiles($request, ['audio_file'], $request->chapter_id);
+                    $audio_file = storeAudioFiles($request, ['audio_file'], $request->chapter_id);
 
-                    $data['body'] = $audio_file['audio_file'];
+                    $data['body'] = $audio_file['audio_file']['path'];
+                    $data['file_size'] = $audio_file['audio_file']['size'];
                 } elseif ($request->type == "picture" && isset($request->picture_file)) {
                     $audio_file = storeFiles($request, ['picture_file'], $request->chapter_id);
 
@@ -117,10 +119,12 @@ class CourseContentController extends Controller
             $courseContent->type = $request->type;
             if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {
                 $file = storePDFFiles($request, ['file'], $request->id);
-                $courseContent->body = $file['file'];
+                $courseContent->body = $file['file']['path'];
+                $courseContent->file_size = $file['file']['size'];
             } if ($request->type == "audio" && isset($request->audio_file) && $request->audio_file !== 'undefined') {
-                $audio_file = storeFiles($request, ['audio_file'], $request->id);
-                $courseContent->body = $audio_file['audio_file'];
+                $audio_file = storeAudioFiles($request, ['audio_file'], $request->id);
+                $courseContent->body = $audio_file['audio_file']['path'];
+                $courseContent->file_size = $audio_file['audio_file']['size'];
             } if ($request->type == "picture" && isset($request->picture_file) && $request->picture_file !== 'undefined') {
                 $picture_file = storeFiles($request, ['picture_file'], $request->id);
                 $courseContent->body = $picture_file['picture_file'];

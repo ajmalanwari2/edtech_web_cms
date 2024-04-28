@@ -561,7 +561,8 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                         select
                             sl.title as content_title,
                             sl.type as content_type, 
-                            sl.body as chapter_content_path
+                            sl.body as chapter_content_path,
+                            sl.file_size
                         from subject_lessons as sl
                         where sl.chapter_id = '.$chapter_id .'');
 
@@ -635,7 +636,7 @@ FROM
         if (!empty($questions)) {
             foreach ($questions as $q) {
                 if ($q->question_id !== null) {
-                    $q->references = Content::select('title','type', 'body')->whereIn('id', explode(',', $q->references))->get();
+                    $q->references = Content::select('title','type', 'body', 'file_size')->whereIn('id', explode(',', $q->references))->get();
                     $content['chapter_quiz_questions'][] = $q;
                 } else {
                     $content['chapter_quiz_questions'] = [];

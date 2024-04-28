@@ -10,5 +10,5 @@ class LibraryKitContent extends Model
     use HasFactory;
     public $timestamps = true;
 
-    protected $fillable  = ['id', 'title', 'body','library_kit_id','created_by', 'updated_by'];
+    protected $fillable  = ['id', 'title', 'body', 'file_size','library_kit_id','created_by', 'updated_by'];
 }

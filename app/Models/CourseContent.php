@@ -10,7 +10,7 @@ class CourseContent extends Model
     use HasFactory;
     public $timestamps = true;
 
-    protected $fillable  = ['id', 'course_id', 'title', 'body', 'type', 'created_by', 'updated_by'];
+    protected $fillable  = ['id', 'course_id', 'title', 'body', 'file_size', 'type', 'created_by', 'updated_by'];
 
     public function courses()
     {

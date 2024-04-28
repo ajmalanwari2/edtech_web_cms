@@ -10,5 +10,5 @@ class LibraryDocumentContent extends Model
     use HasFactory;
     public $timestamps = true;
 
-    protected $fillable  = ['id', 'title', 'body','is_main', 'library_document_id','created_by', 'updated_by'];
+    protected $fillable  = ['id', 'title', 'body','is_main', 'file_size', 'library_document_id','created_by', 'updated_by'];
 }

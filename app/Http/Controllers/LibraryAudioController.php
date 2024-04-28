@@ -257,7 +257,8 @@ class LibraryAudioController extends Controller
         $library_audio = DB::select('select 
                     lac.library_audio_id as id,                
                     lac.title,
-                    lac.body as file_path
+                    lac.body as file_path,
+                    lac.file_size
                     from library_audio_contents as lac
                     where lac.library_audio_id  = '.$library_audio_id .'');
 

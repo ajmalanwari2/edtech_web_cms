@@ -56,22 +56,8 @@ class ChapterController extends Controller
                     return $row->quiz_included ? 'Yes' : 'No';
                 })
                 ->addColumn('actions', function ($row) {
-                    $actionBtn = '<div class="dropdown ml-auto">
-                    <a href="#" class="dropdown-toggle text-muted" data-caret="false" data-toggle="dropdown">
-                        <i class="material-icons">more_vert</i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" onclick="loadRecord('.$row->id.')" href="javascript.void(0)" data-toggle="modal" data-target="#edit-modal-form">
-                    <i class="material-icons">edit</i></i> Edit</a>
-                    <a class="dropdown-item" onclick="loadRecord('.$row->id.')" href="javascript:void(0)"
-                    data-toggle="modal" data-target="#modal-view"><i class="material-icons"; style="color:SlateBlue">visibility</i> View</a>
-                    <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#modal-confirm"
-                onclick="deleteRecordID=' . $row->id . ';"> <i class="material-icons"; style="color:darkorange">delete</i> Delete</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="'.route('content.show', $row->id).'"><i class="material-icons">add</i></i> Add Content</a>
-                        <a class="dropdown-item" href="'.route('quiz.show', $row->id).'"><i class="material-icons">add</i></i> Add Quiz</a>
-                    </div>
-                </div>';
+                    $actionBtn = '  <a class="dropdown-item" onclick="loadRecord('.$row->id.')" href="javascript:void(0)"
+                    data-toggle="modal" data-target="#modal-view"><i class="material-icons"; style="color:SlateBlue">visibility</i></a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['actions'])
