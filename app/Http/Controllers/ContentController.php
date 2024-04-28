@@ -55,43 +55,7 @@ class ContentController extends Controller
         }
     }
 
-    // public function list(Request $request)
-    // {
-    //     if ($request->ajax()) {
-
-    //         $data = DB::select('
-    //         select
-    //         school.id as school_id,
-    //         school.name as school_name,
-    //         grade.id as grade_id,
-    //         grade.name as grade_name,
-    //         subject.id as subject_id,
-    //         subject.name as subject_name
-
-    //         from
-    //         schools AS school
-    //         join grades_in_schools as grade_in_school on grade_in_school.school_id=school.id
-    //         JOIN grades AS grade ON grade.id = grade_in_school.grade_id
-    //         join subjects_in_grades as subject_in_grade on subject_in_grade.grade_id = grade.id
-    //         join subjects as subject on subject.id = subject_in_grade.subject_id
-    //     ');
-    //         return Datatables::of($data)
-    //             ->addIndexColumn()
-    //             ->addColumn('actions', function ($row) {
-    //                 $actionBtn = '<a  onclick="loadRecord(' . $row->school_id . ',' . $row->grade_id . ',' . $row->subject_id . ')" href="javascript:void(0)"
-    //                 data-toggle="modal" data-target="#modal-view"><i class="material-icons"; style="color:SlateBlue">visibility</i></a>
-    //                 <a onclick="setHiddenIDs(' . $row->school_id . ',' . $row->grade_id . ',' . $row->subject_id . ')" href="javascript:void(0)" data-toggle="modal" data-target="#modal-form" > <i class="material-icons" style="color:darkgreen">add</i></a>';
-
-    //                 return $actionBtn;
-    //             })
-    //             ->rawColumns(['actions'])
-    //             ->make(true);
-    //     }
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
         try {

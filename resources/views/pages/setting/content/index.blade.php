@@ -365,7 +365,7 @@
             <div class="modal-body text-center p-4">
                 <i class="material-icons icon-40pt text-warning mb-2">warning</i>
                 <h6>Do you want to delete the record!</h6>
-                <button type="button" class="btn btn-light" data-dsmiss="modal" i>No</button>
+                <button type="button" class="btn btn-light" onclick="closeModal()">No</button>
                 <button type="button" class="btn btn-warning my-2" onclick="deleteRecord()">Yes</button>
             </div> <!-- // END .modal-body -->
         </div> <!-- // END .modal-content -->
@@ -823,6 +823,48 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
     $('#subject_id').val('');
 });
 
+
+var deleteRecordID = 0;
+
+function deleteRecord() {
+
+    if (deleteRecordID == 0)
+        return;
+
+    $.ajax({
+        type: "POST",
+        url: site_url + 'api/chapter/delete',
+        data: {
+            id: deleteRecordID,
+            '_token': '{{ csrf_token() }}'
+        },
+        fail: (function() {
+            $.toaster({
+                priority: 'danger',
+                title: 'Info',
+                message: 'Failed when deleting record.'
+            });
+        }),
+        success: (function(data) {
+            $.toaster({
+                priority: 'success',
+                title: 'Info',
+                message: 'Record has been removed.'
+               
+               
+            });
+           
+            // $('#modal-confirm').modal('toggle');
+            $('#modal-confirm').removeClass('show');
+             $('.modal-backdrop').remove();
+            table.ajax.reload();
+           
+         
+              
+        }),
+        dataType: 'json'
+    });
+}
 
 $(document).ready(function() {
     $('#grade_id').change(function() {

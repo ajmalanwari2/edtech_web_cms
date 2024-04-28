@@ -200,6 +200,9 @@ class ChapterController extends Controller
             $chapterContents = DB::table('subject_lessons')->where('chapter_id', $request->id)->get();
             foreach($chapterContents as $chapterContent){
                 Content::destroy($chapterContent->id);
+
+                $res = File::delete(base_path()  .$rec->body);
+                
                 }
             if (!empty($result))
                 return response([$result], 200)

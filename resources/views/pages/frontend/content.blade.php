@@ -29,19 +29,19 @@
                 <div class="vid-details">
                     <table>
                         <tr>
-                            <td>صنف</td>
+                            <td>Grade</td>
                             <td>{{$g->grade_name}}</td>
                         </tr>
                         <tr>
-                            <td>زبان درسی</td>
+                            <td>Language</td>
                             <td>{{$g->grade_language}}</td>
                         </tr>
                         <tr>
-                            <td>مضامین</td>
+                            <td>Subjects</td>
                             <td>{{$g->subject_count}}</td>
                         </tr>
                         <tr>
-                            <td>تعداد ویدویوهای درسی</td>
+                            <td>Number of Videos</td>
                             <td>{{$g->video_count}}</td>
                         </tr>
                     </table>

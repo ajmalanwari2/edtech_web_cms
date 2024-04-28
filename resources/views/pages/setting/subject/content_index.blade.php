@@ -784,6 +784,48 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
 });
 
 
+var deleteRecordID = 0;
+
+function deleteRecord() {
+
+    if (deleteRecordID == 0)
+        return;
+
+    $.ajax({
+        type: "POST",
+        url: site_url + 'api/chapter/delete',
+        data: {
+            id: deleteRecordID,
+            '_token': '{{ csrf_token() }}'
+        },
+        fail: (function() {
+            $.toaster({
+                priority: 'danger',
+                title: 'Info',
+                message: 'Failed when deleting record.'
+            });
+        }),
+        success: (function(data) {
+            $.toaster({
+                priority: 'success',
+                title: 'Info',
+                message: 'Record has been removed.'
+               
+               
+            });
+           
+            // $('#modal-confirm').modal('toggle');
+            $('#modal-confirm').removeClass('show');
+             $('.modal-backdrop').remove();
+            table.ajax.reload();
+           
+         
+              
+        }),
+        dataType: 'json'
+    });
+}
+
 $(document).ready(function() {
     $('#grade_id').change(function() {
         let pro_id = $(this).val();
