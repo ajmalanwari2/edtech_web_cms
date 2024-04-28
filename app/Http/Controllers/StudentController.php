@@ -589,6 +589,7 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                     $content['total_question'] = $startQuiz[0]->total_question;
                     $content['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
                     $content['quiz_status'] = $startQuiz[0]->quiz_status;
+                    $content['chapter_quiz_questions'] = [];
 
 $questions = DB::select('
         SELECT
