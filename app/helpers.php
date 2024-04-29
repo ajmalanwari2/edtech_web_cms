@@ -80,7 +80,6 @@ if (!function_exists('mulistoreFiles')) {
 if (!function_exists('storePDFFiles')) {
     function storePDFFiles($request, $file_names, $document_id)
     {
-        \Log::info($request);
         $path_array = [];
         foreach ($file_names as $type) {
             if ($request->hasFile($type)) {
@@ -174,14 +173,17 @@ if (!function_exists('storeAudioFiles')) {
                 $path = 'storage/uploads/' . $type . '/';
                 $extension = $request->file($type)->getClientOriginalExtension();
                 $fileSize = $request->file($type)->getSize();
+                $originalFileName = $request->file($type)->getClientOriginalName();
                 if (in_array($extension, ['mp3'])) {
-                    $fileName = $document_id . '-' . time() . '.' . $extension;
+                    $file = $request->file($type);
+                    // $fileName = $document_id . '-' . time() . '.' . $extension;
+                    $fileName = $originalFileName;
                     //create the folder if it does not exist
                     if (!file_exists(base_path() . '/storage/app/public/uploads/' . $type)) {
                         mkdir(base_path() . '/storage/app/public/uploads/' . $type, 0777, true);
                     }
                     //then move the file
-                    $request->file($type)->move(
+                    $file->move(
                         base_path() . '/storage/app/public/uploads/' . $type,
                         $fileName
                     );
