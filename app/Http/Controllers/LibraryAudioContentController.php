@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateKitContentRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use DataTables;
-
+use Illuminate\Support\Facades\Storage;
 class LibraryAudioContentController extends Controller
 {
     /**
@@ -120,6 +120,14 @@ class LibraryAudioContentController extends Controller
             $libraryAudioContent = LibraryAudioContent::find($request->id);
             $libraryAudioContent->title  = $request->title;
             if (isset($request->file) && $request->file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $libraryAudioContent->body);
+
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 $file = storeAudioFiles($request, ['file'], $request->id);
                 $libraryAudioContent->body = $file['file']['path'];
                 $libraryAudioContent->file_size = $file['file']['size'];
@@ -135,6 +143,15 @@ class LibraryAudioContentController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
+            $libraryAudioContent = LibraryAudioContent::find($request->id);
+            $filePath = str_replace('storage/', '', $libraryAudioContent->body);
+
+            // Check if the file exists in the storage
+            if (Storage::disk('public')->exists($filePath)) {
+                // Delete the file
+                Storage::disk('public')->delete($filePath);
+                // File deleted successfully
+            }
             $result = LibraryAudioContent::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)

@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateKitContentRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use DataTables;
-
+use Illuminate\Support\Facades\Storage;
 class LibraryKitContentController extends Controller
 {
     /**
@@ -118,6 +118,14 @@ class LibraryKitContentController extends Controller
             $libraryKitContent = LibrarykitContent::find($request->id);
             $libraryKitContent->title  = $request->title;
             if (isset($request->file) && $request->file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $libraryKitContent->body);
+
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 $file = storePDFFiles($request, ['file'], $request->id);
                 $libraryKitContent->body = $file['file']['path'];
                 $libraryKitContent->file_size = $file['file']['size'];
@@ -133,6 +141,15 @@ class LibraryKitContentController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
+            $libraryKitContent = LibrarykitContent::find($request->id);
+            $filePath = str_replace('storage/', '', $libraryKitContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
             $result = LibrarykitContent::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)

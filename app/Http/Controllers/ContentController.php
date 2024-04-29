@@ -9,7 +9,7 @@ use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 class ContentController extends Controller
 {
@@ -147,14 +147,38 @@ class ContentController extends Controller
             $chapterContent->title  = $request->title;
             $chapterContent->type = $request->type;
             if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $chapterContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
                 $file = storePDFFiles($request, ['file'], $request->id);
                 $chapterContent->body = $file['file']['path'];
                 $chapterContent->file_size = $file['file']['size'];
             } if ($request->type == "audio" && isset($request->audio_file) && $request->audio_file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $chapterContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
                 $audio_file = storeAudioFiles($request, ['audio_file'], $request->id);
                 $chapterContent->body = $audio_file['audio_file']['path'];
                 $chapterContent->file_size = $audio_file['audio_file']['size'];
             } if ($request->type == "picture" && isset($request->picture_file) && $request->picture_file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $chapterContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
                 $picture_file = storeFiles($request, ['picture_file'], $request->id);
                 $chapterContent->body = $picture_file['picture_file'];
             }
@@ -174,6 +198,15 @@ class ContentController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
+            $chapterContent = Content::find($request->id);
+            $filePath = str_replace('storage/', '', $chapterContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
             $result = Content::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)

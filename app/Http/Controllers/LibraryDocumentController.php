@@ -11,7 +11,7 @@ use App\Http\Requests\UpdateIqraKitRequest;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 class LibraryDocumentController extends Controller
 { /**
     * Display a listing of the resource.
@@ -164,12 +164,24 @@ class LibraryDocumentController extends Controller
         //
     }
 
-   
-
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $result = LibraryDocument::destroy($request->id);
+            $libraryDocContents = DB::table('library_document_contents')->where('library_document_id', $request->id)->get();
+            foreach($libraryDocContents as $libraryDocContent){
+
+$filePath = str_replace('storage/', '', $libraryDocContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
+libraryDocumentContent::destroy($libraryDocContent->id);
+
+                }
+                $result = LibraryDocument::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)
                     ->header('Content-Type', 'text/json');
@@ -178,6 +190,9 @@ class LibraryDocumentController extends Controller
                     ->header('Content-Type', 'text/json');
         }
     }
+
+
+  
 
 
 

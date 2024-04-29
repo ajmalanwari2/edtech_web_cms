@@ -324,7 +324,8 @@
                     title: 'Info',
                     message: 'Record has been removed.'
                 });
-                $('#modal-confirm').modal('toggle');
+                $('#modal-confirm').removeClass('show');
+            $('.modal-backdrop').remove();
                 table.ajax.reload();
             }),
             dataType: 'json'

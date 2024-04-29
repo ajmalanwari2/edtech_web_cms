@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LibraryKit;
+use App\Models\libraryKitContent;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Subject;
@@ -11,7 +12,7 @@ use App\Http\Requests\UpdateIqraKitRequest;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 class LibraryKitController extends Controller
 { /**
     * Display a listing of the resource.
@@ -160,11 +161,24 @@ class LibraryKitController extends Controller
     }
 
    
-
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $result = LibraryKit::destroy($request->id);
+            $librarykitContents = DB::table('library_kit_contents')->where('library_kit_id', $request->id)->get();
+            foreach($librarykitContents as $librarykitContent){
+
+$filePath = str_replace('storage/', '', $librarykitContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
+libraryKitContent::destroy($librarykitContent->id);
+
+                }
+                $result = LibraryKit::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)
                     ->header('Content-Type', 'text/json');
@@ -173,6 +187,7 @@ class LibraryKitController extends Controller
                     ->header('Content-Type', 'text/json');
         }
     }
+
 
 
 

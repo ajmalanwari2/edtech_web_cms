@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCourse_ContentRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Storage;
 class CourseContentController extends Controller
 {
     /**
@@ -117,15 +118,40 @@ class CourseContentController extends Controller
             $courseContent = CourseContent::find($request->id);
             $courseContent->title  = $request->title;
             $courseContent->type = $request->type;
+
             if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $courseContent->body);
+
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 $file = storePDFFiles($request, ['file'], $request->id);
                 $courseContent->body = $file['file']['path'];
                 $courseContent->file_size = $file['file']['size'];
             } if ($request->type == "audio" && isset($request->audio_file) && $request->audio_file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $courseContent->body);
+
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 $audio_file = storeAudioFiles($request, ['audio_file'], $request->id);
                 $courseContent->body = $audio_file['audio_file']['path'];
                 $courseContent->file_size = $audio_file['audio_file']['size'];
             } if ($request->type == "picture" && isset($request->picture_file) && $request->picture_file !== 'undefined') {
+                $filePath = str_replace('storage/', '', $courseContent->body);
+
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 $picture_file = storeFiles($request, ['picture_file'], $request->id);
                 $courseContent->body = $picture_file['picture_file'];
             }else{
@@ -176,6 +202,15 @@ class CourseContentController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
+            $courseContent = CourseContent::find($request->id);
+            $filePath = str_replace('storage/', '', $courseContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
             $result = CourseContent::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)

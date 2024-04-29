@@ -13,7 +13,7 @@ use App\Models\Student;
 use DataTables;
 use App\Models\CourseContent;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Storage;
 class CourseController extends Controller
 {
     /**
@@ -253,14 +253,26 @@ public function store(Request $request)
      * Remove the specified resource from storage.
      */
 
+
+    
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $result = Course::destroy($request->id);
+           
             $courseContents = DB::table('course_contents')->where('course_id', $request->id)->get();
             foreach($courseContents as $courseContent){
+              
+                $filePath = str_replace('storage/', '', $courseContent->body);
+ 
+                // Check if the file exists in the storage
+                if (Storage::disk('public')->exists($filePath)) {
+                    // Delete the file
+                    Storage::disk('public')->delete($filePath);
+                    // File deleted successfully
+                }
                 CourseContent::destroy($courseContent->id);
                 }
+                $result = Course::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)
                     ->header('Content-Type', 'text/json');

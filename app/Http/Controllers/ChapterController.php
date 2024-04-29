@@ -9,6 +9,7 @@ use App\Http\Requests\StoreChapterRequest;
 use App\Http\Requests\UpdateChapterRequest;
 use Illuminate\Support\Facades\DB;
 use DataTables;
+use Illuminate\Support\Facades\Storage;
 class ChapterController extends Controller
 {
     /**
@@ -102,35 +103,6 @@ class ChapterController extends Controller
         }
     }
 
-
-
-
-    // public function store(Request $request)
-    // {
-
-    //     try {
-    //         if ($request->ajax())
-    //         {
-    //             DB::beginTransaction();
-    //             $data = $request->input();
-    //             $data['created_by'] = auth()->user()->id;
-    //             $result = Chapter::create($data);
-    //             DB::commit();
-    //                 if(!empty($result->id))
-    //                 {
-    //                     return response(['id' => $result->id], 201)
-    //                     ->header('Content-Type', 'text/json');
-    //                 }
-    //         }
-    //     } catch (Exception $e) {
-    //         DB::rollBack();
-    //         return redirect(route('subject.index'))->with('error',$e->getMessage());
-    //     }
-    // }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request)
     {
         if ($request->ajax()) {
@@ -196,14 +168,21 @@ class ChapterController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $result = Chapter::destroy($request->id);
             $chapterContents = DB::table('subject_lessons')->where('chapter_id', $request->id)->get();
             foreach($chapterContents as $chapterContent){
-                Content::destroy($chapterContent->id);
 
-                $res = File::delete(base_path()  .$rec->body);
-                
+$filePath = str_replace('storage/', '', $chapterContent->body);
+
+// Check if the file exists in the storage
+if (Storage::disk('public')->exists($filePath)) {
+    // Delete the file
+    Storage::disk('public')->delete($filePath);
+    // File deleted successfully
+}
+Content::destroy($chapterContent->id);
+
                 }
+                $result = Chapter::destroy($request->id);
             if (!empty($result))
                 return response([$result], 200)
                     ->header('Content-Type', 'text/json');

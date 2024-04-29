@@ -729,12 +729,9 @@ function loadRecord(id) {
                 contentsHtml += '<tr>';
                 contentsHtml += '<td>' + value.title + '</td>';
                 contentsHtml += '<td>' + value.type + '</td>';
-                if (value.type === 'video') {
+               
                     contentsHtml += '<td><a href="' + value.body +
                         '" target="_blank">Download Content</a></td>';
-                } else {
-                    contentsHtml += '<td>' + value.body + '</td>';
-                }
 
                 contentsHtml += '</tr>';
             });
@@ -771,7 +768,8 @@ function deleteRecord() {
                 title: 'Info',
                 message: 'Record has been removed.'
             });
-            $('#modal-confirm').modal('toggle');
+            $('#modal-confirm').removeClass('show');
+            $('.modal-backdrop').remove();
             table.ajax.reload();
         }),
         dataType: 'json'
