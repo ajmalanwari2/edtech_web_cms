@@ -392,28 +392,49 @@ $grade = Grade::find($id);
     public function subject($lang, $grade_id, $subject_id)
     {
         $lang = $this->getLang();
-        $subjectContents = DB::select('select
-        sl.id,
-        sl.chapter_id,
-        sl.title,
-        sl.body,
-        sl.type,
-        g.name as grade_name,
-        s.name as subject_name,
-        ch.number as chapter_number
-    from subject_lessons sl 
-    join chapters ch 
-        on sl.chapter_id=ch.id 
-    join subjects as s
-        on s.id = ch.subject_id
-    join subjects_in_grades as sig
-    	on s.id = sig.subject_id
-    join grades as g
-        on g.id = sig.grade_id    
-        where sl.type=\'video\' 
-        and s.id='.$subject_id.'
-        and g.id='.$grade_id.'
-   ');
+        $query = 'SELECT
+    sl.chapter_id,
+    GROUP_CONCAT(DISTINCT sl.id) AS ids,
+    GROUP_CONCAT(DISTINCT sl.title) AS titles,
+    GROUP_CONCAT(DISTINCT sl.body) AS bodies,
+    GROUP_CONCAT(DISTINCT sl.type) AS types,
+    g.name AS grade_name,
+    s.name AS subject_name,
+    ch.number AS chapter_number,
+    ch.name as chapter_name
+FROM subject_lessons sl
+JOIN chapters ch ON sl.chapter_id = ch.id
+JOIN subjects s ON s.id = ch.subject_id
+JOIN subjects_in_grades sig ON s.id = sig.subject_id
+JOIN grades g ON g.id = sig.grade_id
+WHERE (sl.type = "video" OR sl.type = "file")
+    AND s.id = :subject_id
+    AND g.id = :grade_id
+GROUP BY sl.chapter_id';
+
+$subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' => $grade_id]);
+//         $subjectContents = DB::select('select
+//         sl.id,
+//         sl.chapter_id,
+//         sl.title,
+//         sl.body,
+//         sl.type,
+//         g.name as grade_name,
+//         s.name as subject_name,
+//         ch.number as chapter_number
+//     from subject_lessons sl 
+//     join chapters ch 
+//         on sl.chapter_id=ch.id 
+//     join subjects as s
+//         on s.id = ch.subject_id
+//     join subjects_in_grades as sig
+//     	on s.id = sig.subject_id
+//     join grades as g
+//         on g.id = sig.grade_id    
+//         where sl.type=\'video\' or sl.type=\'file\' 
+//         and s.id='.$subject_id.'
+//         and g.id='.$grade_id.'
+//    ');
         if ($this->lang == 'en') {
             return view('pages.frontend.subject', compact('lang', 'subjectContents'));
         } else {
@@ -421,6 +442,38 @@ $grade = Grade::find($id);
         }
     }
 
+
+    public function course($lang)
+    {
+        $lang = $this->getLang();
+      
+        $courseContents = DB::select('select
+        cc.id,
+        cc.title,
+        cc.body,
+        cc.type
+    from course_contents cc
+    join courses as c
+    on c.id = cc.course_id
+    where c.language = \''.$lang.'\'
+   ');
+
+   $courseContentEnglish = DB::select('select
+        cc.id,
+        cc.title,
+        cc.body,
+        cc.type
+    from course_contents cc
+    join courses as c
+    on c.id = cc.course_id
+    where c.language = \'pa\'
+   ');
+        if ($this->lang == 'en') {
+            return view('pages.frontend.course', compact('lang', 'courseContentEnglish'));
+        } else {
+            return view('pages.frontend.course_rtl', compact('lang', 'courseContents'));
+        }
+    }
 
     public function landing()
     {

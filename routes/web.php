@@ -60,6 +60,7 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
         Route::get('grade/{grade_id}/subject/{subject_id}', [FrontEndController::class, 'subject'])->name('subject');
         Route::get('request_form', [FrontEndController::class, 'request_form'])->name('request_form');
         Route::post('request_form_submit', [FrontEndController::class, 'request_form_submit'])->name('request_form_submit');
+        Route::get('course', [FrontEndController::class, 'course'])->name('course');
     });
     
     Route::get('/', function () {

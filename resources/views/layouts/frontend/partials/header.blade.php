@@ -32,7 +32,7 @@
                             <li><a href="contents.html">Content Second</a></li>
                         </ul> --}}
                         </li>
-                        <li><a href="#">Courses</a></i>
+                        <li><a href="/front/{{ $lang }}/course">Courses</a></i>
                         <li><a href="#">Download</a>
                             <ul>
                                 <li><a href="#">Android</a></li>

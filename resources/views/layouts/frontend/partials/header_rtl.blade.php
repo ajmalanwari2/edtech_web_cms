@@ -32,6 +32,7 @@
                           <li><a href="contents_rtl.html">فهرست دوم</a></li>
                         </ul> --}}
                         </li>
+                        <li><a href="/front/{{ $lang }}/course">کورسهای آموزشی</a></i>
                         <li><a href="#">دونلود</a>
                             <ul>
                                 <li><a href="#">اپل</a></li>
