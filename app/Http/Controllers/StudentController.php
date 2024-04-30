@@ -483,7 +483,8 @@ $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
                             //     }
 $chapters['textbook'] = DB::select('select
     ldc.title as document_title,
-    ldc.body as document_content_path
+    ldc.body as document_content_path,
+    ldc.file_size
     from library_document_contents as ldc
     join library_documents as ld
     on ld.id = ldc.library_document_id
