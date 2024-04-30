@@ -19,7 +19,8 @@
                 <div class="video_youtube">
                     @php
                     $watchUrl = $subjectContents && $subjectContents[0] ? $subjectContents[0]->body : '';
-                    $embedUrl = str_replace('watch?v=', 'embed/', $watchUrl);
+                    $videoId = substr($watchUrl, strrpos($watchUrl, '/') + 1);
+                    $embedUrl = "https://www.youtube.com/embed/" . $videoId;
 
                     @endphp
                     <iframe id="main-video" width="560" height="500" src="{{ $embedUrl }}?autoplay=1"
@@ -48,21 +49,20 @@
                                     <div class="video_no_youtube">
                                         @php
                                         $watchUrl = $subjectContent->body;
-                                        $queryString = parse_url($watchUrl, PHP_URL_QUERY);
-                                        parse_str($queryString, $parameters);
-
-                                        $embedUrl = str_replace('watch?v=', 'embed/', $watchUrl);
-                                        $thumnail = 'https://img.youtube.com/vi/'.$parameters['v'].'/0.jpg';
+                                        $videoId = substr($watchUrl, strrpos($watchUrl, '/') + 1);
+                                        $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
+                                        $thumbnail = 'https://img.youtube.com/vi/' . $videoId . '/0.jpg';
                                         @endphp
-                                        <img onclick="playVideo('{{$parameters['v']}}', '{{$subjectContent->title}}', '{{$subjectContent->grade_name}}', '{{$subjectContent->subject_name}}')"
-                                            src="{{ $thumnail}}" width="100%" height="auto">
+                                        <img onclick="playVideo('{{$videoId}}', '{{$subjectContent->title}}', '{{$subjectContent->grade_name}}', '{{$subjectContent->subject_name}}')"
+                                            src="{{ $thumbnail }}" width="100%" height="auto">
                                     </div>
                                 </a>
                             </div>
                             <div class="details-wrap">
                                 <div class="vid-details">
                                     <div class="lesson"><i class="icon-folder-open-empty"></i>
-                                        {{$subjectContent->chapter_number}} </div>
+                                        {{$subjectContent->chapter_number}}
+                                    </div>
                                     <div class="subject"><i class="icon-doc-text"></i>{{$subjectContent->subject_name}}
                                     </div>
                                     <div class="title">{{$subjectContent->title}}</div>
