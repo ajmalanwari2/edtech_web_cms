@@ -304,7 +304,8 @@ class TeacherController extends Controller
     
                 $textbook = DB::select('SELECT
                     ldc.title as document_title,
-                    ldc.body as document_content_path
+                    ldc.body as document_content_path,
+                    ldc.file_size
                     FROM library_document_contents as ldc
                     JOIN library_documents as ld
                     ON ld.id = ldc.library_document_id
