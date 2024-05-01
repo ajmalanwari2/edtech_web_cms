@@ -610,6 +610,7 @@ $questions = DB::select('
         WHEN q.option_b_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_b_image)
         ELSE NULL
     END AS option_b_image,
+    q.option_c_text AS optionc,
     CASE
         WHEN q.option_c_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_c_image)
         ELSE NULL
