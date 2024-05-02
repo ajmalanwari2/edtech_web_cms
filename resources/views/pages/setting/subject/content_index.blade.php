@@ -16,7 +16,7 @@
                     <div class="flex">
                         <div class="card-subtitle text-muted">List of Lessons</div>
                     </div>
-                    <a class="btn btn-danger" href="{{ route('subject.index') }}" style="margin-right: 5px;">Back</a>
+                    <a class="btn btn-danger" href="{{ route('grade.subject_index', $grade_id) }}" style="margin-right: 5px;">Back</a>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-form">Add New
                         Record</button>
                     <button type="button" class="btn btn-info" onclick="table.ajax.reload()"
