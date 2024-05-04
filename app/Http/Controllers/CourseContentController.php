@@ -155,7 +155,7 @@ class CourseContentController extends Controller
                 $picture_file = storeFiles($request, ['picture_file'], $request->id);
                 $courseContent->body = $picture_file['picture_file'];
             }else{
-                $courseContent->body = $request->body;
+                $courseContent->body = $courseContent->body;
             }
             $result = $courseContent->save();
             if (!empty($result))

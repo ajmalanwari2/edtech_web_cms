@@ -399,6 +399,7 @@ and ch.id in (select chapter_id from chapter_states where user_id = '.$user_id.'
 
         $grade = DB::select('
         SELECT
+        s.id as subject_id,
         s.name AS subject_name,
         CASE
             WHEN g.language = "en" THEN "English"
@@ -530,6 +531,7 @@ $chapters['textbook'] = DB::select('select
         $content = [];
         $grade = DB::select('
         SELECT
+        ch.id as chapter_id,
         ch.name AS chapter_name,
         CASE
             WHEN g.language = "en" THEN "English"
@@ -554,6 +556,7 @@ $chapters['textbook'] = DB::select('select
         where sl.chapter_id = '.$chapter_id.'        
     ');
 
+$content['chapter_id'] = $grade[0]->chapter_id;
 $content['chapter_name'] = $grade[0]->chapter_name;
 $content['grade_language'] = $grade[0]->grade_language;
 $content['lesson_count'] = $ContentCount[0]->content_count;

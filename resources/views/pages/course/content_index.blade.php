@@ -77,7 +77,7 @@
                                 <div class="col-12 col-md-6 mb-3">
                                     <label class="text-label" for="email">Content Type:</label>
                                     <div class="input-group input-group-merge">
-                                        <select id="type" data-toggle="select" name="Type" class="form-control"
+                                        <select id="type" data-toggle="select" name="type" class="form-control"
                                             required="">
                                             <option value="">select</option>
                                         <option value="video">Video</option>
@@ -94,8 +94,14 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-12 mb-3" id="file_field" style="display: none;">
-                                    <label for="type">File</label>
-                                    <input type="file" class="form-control" id="file" name="file">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="file" name="file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                                 </div>
                                 <div class="col-12 col-md-12 mb-3" id="text_field" style="display: none;">
                                     <label for="type">text</label>
@@ -108,13 +114,26 @@
                                         value="{{ old('video') }}" required="">
                                 </div>
                                 <div class="col-12 col-md-12 mb-3" id="audio_field" style="display: none;">
-                                <label for="type">Audio</label>
-                                <input type="file" class="form-control" id="audio_file" name="audio_file">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="audio_file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="audio_file" name="audio_file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                             </div>
+                            
                             <div class="col-12 col-md-12 mb-3" id="picture_field" style="display: none;">
-                                <label for="type">Picture</label>
-                                <input type="file" class="form-control" id="picture_file" name="picture_file">
-                            </div>
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="picture_file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="picture_file" name="picture_file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
+                            </div> 
                             </div>
                         </div>
                     </form>
@@ -360,6 +379,7 @@ $(document).ready(function() {
             $('#file_field').hide();
             $('#picture_view').hide();
             $('#picture_field').hide();
+            $('#video').val(data.course_content);
         } else if (data.type == 'audio') {
             $('#audio_view').show();
             $('#video_view').hide();
@@ -371,6 +391,14 @@ $(document).ready(function() {
             $('#file_field').hide();
             $('#picture_view').hide();
             $('#picture_field').hide();
+            $('.file_status').text(data.course_content);
+                if (data.course_content == '') {
+                            $("#audio_file").hide();
+                        } else {
+                            $("#audio_file").show();
+                            $("#audio_file").attr('href', site_url + data.course_content);
+                            $("#audio_file").find('img').attr('src', site_url + data.course_content);
+                        }
         } else if (data.type == 'picture') {
             $('#picture_view').show();
             $('#picture_field').show();
@@ -382,6 +410,14 @@ $(document).ready(function() {
             $('#video_field').hide();
             $('#text_field').hide();
             $('#file_field').hide();
+            $('.file_status').text(data.course_content);
+                if (data.course_content == '') {
+                            $("#picture_file").hide();
+                        } else {
+                            $("#picture_file").show();
+                            $("#picture_file").attr('href', site_url + data.course_content);
+                            $("#picture_file").find('img').attr('src', site_url + data.course_content);
+                        }
         } else if (data.type == 'text') {
             $('#video_view').hide();
             $('#text_view').show();
@@ -393,6 +429,7 @@ $(document).ready(function() {
             $('#audio_field').hide();
             $('#picture_field').hide();
             $('#picture_view').hide();
+            $('#text').val(data.course_content);
         } else {
             $('#video_view').hide();
             $('#audio_view').hide();
@@ -404,6 +441,14 @@ $(document).ready(function() {
             $('#audio_field').hide();
             $('#picture_field').hide();
             $('#picture_view').hide();
+            $('.file_status').text(data.course_content);
+                if (data.course_content == '') {
+                            $("#file").hide();
+                        } else {
+                            $("#file").show();
+                            $("#file").attr('href', site_url + data.course_content);
+                            $("#file").find('img').attr('src', site_url + data.course_content);
+                        }
         }
                 $("#saveBTN").attr("onclick", "saveForm(" + data.id + ")");
                 $("#saveBTN").html("Save");
@@ -496,6 +541,45 @@ $(document).ready(function() {
         $("#saveBTN").html("Save");
         $("#modal-form-title").html("contents Add Form");
     });
+
+    $(document).ready(function() {
+    $('#type').on('change', function(){
+    if(this.value == 'file'){
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    if(this.value == 'audio'){
+        console.log('Iam in audio');
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    if(this.value == 'picture'){
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    });
+});
 </script>
 
 @stop

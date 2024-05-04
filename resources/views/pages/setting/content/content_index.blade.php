@@ -96,8 +96,14 @@
                                 </div>
                             </div>
                             <div class="col-12 col-md-12 mb-3" id="file_field" style="display: none;">
-                                <label for="type">File</label>
-                                <input type="file" class="form-control" id="file" name="file">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="file" name="file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                             </div>
                             <div class="col-12 col-md-12 mb-3" id="text_field" style="display: none;">
                                 <label for="type">text</label>
@@ -109,14 +115,28 @@
                                 <input type="text" class="form-control" id="video" name="video"
                                     value="{{ old('video') }}" required="">
                             </div>
+
                             <div class="col-12 col-md-12 mb-3" id="audio_field" style="display: none;">
-                                <label for="type">Audio</label>
-                                <input type="file" class="form-control" id="audio_file" name="audio_file">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="audio_file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="audio_file" name="audio_file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                             </div>
+                            
                             <div class="col-12 col-md-12 mb-3" id="picture_field" style="display: none;">
-                                <label for="type">Picture</label>
-                                <input type="file" class="form-control" id="picture_file" name="picture_file">
-                            </div>
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="picture_file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="picture_file" name="picture_file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
+                            </div> 
                         </div>
                     </div>
                 </form>
@@ -205,6 +225,31 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}" />
+<style>
+    .file_uploads {
+            cursor: pointer;
+            display: inline-block;
+            padding: 10px 20px;
+            /* background-color: #007bff; */
+            /* color: #fff; */
+            /* border-radius: 4px; */
+        }
+
+        .file_uploads i {
+            margin-right: 5px;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+            }
+</style>
 @stop
 @section('scripts')
 <script src="{{ asset('assets/tinymce/tinymce.min.js') }}"></script>
@@ -341,80 +386,129 @@ function loadRecord(id) {
             $.toaster({
                 priority: 'danger',
                 title: 'Info',
-                message: 'There was error loading record.'
+                message: 'There was an error loading the record.'
             });
         }),
         success: (function(data) {
             $('#chapter_content_number').text(data.number);
             $('#chapter_content').html(data.chapter_content);
             $('#chapter_content_title').text(data.title);
-            $("#fileId").attr("href", site_url+data.chapter_content);            
+            $("#fileId").attr("href", site_url + data.chapter_content);
             $('#chapter_content_type').text(data.type);
             $('#title').val(data.title);
-            $('#video').val(data.chapter_content);
-            $('#audio').val(data.chapter_content);
             tinymce.get('text').setContent(data.chapter_content);
             $('#type').val(data.type);
+
             if (data.type == 'video') {
-            $('#video_view').show();
-            $('#audio_view').hide();
-            $('#text_view').hide();
-            $('#file_view').hide();
-            $('#video_field').show();
-            $('#audio_field').hide();
-            $('#text_field').hide();
-            $('#file_field').hide();
-            $('#picture_view').hide();
-            $('#picture_field').hide();
-        } else if (data.type == 'audio') {
-            $('#audio_view').show();
-            $('#video_view').hide();
-            $('#text_view').hide();
-            $('#file_view').hide();
-            $('#audio_field').show();
-            $('#video_field').hide();
-            $('#text_field').hide();
-            $('#file_field').hide();
-            $('#picture_view').hide();
-            $('#picture_field').hide();
-        } else if (data.type == 'picture') {
-            $('#picture_view').show();
-            $('#picture_field').show();
-            $('#audio_view').hide();
-            $('#video_view').hide();
-            $('#text_view').hide();
-            $('#file_view').hide();
-            $('#audio_field').show();
-            $('#video_field').hide();
-            $('#text_field').hide();
-            $('#file_field').hide();
-        } else if (data.type == 'text') {
-            $('#video_view').hide();
-            $('#text_view').show();
-            $('#audio_view').hide();
-            $('#file_view').hide();
-            $('#text_field').show();
-            $('#file_field').hide();
-            $('#video_field').hide();
-            $('#audio_field').hide();
-            $('#picture_field').hide();
-            $('#picture_view').hide();
-        } else {
-            $('#video_view').hide();
-            $('#audio_view').hide();
-            $('#text_view').hide();
-            $('#file_view').show();
-            $('#file_field').show();
-            $('#text_field').hide();
-            $('#video_field').hide();
-            $('#audio_field').hide();
-            $('#picture_field').hide();
-            $('#picture_view').hide();
-        }
+                $('#video_view').show();
+                $('#audio_view').hide();
+                $('#text_view').hide();
+                $('#file_view').hide();
+                $('#picture_view').hide();
+
+                // Show the video field and set the value
+                $('#video_field').show();
+                $('#video').val(data.chapter_content);
+
+                // Hide other fields
+                $('#audio_field').hide();
+                $('#text_field').hide();
+                $('#file_field').hide();
+                $('#picture_field').hide();
+            } else if (data.type == 'audio') {
+                $('#audio_view').show();
+                $('#video_view').hide();
+                $('#text_view').hide();
+                $('#file_view').hide();
+                $('#picture_view').hide();
+
+                // Show the audio field and set the value
+                $('#audio_field').show();
+                $('#audio_file').val('');
+
+                // Hide other fields
+                $('#video_field').hide();
+                $('#text_field').hide();
+                $('#file_field').hide();
+                $('#picture_field').hide();
+                $('.file_status').text(data.chapter_content);
+                if (data.chapter_content == '') {
+                            $("#audio_file").hide();
+                        } else {
+                            $("#audio_file").show();
+                            $("#audio_file").attr('href', site_url + data.chapter_content);
+                            $("#audio_file").find('img').attr('src', site_url + data.chapter_content);
+                        }
+
+            } else if (data.type == 'picture') {
+                $('#picture_view').show();
+                $('#audio_view').hide();
+                $('#video_view').hide();
+                $('#text_view').hide();
+                $('#file_view').hide();
+
+                // Show the picture field
+                $('#picture_field').show();
+
+                // Hide other fields
+                $('#audio_field').hide();
+                $('#video_field').hide();
+                $('#text_field').hide();
+                $('#file_field').hide();
+                $('.file_status').text(data.chapter_content);
+                if (data.chapter_content == '') {
+                            $("#picture_file").hide();
+                        } else {
+                            $("#picture_file").show();
+                            $("#picture_file").attr('href', site_url + data.chapter_content);
+                            $("#picture_file").find('img').attr('src', site_url + data.chapter_content);
+                        }
+            } else if (data.type == 'text') {
+                $('#text_view').show();
+                $('#video_view').hide();
+                $('#audio_view').hide();
+                $('#file_view').hide();
+                $('#picture_view').hide();
+
+                // Show the text field and set the value
+                $('#text_field').show();
+                $('#text').val(data.chapter_content);
+
+                // Hide other fields
+                $('#audio_field').hide();
+                $('#video_field').hide();
+                $('#file_field').hide();
+                $('#picture_field').hide();
+            } else {
+                $('#file_view').show();
+                $('#video_view').hide();
+                $('#audio_view').hide();
+                $('#text_view').hide();
+                $('#picture_view').hide();
+
+                // Show the file field
+                $('#file_field').show();
+
+                // Set the file name
+               
+
+                // Hide other fields
+                $('#audio_field').hide();
+                $('#video_field').hide();
+                $('#text_field').hide();
+                $('#picture_field').hide();
+                $('.file_status').text(data.chapter_content);
+                if (data.chapter_content == '') {
+                            $("#file").hide();
+                        } else {
+                            $("#file").show();
+                            $("#file").attr('href', site_url + data.chapter_content);
+                            $("#file").find('img').attr('src', site_url + data.chapter_content);
+                        }
+            }
             $("#saveBTN").attr("onclick", "saveForm(" + data.id + ")");
             $("#saveBTN").html("Save");
-            $("#modal-form-title").html("Content Add Form");
-
+            $("#modal-form-title").html("Content Edit Form");
         }),
         dataType: 'json'
     });
@@ -487,6 +581,46 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
     $("#saveBTN").attr("onclick", "saveForm()");
     $("#saveBTN").html("Save");
     $("#modal-form-title").html("Lesson Content");
+});
+
+$(document).ready(function() {
+    $('#type').on('change', function(){
+    if(this.value == 'file'){
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    if(this.value == 'audio'){
+        console.log('Iam in audio');
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    if(this.value == 'picture'){
+        console.log('Iam in picture');
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+    }
+    });
 });
 
 </script>
