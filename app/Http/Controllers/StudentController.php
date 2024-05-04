@@ -424,6 +424,7 @@ and ch.id in (select chapter_id from chapter_states where user_id = '.$user_id.'
     ');
 
     $chapters = [];
+$chapters['subject_id'] = $grade[0]->subject_id;
 $chapters['subject_name'] = $grade[0]->subject_name;
 $chapters['grade_language'] = $grade[0]->grade_language;
 $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
