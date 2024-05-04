@@ -71,9 +71,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3" id="file_field">
-                                    <label for="type">File</label>
-                                    <input type="file" class="form-control" id="file" name="file">
+                                <div class="col-6 col-md-6 mb-3" id="file_field">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="file" name="file" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -240,6 +246,14 @@
                 $('#library_audio_content').html(data.body);
                 $('#library_audio_content_title').text(data.title);
                 $('#title').val(data.title);
+                $('.file_status').text(data.body);
+                if (data.body == '') {
+                            $("#file").hide();
+                        } else {
+                            $("#file").show();
+                            $("#file").attr('href', site_url + data.body);
+                            $("#file").find('img').attr('src', site_url + data.body);
+                        }
                 $("#saveBTN").attr("onclick", "saveForm(" + data.id + ")");
                 $("#saveBTN").html("Save");
                 $("#modal-form-title").html("Library Audio Content");
@@ -337,6 +351,18 @@
         $("#saveBTN").html("Save");
         $("#modal-form-title").html("Library Audio Content");
     });
+
+    $(document).ready(function() {
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
+});
 </script>
 
 @stop
