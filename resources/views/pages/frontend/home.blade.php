@@ -92,7 +92,7 @@
                     <h3>
                         <txp:title />
                     </h3>
-                    <h2>WELCOME TO EDTECH EQRA</h2>
+                    <h2>Welcome to our application</h2>
                     <p>Welcome to EdTech Application! Our platform is here to transform education through technology.
                         With our user-friendly interface and advanced features, we offer an immersive learning
                         experience for students, seamless lesson delivery for educators, and efficient management for
@@ -132,7 +132,7 @@
             <div class="col-lg-8">
                 <div class="four-small">
                     <div class="about-top">
-                        <h2>WE ARE PROVIDING A COMPLETE PLATFORM
+                        <h2>we are not proviceijkjfalsdkjf;lakdjf;lajdfl;k
                             FOR EDUCATION ENHANCEMENT</h2>
                         <div class="slide">
                             <div class="row">
