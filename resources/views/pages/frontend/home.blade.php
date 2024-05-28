@@ -92,7 +92,7 @@
                     <h3>
                         <txp:title />
                     </h3>
-                    <h2>Welcome to our application</h2>
+                    <h2>Edtech Eqra Application...</h2>
                     <p>Welcome to EdTech Application! Our platform is here to transform education through technology.
                         With our user-friendly interface and advanced features, we offer an immersive learning
                         experience for students, seamless lesson delivery for educators, and efficient management for
@@ -132,8 +132,7 @@
             <div class="col-lg-8">
                 <div class="four-small">
                     <div class="about-top">
-                        <h2>we are not proviceijkjfalsdkjf;lakdjf;lajdfl;k
-                            FOR EDUCATION ENHANCEMENT</h2>
+                        <h2>Online Leaning Platform </h2>
                         <div class="slide">
                             <div class="row">
                                 <div class="col-md-4">
@@ -141,7 +140,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>High Learning Contents</h4>
+                                            <h4>School from grade 1 to 6</h4>
                                             <p>High quality HD recordings from Grade 1 to Grade 12 in Dari and Pashto
                                                 Language for all subjects based on MoE curriculum.</p>
                                         </div>
@@ -152,7 +151,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>Assessments and Feedbacks</h4>
+                                            <h4>Courses </h4>
                                             <p>Includes assessments to evaluate learners' knowledge and provide instant
                                                 feedback on their performance.</p>
                                         </div>
@@ -163,14 +162,20 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon3.png') }}">
-                                            <h4>Comprehensive Library</h4>
+                                            <h4>Books</h4>
                                             <p>Rich library compose of extra curricula courses, documents, audio, and
                                                 video lessons.</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
+                                <h2>Offline Leaning Platform(Mobile Application)</h2>
                                 <div class="col-md-4">
                                     <!-- item Box start -->
+
+
+
+
+                                 
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon4.png') }}">

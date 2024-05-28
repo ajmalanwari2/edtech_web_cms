@@ -10,12 +10,12 @@
 
         <!-- Slider 1 Start -->
         <div class="carousel-item">
-            <img src="{{ asset('assets/frontend/images/slider1.jpg') }}" aria-hidden="true" focusable="false"
+            <img src="{{ asset('assets/frontend/images/slider33.jpg') }}" aria-hidden="true" focusable="false"
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title">Title of this slideshow 1</h1>
-                    <p>Description of this slider temporary testing here</p>
+                    <h1 class="slide-title"> Baghlan - Afghanistan</h1>
+                    <p>Shaeed sardar Mohammad dawood khan High school...</p>
                     <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
@@ -29,8 +29,8 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title">Second of this slideshow</h1>
-                    <p>Description of this slider temporary testing here</p>
+                    <h1 class="slide-title">Nangarhar-Afghanistan</h1>
+                    <p>Kabul Camp High school, Rodat Dirstrict...</p>
                     <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
@@ -44,8 +44,8 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title">Third Title of this slideshow</h1>
-                    <p>Description of this slider temporary testing here</p>
+                    <h1 class="slide-title">Bamyan - Afghanistan</h1>
+                    <p>Chel Borj Secondary School Yakawlang 2 - Bamyan Province...</p>
                     <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>

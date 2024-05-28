@@ -5,7 +5,7 @@
         <div class="col-md-5" data-aos="fade-right">
           <h3>About Us</h3>
           <img class="logo" src="{{ asset('assets/frontend/images/logo.png') }}">
-          <p>This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing </p>
+          <p> Edtech application is learning management system which has contents of Afghanistan school's curriculum from grade 1 to grade 6 </p>
           <div class="about-list">
             <a href="#" target="_blank"><i class="icon-facebook icon"></i></a>
             <a href="#" target="_blank"><i class="icon-instagram icon"></i></a>
