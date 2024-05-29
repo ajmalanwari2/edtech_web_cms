@@ -28,7 +28,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$videoCount}}</h4>
-                        <p>Video Lessons</p>
+                        <p>{{ __('home.video_lossons') }}</p>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$audioCount}}</h4>
-                        <p>Audio Lessons</p>
+                        <p>{{ __('home.audio_lossons') }}</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$documentCount}}</h4>
-                        <p>Document Lessons</p>
+                        <p>{{ __('home.document_lessons') }}</p>
                     </div>
                 </div>
             </div>
@@ -92,18 +92,8 @@
                     <h3>
                         <txp:title />
                     </h3>
-                    <h2>Edtech Eqra Application...</h2>
-                    <p>Welcome to EdTech Application! Our platform is here to transform education through technology.
-                        With our user-friendly interface and advanced features, we offer an immersive learning
-                        experience for students, seamless lesson delivery for educators, and efficient management for
-                        institutions. Join us as we revolutionize education and empower learners to reach their full
-                        potential in a dynamic and engaging digital environment.
-                        At EdTech Application, we believe in making education accessible to all. With our flexible and
-                        inclusive platform, students can learn anytime, anywhere, breaking the barriers of traditional
-                        classrooms. We combine the latest advancements in education technology with personalized
-                        learning tools, virtual classrooms, and robust analytics to optimize the learning journey for
-                        every individual. Be a part of the EdTech revolution and embark on a transformative educational
-                        experience with us.</p>
+                    <h2>{{ __('home.title') }}...</h2>
+                    <p>{{ __('home.description') }}</p>
                 </div>
             </div>
         </div>
@@ -132,7 +122,7 @@
             <div class="col-lg-8">
                 <div class="four-small">
                     <div class="about-top">
-                        <h2>Online Leaning Platform </h2>
+                        <h2>{{ __('home.title1') }}</h2>
                         <div class="slide">
                             <div class="row">
                                 <div class="col-md-4">
@@ -140,9 +130,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>School from grade 1 to 6</h4>
-                                            <p>High quality HD recordings from Grade 1 to Grade 12 in Dari and Pashto
-                                                Language for all subjects based on MoE curriculum.</p>
+                                            <h4>{{ __('home.sub_title1') }}</h4>
+                                            <p>{{ __('home.description1') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -151,9 +140,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>Courses </h4>
-                                            <p>Includes assessments to evaluate learners' knowledge and provide instant
-                                                feedback on their performance.</p>
+                                            <h4>{{ __('home.sub_title2') }}</h4>
+                                            <p>{{ __('home.description2') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -162,13 +150,12 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon3.png') }}">
-                                            <h4>Books</h4>
-                                            <p>Rich library compose of extra curricula courses, documents, audio, and
-                                                video lessons.</p>
+                                            <h4>{{ __('home.sub_title3') }}</h4>
+                                            <p>{{ __('home.description3') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
-                                <h2>Offline Leaning Platform(Mobile Application)</h2>
+                                <h2>{{ __('home.title2') }}</h2>
                                 <div class="col-md-4">
                                     <!-- item Box start -->
 
@@ -179,9 +166,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon4.png') }}">
-                                            <h4>Collaboration and Interaction</h4>
-                                            <p>To allow learners to interact and collaborate with peers, teachers, or
-                                                experts to foster a sense of community.</p>
+                                            <h4>{{ __('home.sub_title4') }}</h4>
+                                            <p>{{ __('home.description4') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -190,9 +176,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>Tracking and Analytics</h4>
-                                            <p>To track learners' progress, record their achievements, and provide
-                                                analytics and insights on their learning journey.</p>
+                                            <h4>{{ __('home.sub_title5') }}</h4>
+                                            <p>{{ __('home.description5') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -201,10 +186,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>Data Security and Privacy</h4>
-                                            <p>Prioritizing data security and privacy, ensuring that learner information
-                                                and data are protected and handled in compliance with relevant
-                                                regulations.</p>
+                                            <h4>{{ __('home.sub_title6') }}</h4>
+                                            <p>{{ __('home.description6') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->

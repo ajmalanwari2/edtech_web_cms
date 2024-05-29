@@ -29,19 +29,19 @@
                 <div class="vid-details">
                     <table>
                         <tr>
-                            <td>Grade</td>
+                            <td>{{ __('contents.grade') }}</td>
                             <td>{{$g->grade_name}}</td>
                         </tr>
                         <tr>
-                            <td>Language</td>
+                            <td>{{ __('contents.language') }}</td>
                             <td>{{$g->grade_language}}</td>
                         </tr>
                         <tr>
-                            <td>Subjects</td>
+                            <td>{{ __('contents.subjects') }}</td>
                             <td>{{$g->subject_count}}</td>
                         </tr>
                         <tr>
-                            <td>Number of Videos</td>
+                            <td>{{ __('contents.number_of_videos') }}</td>
                             <td>{{$g->video_count}}</td>
                         </tr>
                     </table>
