@@ -16,7 +16,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$total_registered_students}}</h4>
-                        <p>ثبت شاگردان</p>
+                        <p>{{ __('home.student_registration') }}</p>
                     </div>
                 </div>
             </div>

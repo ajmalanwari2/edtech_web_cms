@@ -6,7 +6,7 @@
 <div class="page-inner">
     <div class="container">
 
-      <h1>About Edtech Eqra Dari/Pashto</h1>
+    <h1>{{ __('about.title') }}</h1>
       <p>This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing </p>
 
     </div>

@@ -7,7 +7,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <h1>Swedish Committee for Afghanistan</h1>
+          <h1>{{ __('about.title') }}</h1>
           <p>Swedish Committee for Afghanistan
 The Swedish Committee for Afghanistan (SCA) is a development organization that has been present in Afghanistan for more than 40 years, supporting rural communities. Our target groups are women, children and people with disabilities.
 
