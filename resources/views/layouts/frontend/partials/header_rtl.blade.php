@@ -25,7 +25,7 @@
                     <!-- Menu List Names Start -->
                     <ul class="sm sm-clean" id="main-menu">
                         <li><a href="/front/{{ $lang }}">صفحه نخست</a></li>
-                        <li><a href="/front/{{ $lang }}/aboutus">در باره ما</a></li>
+                        <!-- <li><a href="/front/{{ $lang }}/aboutus">در باره ما</a></li> -->
                         <li><a href="/front/{{ $lang }}/content">فهرست</a>
                                       {{-- <ul>
                           <li><a href="contents_rtl.html">فهرست اول</a></li>

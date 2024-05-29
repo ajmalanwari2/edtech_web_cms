@@ -25,7 +25,7 @@
                     <!-- Menu List Names Start -->
                     <ul class="sm sm-clean" id="main-menu">
                         <li><a href="/front/{{ $lang }}">Home</a></li>
-                        <li><a href="/front/{{ $lang }}/aboutus">About Us</a></li>
+                        <!-- <li><a href="/front/{{ $lang }}/aboutus">About Us</a></li> -->
                         <li><a href="/front/{{ $lang }}/content">Contents</a>
                             {{-- <ul>
                             <li><a href="contents.html">Content First</a></li>
