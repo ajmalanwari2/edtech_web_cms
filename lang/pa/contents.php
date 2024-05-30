@@ -2,18 +2,18 @@
 
 return [
 
-    'grade' => '',
-    'language' => '',
-    'subjects' => '',
-    'number_of_videos' => '',
-    'address' => '',
-    'all_rights_reserved' => '',
-    'go_up' => '',
-    'overview' => '',
-    'contents' => '',
-    'contact' => '',
-    'request_access' => '',
-    'courses' => '',
+    'grade' => 'ټولګی ',
+    'language' => 'ژبه ',
+    'subjects' => 'مضمون',
+    'number_of_videos' => 'د ویدیو ګانو شمیر',
+    'address' => 'آدرس',
+    'all_rights_reserved' => 'د نشر حق حفظ دی ',
+    'go_up' => 'پورته تلل ',
+    'overview' => 'نوری صفحی ',
+    'contents' => 'درسونه ',
+    'contact' => 'اړیکه',
+    'request_access' => 'د لاسرسی غوښتنلیک',
+    'courses' => 'کورسونه',
    
     
 ];

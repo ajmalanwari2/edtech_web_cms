@@ -23,5 +23,5 @@ return [
     'language'=>'ژبه',
     'english'=>'انگلیسی',
     'dari'=>'دری',
-    'pashto'=>'پشتو'
+    'pashto'=>'پښتو'
 ];

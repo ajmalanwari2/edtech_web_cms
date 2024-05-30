@@ -2,6 +2,6 @@
 
 return [
 
-    'title' => 'Swedish Committee for Afghanistan',
+    'title' => 'د افغانستان لپاره د سویډن کمیټه ',
     
 ];

@@ -2,8 +2,8 @@
 
 return [
 
-    'grade' => '',
-    'language' => '',
-    'subjects' => '',
-    'number_of_videos' => '',
+    'grade' => ' صنف ',
+    'language' => 'زبان ',
+    'subjects' => 'مضمون ',
+    'number_of_videos' => 'تعداد ویدیو ها',
 ];
