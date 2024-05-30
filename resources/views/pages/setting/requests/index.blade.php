@@ -314,7 +314,7 @@
         <div class="modal-content">
             <div class="modal-body text-center p-4">
                 <h6>Do you want to approved the request!</h6>
-                <button type="button" class="btn btn-light" data-dsmiss="modal" i>No</button>
+                <button type="button" class="btn btn-light" onclick="closeModal()" data-dsmiss="modal" i>No</button>
                 <button type="button" class="btn btn-warning my-2" onclick="approvedRequest()">Yes</button>
             </div> <!-- // END .modal-body -->
         </div> <!-- // END .modal-content -->
@@ -596,7 +596,7 @@ function approvedRequest() {
             });
             // $('#modal-confirm').modal('toggle');
             table.ajax.reload();
-            $('#modal-form').removeClass('show');
+            $('#modal-confirm').removeClass('show');
             $('.modal-backdrop').remove();
         }),
         dataType: 'json'

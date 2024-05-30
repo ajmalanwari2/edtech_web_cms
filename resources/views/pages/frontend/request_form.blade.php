@@ -49,7 +49,7 @@
 
                                 <input name="phone_no" class="form-control form-control-lg" type="text" name=""
                                     placeholder="{{ __('request_form.phone') }}" >
-                                <select name="province_id" class="form-control form-control-lg" required
+                                <select name="province_id" id="province_id" class="form-control form-control-lg" required
                                     style="width: 500px;margin-top:10px">
                                     <option selected>Select {{ __('request_form.province') }}</option>
                                     @foreach($provinces as $province)
@@ -58,7 +58,7 @@
                                             {{$province->name}}</option>
                                         @endforeach
                                 </select>
-                                <select name="district_id" class="form-control form-control-lg" required
+                                <select name="district_id" id="district_id" class="form-control form-control-lg" required
                                     style="width: 500px;margin-top:10px">
                                     <option selected>Select {{ __('request_form.district') }}</option>
                                     @foreach($districts as $district)
@@ -122,7 +122,23 @@ $('#role').change(function(){
     }
 });
 });
-
+$(document).ready(function() {
+        $('#province_id').change(function() {
+            let pro_id = $(this).val();
+            let data = {
+                'pro_id': $(this).val(),
+                '_token': '{{ csrf_token() }}',
+            };
+            $.ajax({
+                url: '/get_districts',
+                type: 'post',
+                data: data,
+                success: function(res) {
+                    $('#district_id').html(res);
+                }
+            });
+        });
+    });
 </script>
 
 @stop

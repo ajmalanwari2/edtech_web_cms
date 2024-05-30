@@ -62,7 +62,7 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
         Route::post('request_form_submit', [FrontEndController::class, 'request_form_submit'])->name('request_form_submit');
         Route::get('course', [FrontEndController::class, 'course'])->name('course');
     });
-    
+    Route::post('/get_districts', [DistrictController::class, 'getDistrictsThroughProvince']);
     Route::get('/', function () {
         return view('underconstruction');
     });

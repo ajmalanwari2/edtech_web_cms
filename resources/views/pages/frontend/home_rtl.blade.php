@@ -28,7 +28,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$videoCount}}</h4>
-                        <p>ویدوهای درسی</p>
+                        <p>{{ __('home.video_lossons') }}</p>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$audioCount}}</h4>
-                        <p>درسهای صوتی</p>
+                        <p>{{ __('home.audio_lossons') }}</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="text">
                         <h4>{{$documentCount}}</h4>
-                        <p>کتب درسی</p>
+                        <p>{{ __('home.document_lessons') }}</p>
                     </div>
                 </div>
             </div>
@@ -92,11 +92,8 @@
                     <h3>
                         <txp:title />
                     </h3>
-                    <h2>به سایت اقرا خوش آمدید</h2>
-                    <p>جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت
-                        موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا
-                        جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی
-                        وبسایت موقتی میباشد اینجا </p>
+                    <h2>{{ __('home.title') }}</h2>
+                    <p>{{ __('home.description') }}</p>
                 </div>
             </div>
         </div>
@@ -125,8 +122,7 @@
             <div class="col-lg-8">
                 <div class="four-small">
                     <div class="about-top">
-                        <h2>WE ARE PROVIDING A COMPLETE PLATFORM
-                            FOR EDUCATION ENHANCEMENT</h2>
+                        <h2>{{ __('home.title1') }}</h2>
                         <div class="slide">
                             <div class="row">
                                 <div class="col-md-4">
@@ -134,9 +130,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>High Learning Contents</h4>
-                                            <p>High quality HD recordings from Grade 1 to Grade 12 in Dari and Pashto
-                                                Language for all subjects based on MoE curriculum.</p>
+                                            <h4>{{ __('home.sub_title1') }}</h4>
+                                            <p>{{ __('home.description1') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -145,9 +140,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>Assessments and Feedbacks</h4>
-                                            <p>Includes assessments to evaluate learners' knowledge and provide instant
-                                                feedback on their performance.</p>
+                                            <h4>{{ __('home.sub_title2') }}</h4>
+                                            <p>{{ __('home.description2') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -156,9 +150,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon3.png') }}">
-                                            <h4>Comprehensive Library</h4>
-                                            <p>Rich library compose of extra curricula courses, documents, audio, and
-                                                video lessons.</p>
+                                            <h4>{{ __('home.sub_title3') }}</h4>
+                                            <p>{{ __('home.description3') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -167,9 +160,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon4.png') }}">
-                                            <h4>Collaboration and Interaction</h4>
-                                            <p>To allow learners to interact and collaborate with peers, teachers, or
-                                                experts to foster a sense of community.</p>
+                                            <h4>{{ __('home.sub_title4') }}</h4>
+                                            <p>{{ __('home.description4') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -178,9 +170,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>Tracking and Analytics</h4>
-                                            <p>To track learners' progress, record their achievements, and provide
-                                                analytics and insights on their learning journey.</p>
+                                            <h4>{{ __('home.sub_title5') }}</h4>
+                                            <p>{{ __('home.description5') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -189,10 +180,8 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>Data Security and Privacy</h4>
-                                            <p>Prioritizing data security and privacy, ensuring that learner information
-                                                and data are protected and handled in compliance with relevant
-                                                regulations.</p>
+                                            <h4>{{ __('home.sub_title6') }}</h4>
+                                            <p>{{ __('home.description6') }}</p>
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
@@ -229,7 +218,7 @@
                             توسطه: ادی تیک</span>
                     </div>
                     <p>{{$n->description}}</p>
-                    <a href="#" class="btn btn-primary">ادامه مطلب &raquo;</a>
+                    <a href="#" class="btn btn-primary">{{ __('home.read_more') }}&raquo;</a>
                 </div>
             </div>
             @endforeach

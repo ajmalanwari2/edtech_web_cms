@@ -224,7 +224,7 @@
                             EdTech</span>
                     </div>
                     <p>{{$n->description}}</p>
-                    <a href="#" class="btn btn-primary">Read More &raquo;</a>
+                    <a href="#" class="btn btn-primary">{{ __('home.read_more') }} &raquo;</a>
                 </div>
             </div>
             @endforeach

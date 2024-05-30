@@ -2,19 +2,19 @@
 
 return [
 
-    'about_us' => '',
-    'description' => '',
-    'home' => '',
-    'download' => '',
-    'contact_us' => '',
-    'address' => '',
-    'all_rights_reserved' => '',
-    'go_up' => '',
-    'overview' => '',
-    'contents' => '',
-    'contact' => '',
-    'request_access' => '',
-    'courses' => '',
+    'about_us' => 'در باره ما',
+    'description' => 'جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا ',
+    'home' => 'صفحه نخست',
+    'download' => 'دانلود',
+    'contact_us' => 'تماس با ما',
+    'address' => 'کابل افغانستان',
+    'all_rights_reserved' => '2024 SCA All Rights Reserved. Developed by:',
+    'go_up' => 'Go Up',
+    'overview' => 'لینک ها',
+    'contents' => 'فهرست',
+    'contact' => 'تماس',
+    'request_access' => 'درخواست',
+    'courses' => 'کورسهای آموزشی',
    
     
 ];
