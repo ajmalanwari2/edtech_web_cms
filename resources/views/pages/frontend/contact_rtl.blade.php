@@ -21,7 +21,7 @@
                         placeholder="{{ __('contact.email') }}" >
                     <input name="subject" class="form-control form-control-lg" type="subject" 
                         placeholder="{{ __('contact.subject') }}" >
-                    <select name="province_id" class="form-control form-control-lg" required
+                    <select name="province_id" id="province_id" class="form-control form-control-lg" required
                         >
                         <option selected>انتخاب {{ __('request_form.province') }}</option>
                         @foreach ($provinces as $province)
@@ -29,7 +29,7 @@
                                 {{ $province->name }}</option>
                         @endforeach
                     </select>
-                    <select name="district_id" class="form-control form-control-lg" required
+                    <select name="district_id" id="district_id" class="form-control form-control-lg" required
                         style="width: 500px;margin-top:10px">
                         <option selected>انتخاب {{ __('request_form.district') }}</option>
                         @foreach ($districts as $district)
@@ -54,5 +54,26 @@
 
 @stop
 @section('scripts')
+<script src="{{ asset('assets/frontend/js/jquery-3.6.0.min.js') }}"></script>
+
+<script type="text/javascript">
+     $(document).ready(function() {
+        $('#province_id').change(function() {
+            let pro_id = $(this).val();
+            let data = {
+                'pro_id': $(this).val(),
+                '_token': '{{ csrf_token() }}',
+            };
+            $.ajax({
+                url: '/get_districts',
+                type: 'post',
+                data: data,
+                success: function(res) {
+                    $('#district_id').html(res);
+                }
+            });
+        });
+    });
+    </script>
 
 @stop

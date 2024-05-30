@@ -2,10 +2,17 @@
 
 return [
 
+<<<<<<< HEAD
     'student_registration' => 'شاگردان راجستر شده',
     'video_lossons' => 'درس های ویدیویی ',
     'audio_lossons' => 'درس های صوتی ',
     'document_lessons' => 'کتاب ها',
+=======
+    'student_registration' => 'شاگردهای راجسترشده',
+    'video_lossons' => 'ویدوهای درسی',
+    'audio_lossons' => 'درسهای صوتی',
+    'document_lessons' => 'کتب درسی',
+>>>>>>> eed57f79e2930af74962e19216908265dc838a78
     'slide_show_title' => 'Slide Show Title',
     'slide_show_description' => 'Slide Show Description',
     'learn_more' => 'ادامه خواندن',
@@ -29,5 +36,6 @@ return [
     'description6' => 'Prioritizing data security and privacy, ensuring that learner information
     and data are protected and handled in compliance with relevant
     regulations.',
+    'read_more' => 'ادامه مطلب',
     
 ];

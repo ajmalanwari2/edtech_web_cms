@@ -19,8 +19,8 @@
           <h3>{{ __('footer.overview') }}</h3>
           <ul>
             <li><a href="/front/{{$lang}}">{{ __('footer.home') }}</a></li>
-            <li><a href="/front/{{$lang}}/aboutus">{{ __('footer.about_us') }}</a></li>
-            {{-- <li><a href="/front/{{$lang}}/">{{ __('footer.download') }}</a></li> --}}
+            <!-- <li><a href="/front/{{$lang}}/aboutus">{{ __('footer.about_us') }}</a></li> -->
+            <!-- {{-- <li><a href="/front/{{$lang}}/">{{ __('footer.download') }}</a></li> --}} -->
             <li><a href="/front/{{$lang}}/contactus">{{ __('footer.contact_us') }}</a></li>
           </ul>
         </div><!-- Column End -->
@@ -31,7 +31,7 @@
           <div class="contact-list">
             <div class="item"><i class="icon icon-whatsapp"></i> +93780000000</div>
             <div class="item"><i class="icon icon-mail"></i> info@edtecheqra.com</div>
-            <div class="item"><i class="icon icon-globe"></i> {{ __('footer.address') }}</div>
+            <div class="item"><i class="icon icon-globe"></i>{{ __('footer.address') }}</div>
           </div>
         </div><!-- Column End -->
 

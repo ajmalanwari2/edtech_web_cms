@@ -29,5 +29,6 @@ return [
     'description6' => 'Prioritizing data security and privacy, ensuring that learner information
     and data are protected and handled in compliance with relevant
     regulations.',
+    'read_more' => 'Read More',
     
 ];
