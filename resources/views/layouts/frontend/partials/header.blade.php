@@ -24,23 +24,23 @@
 
                     <!-- Menu List Names Start -->
                     <ul class="sm sm-clean" id="main-menu">
-                        <li><a href="/front/{{ $lang }}">Home</a></li>
+                        <li><a href="/front/{{ $lang }}">{{ __('footer.home') }}</a></li>
                         <!-- <li><a href="/front/{{ $lang }}/aboutus">About Us</a></li> -->
-                        <li><a href="/front/{{ $lang }}/content">Contents</a>
+                        <li><a href="/front/{{ $lang }}/content">{{ __('footer.contents') }}</a>
                             {{-- <ul>
                             <li><a href="contents.html">Content First</a></li>
                             <li><a href="contents.html">Content Second</a></li>
                         </ul> --}}
                         </li>
-                        <li><a href="/front/{{ $lang }}/course">Courses</a></i>
-                        <li><a href="#">Download</a>
+                        <li><a href="/front/{{ $lang }}/course">{{ __('footer.courses') }}</a></i>
+                        <li><a href="#">{{ __('footer.download') }}</a>
                             <ul>
-                                <li><a href="#">Android</a></li>
-                                <li><a href="#">Apple</a></li>
+                                <li><a href="#">{{ __('footer.android') }}</a></li>
+                                <li><a href="#">{{ __('footer.apple') }}</a></li>
                             </ul>
                         </li>
-                        <li><a href="/front/{{ $lang }}/contact">Contact</a></li>
-                        <li><a href="/front/{{ $lang }}/request_form">Request Access</a></li>
+                        <li><a href="/front/{{ $lang }}/contact">{{ __('footer.contact') }}</a></li>
+                        <li><a href="/front/{{ $lang }}/request_form">{{ __('footer.request_access') }}</a></li>
                     </ul>
                     <!-- Menu List Names Start -->
 

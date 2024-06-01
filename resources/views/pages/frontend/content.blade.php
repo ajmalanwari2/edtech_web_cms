@@ -6,7 +6,7 @@
 <div class="page-inner">
   <div class="container">
 
-    <h1>CONTENTS</h1>
+    <h1>{{ __('footer.contents') }}</h1>
     <!-- <p>This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing This is a demo text temporary for testing </p> -->
     
 

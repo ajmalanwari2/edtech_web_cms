@@ -15,6 +15,7 @@ return [
     'contact' => 'Contact',
     'request_access' => 'Request Access',
     'courses' => 'Courses',
-   
+    'android' => 'Android',
+    'apple' => 'Apple',
     
 ];

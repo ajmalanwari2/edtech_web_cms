@@ -6,7 +6,7 @@
 <div class="page-inner">
   <div class="container">
 
-    <h1>فهرست</h1>
+    <h1>{{ __('footer.contents') }}</h1>
     <!-- <p>جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا جمله امتحانی وبسایت موقتی میباشد اینجا  </p> -->
     
 
@@ -29,19 +29,19 @@
                 <div class="vid-details">
                     <table>
                         <tr>
-                            <td>صنف</td>
+                            <td>{{ __('contents.grade') }}</td>
                             <td>{{$g->grade_name}}</td>
                         </tr>
                         <tr>
-                            <td>زبان درسی</td>
+                            <td>{{ __('contents.language') }}</td>
                             <td>{{$g->grade_language}}</td>
                         </tr>
                         <tr>
-                            <td>مضامین</td>
+                            <td>{{ __('contents.subjects') }}</td>
                             <td>{{$g->subject_count}}</td>
                         </tr>
                         <tr>
-                            <td>تعداد ویدویوهای درسی</td>
+                            <td>{{ __('contents.number_of_videos') }}</td>
                             <td>{{$g->video_count}}</td>
                         </tr>
                     </table>

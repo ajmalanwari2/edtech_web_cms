@@ -15,6 +15,7 @@ return [
     'contact' => 'اړیکه ',
     'request_access' => 'د لاسرسی غوښتنلیک',
     'courses' => 'کورسونه ',
-   
+    'android' => 'اندوراید',
+    'apple' => 'اپل',
     
 ];
