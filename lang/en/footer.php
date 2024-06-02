@@ -11,11 +11,10 @@ return [
     'all_rights_reserved' => '2024 SCA All Rights Reserved. Developed by',
     'go_up' => 'Go Up   ',
     'overview' => 'Overview',
-    'contents' => 'Contents',
+    'contents' => 'School',
     'contact' => 'Contact',
     'request_access' => 'Request Access',
     'courses' => 'Courses',
     'android' => 'Android',
     'apple' => 'Apple',
-    
 ];

@@ -36,7 +36,7 @@
         </div>Column End -->
         <div class="col-md-3 col-sm-6" data-aos="fade-left">
           <h3>{{ __('footer.contact_us') }}</h3>
-            <div class="item"><i class="icon icon-whatsapp"></i> +93780000000</div>
+            <div class="item"><i class="icon icon-whatsapp"></i> +9378 xxxxxxx</div>
             <div class="item"><i class="icon icon-mail"></i> info@edtecheqra.com</div>
             <div class="item"><i class="icon icon-globe"></i> {{ __('footer.address') }}</div>
         </div><!-- Column End -->

@@ -6,11 +6,24 @@ return [
     'video_lossons' => 'ویدیویی درسونه ',
     'audio_lossons' => 'غږیز درسونه ',
     'document_lessons' => 'کتابونه',
-    'slide_show_title' => 'Slide Show Title',
-    'slide_show_description' => 'Slide Show Description',
+    'slide_show_title' => 'بغلان - افغانستان',
+    'slide_show_description' => 'د شهید سردار محمد داود خان عالي لیسه',
+    'learmore' => 'د لوستلو ادامه ',
+    'slide_show_title1' => 'ننګرهار - افغانستان',
+    'slide_show_description1' => ' د روداتو په ولسوالی کی د کابل کمیپ عالي لیسه ',
+    'learnmore1' => 'د لوستلو ادامه  ',
+    'slide_show_title2' => 'بامیان - افغانستان ',
+    'slide_show_description2' => ' د چهل برج عالی متوسطه د یکاولینګ ۲ ولسوالی د بامیانو ولایت ... ',
+    'learnmore2' => 'د لوستلو ادامه',
+
     'learn_more' => 'نور لوستل ',
-    'title' => 'Edtech Eqra Application',
+
+
+
+
+    'title' => 'اقرا - د تکتالوژی په وسیله زده کړې',
     'description' => 'Welcome to EdTech Application! Our platform is here to transform education through technology. With our user-friendly interface and advanced features, we offer an immersive learning experience for students, seamless lesson delivery for educators, and efficient management for institutions. Join us as we revolutionize education and empower learners to reach their full potential in a dynamic and engaging digital environment. At EdTech Application, we believe in making education accessible to all. With our flexible and inclusive platform, students can learn anytime, anywhere, breaking the barriers of traditional classrooms. We combine the latest advancements in education technology with personalized learning tools, virtual classrooms, and robust analytics to optimize the learning journey for every individual. Be a part of the EdTech revolution and embark on a transformative educational experience with us.',
+    
     'title1' => 'Online Leaning Platform',
     'sub_title1' => 'له لومړی صنف څخه تر شپږم صنف پوری درسونه',
     'description1' => 'High quality HD recordings from Grade 1 to Grade 12 in Dari and Pashto

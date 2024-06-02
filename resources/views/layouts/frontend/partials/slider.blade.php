@@ -14,9 +14,9 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title"> Baghlan - Afghanistan</h1>
-                    <p>Shaeed sardar Mohammad dawood khan High school...</p>
-                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                    <h1 class="slide-title">  {{ __('home.slide_show_title') }} </h1>
+                    <p> {{ __('home.slide_show_description') }} </p>
+                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learmore') }} <i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -29,9 +29,9 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title">Nangarhar-Afghanistan</h1>
-                    <p>Kabul Camp High school, Rodat Dirstrict...</p>
-                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                    <h1 class="slide-title">{{ __('home.slide_show_title1') }}</h1>
+                    <p>{{ __('home.slide_show_title1') }}</p>
+                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learnmore1') }}<i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -44,9 +44,9 @@
                 class="bd-placeholder-img" />
             <div class="container position-relative">
                 <div class="carousel-caption text-start">
-                    <h1 class="slide-title">Bamyan - Afghanistan</h1>
-                    <p>Chel Borj Secondary School Yakawlang 2 - Bamyan Province...</p>
-                    <a class="btn btn-lg btn-primary" href="about.html">Learn More <i
+                    <h1 class="slide-title">{{ __('home.slide_show_title2') }}</h1>
+                    <p>{{ __('home.slide_show_description2') }}</p>
+                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learnmore2') }}<i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
