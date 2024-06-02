@@ -6,9 +6,12 @@
             </a>
         </div>
         <div class="language">
-            <a href="/front/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>
-            <a href="/front/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>
-            <a href="/front/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>
+            <!--<a href="/front/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>-->
+            <!--<a href="/front/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>-->
+            <!--<a href="/front/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>-->
+            <a href="/front/da">دری</a>
+            <a href="/front/pa">پښتو</a>
+            <a href="/front/en">EN</a>
             <!-- <a class="login" href="{{ route('admin_home') }}">Login</a> -->
         </div>
 

@@ -76,7 +76,7 @@
                     </div>
                     @elseif($types[$i] == 'file')
                     <div class="ms-auto p-2">
-                        <a href="{{ asset($bodies[$i]) }}">
+                        <a href="{{ asset($bodies[$i]) }}" target="_blank">
                             <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">View Book
                         </a>
                     </div>

@@ -61,8 +61,15 @@ class ContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
+                 $newString = '';
+                 $str = strpos($request->title, 'ټ');
+                if($str !== false){
+                    $newString = str_replace('ت', 'ټ', $request->title);
+                }else{
+                    $newString = $request->title;
+                }
                 $data = [
-                    'title' => $request->title,
+                    'title' => $newString,
                     'type' => $request->type,
                     'chapter_id' => $request->chapter_id,
                     'created_by' => auth()->user()->id,
