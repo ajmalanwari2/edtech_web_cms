@@ -155,7 +155,7 @@
                                         </div>
                                     </div>
                                 </div><!-- item Box End -->
-                                <h2>{{ __('home.title2') }}</h2>
+                                <!--<h2>{{ __('home.title2') }}</h2>-->
                                 <div class="col-md-4">
                                     <!-- item Box start -->
 

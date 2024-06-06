@@ -13,7 +13,7 @@
             session(['msg'=>'']);
             @endphp
             <div class="form-group subscribe_popup req_form">
-                <form action="/{{$lang}}/request_form_submit" method="POST">
+                <form action="/front/{{$lang}}/request_form_submit" method="POST">
                     <div class="">
                         <div class="row">
                             <div class="col-md-6">

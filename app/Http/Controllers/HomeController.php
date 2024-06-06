@@ -281,17 +281,17 @@ from courses as c');
                     (select count(sl.id) from subject_lessons as sl
                     join chapters as ch
                     on ch.id = sl.chapter_id
-                    where ch.subject_id = s.id
+                    where ch.grade_id = g.id
                     and sl.type = \'video\') as video_count,
                        (select count(sl.id) from subject_lessons as sl
                     join chapters as ch
                     on ch.id = sl.chapter_id
-                    where ch.subject_id = s.id
+                    where ch.grade_id = g.id
                     and sl.type = \'file\') as doc_count,
                        (select count(sl.id) from subject_lessons as sl
                     join chapters as ch
                     on ch.id = sl.chapter_id
-                    where ch.subject_id = s.id
+                    where ch.grade_id = g.id
                     and sl.type = \'audio\') as audio_count
                     from grades as g
                     left join subjects_in_grades as sig
