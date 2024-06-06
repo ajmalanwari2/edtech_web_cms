@@ -19,25 +19,37 @@ return [
     'learn_more' => 'Learn More',
 
     'title' => 'Edtech Eqra Application',
-    'description' => 'Welcome to EdTech Application! Our platform is here to transform education through technology. With our user-friendly interface and advanced features, we offer an immersive learning experience for students, seamless lesson delivery for educators, and efficient management for institutions. Join us as we revolutionize education and empower learners to reach their full potential in a dynamic and engaging digital environment. At EdTech Application, we believe in making education accessible to all. With our flexible and inclusive platform, students can learn anytime, anywhere, breaking the barriers of traditional classrooms. We combine the latest advancements in education technology with personalized learning tools, virtual classrooms, and robust analytics to optimize the learning journey for every individual. Be a part of the EdTech revolution and embark on a transformative educational experience with us.',
+    'description' => '
+    The EdTech application serves as a Learning Management System (LMS), offering students
+     access to grade 1 to grade 6 lessons in Pashto and Dari languages, aligned with 
+     Afghanistan’s Ministry of Education curriculum. Students can learn online and
+      offline via the Edtecheqra Mobile app, available on Android and iOS. Learners can 
+      access video and audio lessons, textbooks, gamified content, and contact support 
+      upon registration and approval. Parents can track their childs learning progress
+       through the app, creating a parental account to monitor their educational journey.
+        Teachers also benefit from accessing all offline content. Quiz and exam results 
+        synchronize when the app connects to the internet, ensuring seamless data
+         integration.',
+
+    
+    
     'title1' => 'Online Leaning Platform',
-    'sub_title1' => 'School from grade 1 to 6',
-    'description1' => 'High quality HD recordings from Grade 1 to Grade 12 in Dari and Pashto
-    Language for all subjects based on MoE curriculum.',
+    'sub_title1' => 'Online School',
+    'description1' =>'You can Access Online studies by Clicking school menu of this website and learn from grade 1 to grade 6 in Dari and Pashto languages.',
     'sub_title2' => 'Courses',
-    'description2' => 'Includes assessments to evaluate learners knowledge and provide instant feedback on their performance.',
+    'description2' => 'Find Courses of different subjects of Afghanistan School, Courses are in Pashto, Dari and some English languages, Courses are increasing... ',
     'sub_title3' => 'Books',
-    'description3' => 'Rich library compose of extra curricula courses, documents, audio, and video lessons.',
-    'title1' => 'Offline Leaning Platform(Mobile Application)',
-    'sub_title4' => 'Collaboration and Interaction',
-    'description4' => 'To allow learners to interact and collaborate with peers, teachers, or experts to foster a sense of community.',
-    'sub_title5' => 'Tracking and Analytics',
-    'description5' => 'To track learners progress, record their achievements, and provide
-    analytics and insights on their learning journey.',
-    'sub_title6' => 'Data Security and Privacy',
-    'description6' => 'Prioritizing data security and privacy, ensuring that learner information
-    and data are protected and handled in compliance with relevant
-    regulations.',
+    'description3' =>'You can find PDF books either for a subject or topic base in each chapter of the book, you can read and download the books in our website or mobile application',
+    'title2' => 'Offline Leaning Platform(Mobile Application)',
+    'sub_title4' => 'Offline School',
+    'description4' => 'Download android and IOS application from our website, play store/ app store. Download / transfer the content files   and enjoy offline studies.',
+    'sub_title5' => 'Quizzes and Exams',
+    'description5' => 'First video of each subject in your class will be activated for you, study the book, videos and other contents then pass the quiz you will be able to read next lessons.',
+    'sub_title6' => 'Learning Games',
+    'description6' => 'You can play Games and learn letters Basic information either from Your device installed games or Developed games including Drawing. ',
     'read_more' => 'Read More',
     
 ];
+
+
+

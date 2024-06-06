@@ -130,7 +130,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>{{ __('home.sub_title1') }}</h4>
+                                            <h4>{{ __('home.sub_title1') }}</br></br></h4>
                                             <p>{{ __('home.description1') }}</p>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>{{ __('home.sub_title2') }}</h4>
+                                            <h4>{{ __('home.sub_title2') }}</br></br></h4>
                                             <p>{{ __('home.description2') }}</p>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon3.png') }}">
-                                            <h4>{{ __('home.sub_title3') }}</h4>
+                                            <h4>{{ __('home.sub_title3') }} </br></br></h4>
                                             <p>{{ __('home.description3') }}</p>
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon4.png') }}">
-                                            <h4>{{ __('home.sub_title4') }}</h4>
+                                            <h4>{{ __('home.sub_title4') }}</br></br></h4>
                                             <p>{{ __('home.description4') }}</p>
                                         </div>
                                     </div>
@@ -176,7 +176,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                                            <h4>{{ __('home.sub_title5') }}</h4>
+                                            <h4>{{ __('home.sub_title5') }}</br></br></h4>
                                             <p>{{ __('home.description5') }}</p>
                                         </div>
                                     </div>
@@ -186,7 +186,7 @@
                                     <div class="box">
                                         <div class="inner">
                                             <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                                            <h4>{{ __('home.sub_title6') }}</h4>
+                                            <h4>{{ __('home.sub_title6') }}</br></br></h4>
                                             <p>{{ __('home.description6') }}</p>
                                         </div>
                                     </div>
