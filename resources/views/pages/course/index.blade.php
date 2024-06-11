@@ -141,12 +141,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-3 mb-3">
-                                    <label class="text-label" for="email">Icon:</label>
+                                <div class="col-12 col-md-3 mb-3" id="file_field">
+                                    <label class="text-label" for="file">Icon:</label>
                                     <div class="input-group input-group-merge">
-                                        <input type="file" id="icon1" class="icon-field" name="icon">
+                                        <label for="icon1" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload Icon
+                                        </label>
+                                        <input id="icon1" name="icon" class="file_input visually-hidden icon-field" type="file">
+                                            <div class="file_status"></div>
                                     </div>
-                                </div>
+                            </div>
                                 <div class="col-12 col-md-1" style="margin-top: 26px !important">
                                     <a href="javascript:void(0)" class="addRowBtn"><i class="material-icons"
                                             style="color:darkblue">add</i></a>
@@ -265,11 +269,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="text-label" for="email">Icon:</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="file" id="icon" class="icon-field" name="icon">
-                                </div>
+                            <div class="col-12 col-md-4 mb-3" id="file_field">
+                                    <label class="text-label" for="file">Icon:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="icon" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload Icon
+                                        </label>
+                                        <input id="icon" name="icon" class="file_input visually-hidden icon-field" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -469,8 +477,7 @@ function saveForm() {
         var languageField = row.find('.language-field');
         var language = languageField.val();
         var iconField = row.find('.icon-field');
-        var icon = iconField[0] ? iconField[0].files[0] :
-            null; // Check if the iconField exists before accessing its value
+        var icon = iconField[0] ? iconField[0].files[0] : null; // Check if the iconField exists before accessing its value
 
 
         data.append('number' + index, number);
@@ -607,12 +614,15 @@ $(document).ready(function() {
             '</div>' +
             '</div>' +
             '</div>' +
-            '<div class="col-12 col-md-3 mb-3">' +
-            '<label class="text-label" for="email">Icon:</label>' +
-            '<div class="input-group input-group-merge">' +
-            '<input type="file" id="icon1"  class="icon-field" name="icon">' +
-            '</div>' +
-            '</div>' +
+            '<div class="col-12 col-md-3 mb-3" id="file_field">' +
+            '<label class="text-label" for="file">Icon:</label>'+
+            '<div class="input-group input-group-merge">'+
+            '<label for="icon1" class="file_uploads">'+
+            '<i class="fa fa-paperclip"></i> Upload File</label>'+
+            '<input id="icon1" name="icon" class="file_input visually-hidden icon-field" type="file">'+
+            '<div class="file_status"></div>'+
+            '</div>'+
+            '</div>'+
             '<div class="col-12 col-md-1" style="margin-top: 26px !important">' +
             '<a href="#" class="deleteRowBtn" onclick="deleteRow(this)"><i class="material-icons" style="color:red">delete</i></a>' +
             '</div>' +
@@ -720,6 +730,14 @@ function loadRecord(id) {
             $('#language').val(data.language);
             $('#total_quiz_time').val(data.total_quiz_time);
             $('#description').val(data.description);
+            $('.file_status').text(data.icon);
+                if (data.icon == '') {
+                            $("#icon").hide();
+                        } else {
+                            $("#icon").show();
+                            $("#icon").attr('href', site_url + data.icon);
+                            $("#icon").find('img').attr('src', site_url + data.icon);
+                        }
             $("#editBTN").attr("onclick", "editSaveForm(" + data.id + ")");
             $("#editBTN").html("Update");
             $("#edit-modal-form-title").html("Course");
@@ -780,6 +798,17 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
     $("#saveBTN").attr("onclick", "saveForm()");
     $("#saveBTN").html("Save");
     $("#modal-form-title").html("Course");
+});
+$(document).ready(function() {
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
 });
 </script>
 

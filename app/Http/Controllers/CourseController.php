@@ -229,15 +229,22 @@ public function store(Request $request)
             if (isset($request->icon) && $request->icon != 'undefined') {
                 $file1 = mulistoreFiles($request, ['icon'], 'course_icon',  $request->id . '-icon');
 
-                $file_name = explode('/', $file1['icon']);
+              
 
                 if (empty($file1)) {
                     throw new \Exception('icon for course could not be uploaded');
                 } else {
 
-                    //we will delete old file
-
-                    $res = File::delete(base_path() .'/storage/app/public/uploads/course_icon/' .$course->icon);
+                    $filePath = 'uploads/course_icon/'.$course->icon;
+    
+                    // Check if the file exists in the storage
+                    if (Storage::disk('public')->exists($filePath)) {
+                        // Delete the file
+                        Storage::disk('public')->delete($filePath);
+                        // File deleted successfully
+                    }
+                    
+                    $file_name = explode('/', $file1['icon']);
                     $course->icon = end($file_name);
                 }
             }

@@ -100,10 +100,10 @@
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 mb-3" id="file_field">
-                                    <label class="text-label" for="file">File:</label>
+                                    <label class="text-label" for="file">Icon:</label>
                                     <div class="input-group input-group-merge">
                                         <label for="icon" class="file_uploads">
-                                            <i class="fa fa-paperclip"></i> Upload File
+                                            <i class="fa fa-paperclip"></i> Upload Icon
                                         </label>
                                         <input id="icon" name="icon" class="file_input visually-hidden" type="file">
                                             <div class="file_status"></div>
