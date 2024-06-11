@@ -13,6 +13,7 @@ use App\Models\Game;
 use App\Models\ReadNotice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class GameController extends Controller
@@ -30,7 +31,6 @@ class GameController extends Controller
     {
         if ($request->ajax()) {
             $data = Game::query()->orderBy('updated_at', 'desc')->get();
-            \Log::info($data);
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status_name', function ($row) {
@@ -153,15 +153,22 @@ class GameController extends Controller
             if (isset($request->icon) && $request->icon != 'undefined') {
                 $file1 = storeFiles($request, ['icon'], $request->id . '-icon');
 
-                $file_name = explode('/', $file1['icon']);
+              
 
                 if (empty($file1)) {
                     throw new \Exception('icon for game could not be uploaded');
                 } else {
 
-                    //we will delete old file
-
-                    $res = File::delete(base_path() .'/storage/app/public/uploads/icon/' .$game->icon);
+                    $filePath = 'uploads/icon/'.$game->icon;
+    
+                    // Check if the file exists in the storage
+                    if (Storage::disk('public')->exists($filePath)) {
+                        // Delete the file
+                        Storage::disk('public')->delete($filePath);
+                        // File deleted successfully
+                    }
+                    
+                    $file_name = explode('/', $file1['icon']);
                     $game->icon = end($file_name);
                 }
             }

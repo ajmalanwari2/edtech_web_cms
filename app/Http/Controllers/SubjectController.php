@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\SubjectInGrade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 class SubjectController extends Controller
 {
        /**
@@ -225,28 +226,35 @@ class SubjectController extends Controller
                     return response(['message' => 'The number is already taken.'], 400)->header('Content-Type', 'text/json');
                 }
             }
+    
             $subject->number = $request->number;
             $subject->name = $request->name;
             $subject->status = $request->status;
+    
             if (isset($request->icon) && $request->icon != 'undefined') {
                 $file1 = storeFiles($request, ['icon'], $request->id . '-icon');
-
-                $file_name = explode('/', $file1['icon']);
-
+                
                 if (empty($file1)) {
-                    throw new \Exception('icon for subject could not be uploaded');
+                    throw new \Exception('Icon for subject could not be uploaded');
                 } else {
-
-                    //we will delete old file
-
-                    $res = File::delete(base_path() .'/storage/app/public/uploads/icon/' .$subject->icon);
+                    $filePath = 'uploads/icon/'.$subject->icon;
+    
+                    // Check if the file exists in the storage
+                    if (Storage::disk('public')->exists($filePath)) {
+                        // Delete the file
+                        Storage::disk('public')->delete($filePath);
+                        // File deleted successfully
+                    }
+                    
+                    $file_name = explode('/', $file1['icon']);
                     $subject->icon = end($file_name);
                 }
             }
+    
             $result = $subject->save();
-            if (!empty($result))
-                return response([$result], 201)
-                    ->header('Content-Type', 'text/json');
+            if (!empty($result)) {
+                return response([$result], 201)->header('Content-Type', 'text/json');
+            }
         }
     }
 

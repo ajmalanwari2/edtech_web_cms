@@ -99,10 +99,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
-                                <label class="text-label" for="email">Icon:</label>
-                                <div class="input-group input-group-merge">
-                                <input type="file" id="icon" name="icon">
+                            <div class="col-12 col-md-12 mb-3" id="file_field">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="file" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="icon" name="icon" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -337,6 +342,13 @@ function loadRecord(id) {
             $('#number').val(data.number);
             $('#name').val(data.name);
             $('#status').val(data.status);
+            if (data.body == '') {
+                            $("#icon").hide();
+                        } else {
+                            $("#icon").show();
+                            $("#icon").attr('href', site_url + data.body);
+                            $("#icon").find('img').attr('src', site_url + data.body);
+                        }
             var lessonsHtml = '';
             if (data.lessons != null && data.lessons.length > 0) {
                 $.each(data.lessons, function(key, value) {
@@ -399,6 +411,18 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
     $("#saveBTN").attr("onclick", "saveForm()");
     $("#saveBTN").html("Save");
     $("#modal-form-title").html("Subject");
+});
+
+$(document).ready(function() {
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
 });
 </script>
 

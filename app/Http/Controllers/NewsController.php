@@ -13,6 +13,7 @@ use App\Models\News;
 use App\Models\ReadNotice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class NewsController extends Controller
@@ -153,15 +154,20 @@ class NewsController extends Controller
             if (isset($request->photo) && $request->photo != 'undefined') {
                 $file1 = storeFiles($request, ['photo'], $request->id . '-photo');
 
-                $file_name = explode('/', $file1['photo']);
-
                 if (empty($file1)) {
                     throw new \Exception('photo for news could not be uploaded');
                 } else {
 
-                    //we will delete old file
+                    $filePath = 'uploads/photo/'.$news->photo;
+    
+                    // Check if the file exists in the storage
+                    if (Storage::disk('public')->exists($filePath)) {
+                        // Delete the file
+                        Storage::disk('public')->delete($filePath);
+                        // File deleted successfully
+                    }
 
-                    $res = File::delete(base_path() .'/storage/app/public/uploads/photo/' .$news->photo);
+                    $file_name = explode('/', $file1['photo']);
                     $news->photo = end($file_name);
                 }
             }

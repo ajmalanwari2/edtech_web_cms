@@ -98,11 +98,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
-                                <label class="text-label" for="email">Icon:</label>
-                                <div class="input-group input-group-merge">
-                                <input type="file" id="icon" name="icon">
-                                </div>
+                            <div class="col-12 col-md-6 mb-3" id="file_field">
+                                    <label class="text-label" for="file">File:</label>
+                                    <div class="input-group input-group-merge">
+                                        <label for="icon" class="file_uploads">
+                                            <i class="fa fa-paperclip"></i> Upload File
+                                        </label>
+                                        <input id="icon" name="icon" class="file_input visually-hidden" type="file">
+                                            <div class="file_status"></div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -263,7 +267,7 @@ function saveForm(id) {
     data.append('name', $('#name').val());
     data.append('grade_id', gradeId);
     data.append('status', $('#status').val());
-    data.append('icon', $('#icon')[0].files[0]); // Append the selected file
+    data.append('icon', $('#icon')[0].files[0]);
 
     if (!(id === undefined)) {
         url = site_url + 'api/subject/update';
@@ -335,6 +339,14 @@ function loadRecord(id) {
             $('#number').val(data.number);
             $('#name').val(data.name);
             $('#status').val(data.status);
+            $('.file_status').text(data.icon);
+                if (data.icon == '') {
+                            $("#icon").hide();
+                        } else {
+                            $("#icon").show();
+                            $("#icon").attr('href', site_url + data.icon);
+                            $("#icon").find('img').attr('src', site_url + data.icon);
+                        }
             var lessonsHtml = '';
             if (data.lessons != null && data.lessons.length > 0) {
                 $.each(data.lessons, function(key, value) {
@@ -396,6 +408,18 @@ $(document).on('hide.bs.modal', '#modal-form', function() {
     $("#saveBTN").attr("onclick", "saveForm()");
     $("#saveBTN").html("Save");
     $("#modal-form-title").html("Subject");
+});
+
+$(document).ready(function() {
+        $('.file_input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            var statusElement = $(this).next('.file_status');
+            if (fileName) {
+                statusElement.text('File uploaded: ' + fileName);
+            } else {
+                statusElement.text('No file uploaded');
+            }
+        });
 });
 </script>
 
