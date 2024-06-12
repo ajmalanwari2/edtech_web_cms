@@ -162,7 +162,14 @@
         var url = site_url + 'api/library_kit_content/save';
         var formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
-        formData.append('title', $('#title').val());
+        var str = $('#title').val();
+        var index = str.indexOf("ټ");
+        if(index){
+            var newStr = str.replace('ټ', 'ت');
+        formData.append('title', newStr);
+        }else{
+            formData.append('title', $('#title').val());
+        }
         formData.append('library_kit_id', $('#library_kit_id').val());
         formData.append('file', $('#file')[0].files[0]);
       

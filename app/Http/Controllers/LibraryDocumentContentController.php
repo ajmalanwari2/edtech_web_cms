@@ -68,8 +68,15 @@ class LibraryDocumentContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
+                $newString = '';
+                $str = strpos($request->title, 'ټ');
+               if($str !== false){
+                   $newString = str_replace('ت', 'ټ', $request->title);
+               }else{
+                   $newString = $request->title;
+               }
                 $data = [
-                    'title' => $request->title,
+                    'title' => $newString,
                     'is_main' => $request->is_main,
                     'library_document_id' => $request->library_document_id,
                     'created_by' => auth()->user()->id,

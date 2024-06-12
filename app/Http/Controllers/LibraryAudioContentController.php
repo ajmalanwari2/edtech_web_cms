@@ -61,8 +61,15 @@ class LibraryAudioContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
+                $newString = '';
+                $str = strpos($request->title, 'ټ');
+               if($str !== false){
+                   $newString = str_replace('ت', 'ټ', $request->title);
+               }else{
+                   $newString = $request->title;
+               }
                 $data = [
-                    'title' => $request->title,
+                    'title' => $newString,
                     'library_audio_id' => $request->library_audio_id,
                     'created_by' => auth()->user()->id,
                     'created_at' => date("Y-m-d H:i:s"),

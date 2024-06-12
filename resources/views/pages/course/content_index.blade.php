@@ -273,7 +273,14 @@ $(document).ready(function() {
         var url = site_url + 'api/course_content/save';
         var formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
-        formData.append('title', $('#title').val());
+        var str = $('#title').val();
+        var index = str.indexOf("ټ");
+        if(index){
+            var newStr = str.replace('ټ', 'ت');
+        formData.append('title', newStr);
+        }else{
+            formData.append('title', $('#title').val());
+        }
         formData.append('type', $('#type').val());
         formData.append('course_id', $('#course_id').val());
         if ($('#type').val() == 'video') {
