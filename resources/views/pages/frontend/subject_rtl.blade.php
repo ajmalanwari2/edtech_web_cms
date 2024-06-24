@@ -63,21 +63,22 @@
                     $titles = explode(',', $item->titles);
                     $types = explode(',', $item->types);
                     @endphp
-                    <div class="d-flex inner-box">
-                        <div class="p-2 vid-number">{{ $loop->iteration }}</div>
+                    <div class="d-flex justify-content-between inner-box">
+                        <div class="p-2"><span class="p-2 vid-number">{{ $loop->iteration }}</span>
                         @for($i = 0; $i < count($bodies); $i++) @if($types[$i]=='video' ) @php $watchUrl=$bodies[$i];
                             $videoId=substr($watchUrl, strrpos($watchUrl, '/' ) + 1);
                             $embedUrl='https://www.youtube.com/embed/' . $videoId;
-                            $thumbnail='https://img.youtube.com/vi/' . $videoId . '/0.jpg' ; @endphp <div class="p-2">
+                            $thumbnail='https://img.youtube.com/vi/' . $videoId . '/0.jpg' ; @endphp 
+                       
                             <a
                                 onclick="playVideo('{{$videoId}}', '{{$titles[$i]}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
                                 {{$item->chapter_name}}
                             </a>
                     </div>
                     @elseif($types[$i] == 'file')
-                    <div class="ms-auto p-2">
+                    <div class="p-2">
                         <a href="{{ asset($bodies[$i]) }}" target="_blank">
-                            <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">View Book
+                            <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
                         </a>
                     </div>
                     @endif

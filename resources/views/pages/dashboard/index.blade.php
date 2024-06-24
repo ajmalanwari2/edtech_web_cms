@@ -9,7 +9,8 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
             <div class="col-12 col-lg-12">
-                <div class="card radius-10 border-0 card-h">
+                <div class="card radius-10 border-0 card-h" style="
+    background-color: #075c7d;">
                     <div class="card-body cardbody">
                         <div class="row">
                             <!-- start of icon box -->

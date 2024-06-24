@@ -292,6 +292,7 @@ FROM grades AS g
 LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'pa\'
+and g.status = \'1\'
 GROUP BY g.id, g.name, g.language');
             return view('pages.frontend.content',compact('lang', 'gradesEnglish'));
         }else{
@@ -318,6 +319,7 @@ FROM grades AS g
 LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'da\'
+and g.status = \'1\'
 GROUP BY g.id, g.name, g.language');
 
 $gradesPashto = DB::select('
@@ -343,6 +345,7 @@ FROM grades AS g
 LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'pa\'
+and g.status = \'1\'
 GROUP BY g.id, g.name, g.language');
             return view('pages.frontend.content_rtl',compact('lang', 'gradesDari', 'gradesPashto'));
         }

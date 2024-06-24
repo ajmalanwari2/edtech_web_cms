@@ -181,9 +181,9 @@ color: rgb(255, 255, 255);font-size: 12px;display: flex;justify-content: center;
 .widgets_div .text_div span+span {color: #747F85;font-size: 11px;}
 .widgets_div {border-right: 0.1rem solid #f5f5f5;font-size: 10px;}
 .card-h{border-radius: 30px !important;box-shadow: rgba(211, 226, 249, 0.1) 0px 10px 10px -10px !important;}
-.std{font-weight: normal;color: #a5a5a5; font-size: 10px;}
-.std-num{font-size: 1.3rem; color: #000;font-weight: 600;}
-.std-per {font-size: 11px;font-weight: bold;color: #3088ae;position: relative;top: -8px;}
+.std{font-weight: bold;color: #d9dacf; font-size: 10px;}
+.std-num{font-size: 1.3rem; color: #ffffff;font-weight: 600;}
+.std-per {font-size: 11px;font-weight: bold;color: #eafc86;position: relative;top: -8px;}
 .cardbody{padding: 10px 0 7px;}
 .cardTitle {font-size: 0.8rem;font-weight: bold;margin-top: 10px;}
 .m_card {background: #f6f9ff;text-align: center;padding: 1rem;border-radius: 30px;margin-top: 0.2rem;}
