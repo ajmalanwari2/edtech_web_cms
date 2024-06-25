@@ -53,6 +53,7 @@
 
     @yield('scripts')
     <script type="text/javascript">
+            var site_url = "{{ config('app.app_url') }}";
         // Check if the user has visited before
         function hasVisitedBefore() {
             return (localStorage.getItem('visited') === 'true');

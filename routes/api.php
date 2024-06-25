@@ -39,6 +39,7 @@ use App\Http\Controllers\LibraryDocumentBookmarkController;
 use App\Http\Controllers\LibraryVideoBookmarkController;
 use App\Http\Controllers\LibraryAudioBookmarkController;
 use App\Http\Controllers\LibraryKitBookmarkController;
+use App\Http\Controllers\FrontEndController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,12 @@ use App\Http\Controllers\LibraryKitBookmarkController;
 |
 */
 
+
+
+    Route::post('video/show',[FrontEndController::class, 'show']);
+
 Route::group(['domain' => config('app.app_admin_domain')], function () {
+  
     Route::get('student-list-based-on-district/{district_id}', [StudentController::class, 'getStudentList']);
     Route::get('start-quiz/subject_id',[QuizController::class, 'startQuizMobile']);
     
@@ -434,6 +440,7 @@ Route::group(['middleware' => 'auth:sanctum','domain' => config('app.app_admin_d
         Route::post('reject',[UserCreationRequestController::class, 'reject']);
         Route::post('delete',[UserCreationRequestController::class, 'destroy']);
     });
+ 
 
 
 });

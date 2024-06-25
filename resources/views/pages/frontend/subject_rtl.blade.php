@@ -65,23 +65,29 @@
                     @endphp
                     <div class="d-flex justify-content-between inner-box">
                         <div class="p-2"><span class="p-2 vid-number">{{ $loop->iteration }}</span>
-                        @for($i = 0; $i < count($bodies); $i++) @if($types[$i]=='video' ) @php $watchUrl=$bodies[$i];
+                        @for($i = 0; $i < count($bodies); $i++) 
+                         {{-- @if($types[$i]=='video' ) --}}  
+                        @php $watchUrl=$bodies[$i];
                             $videoId=substr($watchUrl, strrpos($watchUrl, '/' ) + 1);
                             $embedUrl='https://www.youtube.com/embed/' . $videoId;
                             $thumbnail='https://img.youtube.com/vi/' . $videoId . '/0.jpg' ; @endphp 
                        
-                            <a
+                            <!-- <a
                                 onclick="playVideo('{{$videoId}}', '{{$titles[$i]}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
+                                {{$item->chapter_name}}
+                            </a> -->
+                            <a
+                                onclick="loadRecord('{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
                                 {{$item->chapter_name}}
                             </a>
                     </div>
-                    @elseif($types[$i] == 'file')
+                    {{-- @elseif($types[$i] == 'file') --}} 
                     <div class="p-2">
                         <a href="{{ asset($bodies[$i]) }}" target="_blank">
                             <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
                         </a>
                     </div>
-                    @endif
+                    {{-- @endif --}} 
                     @endfor
                 </div>
                 @endforeach
@@ -120,6 +126,50 @@ function playVideo(id, title, grade_name, subject_name) {
     mainVideo.src = 'https://www.youtube.com/embed/' + id;
     mainVideoTitle.innerText = grade_name + ' ،' + subject_name + ' ،' + title;
 
+}
+
+function loadRecord(id, grade_name, subject_name) {
+    $.ajax({
+        type: "POST",
+        url: site_url + 'api/video/show',
+        data: {
+            id: id,
+            '_token': '{{ csrf_token() }}'
+        },
+        fail: (function() {
+            $.toaster({
+                priority: 'danger',
+                title: 'Info',
+                message: 'There was an error loading the record.'
+            });
+        }),
+        success: (function(data) {
+           // Example usage
+var videoUrl = data.body;
+var videoId = getYouTubeVideoId(videoUrl);
+            // Set chapter details
+            const mainVideo = document.getElementById('main-video');
+    const mainVideoTitle = document.querySelector('.main-vid-title');
+    mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
+    mainVideoTitle.innerText = grade_name + ' ،' + subject_name + ' ،' + data.title;
+            
+        }),
+        dataType: 'json'
+    });
+}
+
+function getYouTubeVideoId(url) {
+  // Regular expression pattern to match YouTube video IDs
+  var regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|attribution_link\?.+watch\?v=)|youtu\.be\/)([^\s&?\/]+)/;
+  
+  // Extract the video ID from the URL using the regular expression
+  var match = url.match(regExp);
+  
+  if (match && match[1]) {
+    return match[1]; // Return the extracted video ID
+  }
+  
+  return null; // Return null if the URL is not a valid YouTube URL
 }
 </script>
 @stop

@@ -8,6 +8,7 @@ use App\Models\Grade;
 use App\Models\School;
 use App\Models\Province;
 use App\Models\District;
+use App\models\Content;
 use App\Models\UserCreationRequest;
 use App\Rules\ExistsProvinceForeignKey;
 use App\Rules\ExistsDistrictForeignKey;
@@ -445,6 +446,25 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         }
     }
 
+    public function show(Request $request)
+    {
+        if ($request->ajax()) {
+            $chapter = Content::select('id', 'title', 'body')
+            ->where('chapter_id', $request->id)
+            ->where('type', 'video')->first();
+           
+    
+            if ($chapter) {
+                
+                // Load the related contents for the chapter
+             
+    
+                return response()->json($chapter);
+            }
+        }
+    
+        return response()->json(['data' => null], 404);
+    }
 
     public function course($lang)
     {
