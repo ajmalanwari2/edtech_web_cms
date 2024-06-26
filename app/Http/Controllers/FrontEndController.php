@@ -174,12 +174,14 @@ class FrontEndController extends Controller
     {
        
         // $schools = School::all();
-        $grades = Grade::all();
+       
         $provinces = Province::all();
         $districts = District::all();
         // dd(\App::getLocale());
         $lang = $this->getLang();
+        $grades = Grade::where('status', '1', )->where('language', $lang )->get();
         if ($this->lang == 'en') {
+            $grades = Grade::where('status', '1', )->where('language', 'pa' )->get();
             return view('pages.frontend.request_form', compact('lang', 'grades', 'provinces', 'districts'));
         } else {
             return view('pages.frontend.request_form_rtl', compact('lang', 'grades', 'provinces', 'districts'));
@@ -397,24 +399,17 @@ $grade = Grade::find($id);
     {
         $lang = $this->getLang();
         $query = 'SELECT
-    sl.chapter_id,
-    GROUP_CONCAT(DISTINCT sl.id) AS ids,
-    GROUP_CONCAT(DISTINCT sl.title) AS titles,
-    GROUP_CONCAT(DISTINCT sl.body) AS bodies,
-    GROUP_CONCAT(DISTINCT sl.type) AS types,
+ 	ch.id as chapter_id,
     g.name AS grade_name,
     s.name AS subject_name,
     ch.number AS chapter_number,
     ch.name as chapter_name
-FROM subject_lessons sl
-JOIN chapters ch ON sl.chapter_id = ch.id
+FROM chapters ch
 JOIN subjects s ON s.id = ch.subject_id
 JOIN subjects_in_grades sig ON s.id = sig.subject_id
 JOIN grades g ON g.id = sig.grade_id
-WHERE (sl.type = "video" OR sl.type = "file")
     AND s.id = :subject_id
-    AND g.id = :grade_id
-GROUP BY sl.chapter_id';
+    AND g.id = :grade_id';
 
 $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' => $grade_id]);
 //         $subjectContents = DB::select('select
@@ -446,27 +441,45 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         }
     }
 
-    public function show(Request $request)
+    public function showVideo(Request $request)
     {
         if ($request->ajax()) {
-            $chapter = Content::select('id', 'title', 'body')
+            $video = Content::select('id', 'title', 'body')
             ->where('chapter_id', $request->id)
             ->where('type', 'video')->first();
            
     
-            if ($chapter) {
+            if ($video) {
                 
-                // Load the related contents for the chapter
-             
-    
-                return response()->json($chapter);
+                return response()->json($video);
+            }else{
+                return response()->json('video-not-available');
             }
         }
     
-        return response()->json(['data' => null], 404);
+ 
     }
 
-    public function course($lang)
+    public function showBook(Request $request)
+    {
+        if ($request->ajax()) {
+            $book = Content::select('id', 'title', 'body')
+            ->where('chapter_id', $request->id)
+            ->where('type', 'file')->first();
+           
+    
+            if ($book) {
+                
+                return response()->json($book);
+            }else{
+                return response()->json('book-not-available');
+            }
+        }
+    
+ 
+    }
+
+    public function courseContent($lang, $id)
     {
         $lang = $this->getLang();
       
@@ -479,6 +492,7 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
     join courses as c
     on c.id = cc.course_id
     where c.language = \''.$lang.'\'
+    and cc.course_id = '.$id.'
    ');
 
    $courseContentEnglish = DB::select('select
@@ -490,6 +504,7 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
     join courses as c
     on c.id = cc.course_id
     where c.language = \'pa\'
+     and cc.course_id = '.$id.'
    ');
         if ($this->lang == 'en') {
             return view('pages.frontend.course', compact('lang', 'courseContentEnglish'));
@@ -497,6 +512,79 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
             return view('pages.frontend.course_rtl', compact('lang', 'courseContents'));
         }
     }
+
+
+    public function course()
+    {
+        $lang = $this->getLang();
+
+        if ($this->lang=='en'){
+            $coursesEnglish = DB::select('
+            SELECT
+    c.id AS course_id,
+    c.name AS course_name,
+    CASE
+        WHEN c.language = \'pa\' THEN \'پشتو\'
+        ELSE \'دری\'
+    END AS course_language,
+    (
+        SELECT COUNT(cc.id)
+        FROM course_contents AS cc
+        JOIN courses AS c2 ON c2.id = cc.course_id
+        WHERE c2.id = c.id
+            AND cc.type = \'video\'
+    ) AS video_count
+FROM courses AS c
+WHERE c.language = \'pa\'
+and c.status = \'1\'
+GROUP BY c.id, c.name, c.language');
+            return view('pages.frontend.course_content',compact('lang', 'coursesEnglish'));
+        }else{
+            $coursesDari = DB::select('
+             SELECT
+    c.id AS course_id,
+    c.name AS course_name,
+    CASE
+        WHEN c.language = \'pa\' THEN \'دری\'
+        ELSE \'پشتو\'
+    END AS course_language,
+    (
+        SELECT COUNT(cc.id)
+        FROM course_contents AS cc
+        JOIN courses AS c2 ON c2.id = cc.course_id
+        WHERE c2.id = c.id
+            AND cc.type = \'video\'
+    ) AS video_count
+FROM courses AS c
+WHERE c.language = \'da\'
+and c.status = \'1\'
+GROUP BY c.id, c.name, c.language');
+
+$coursesPashto = DB::select('
+             SELECT
+    c.id AS course_id,
+    c.name AS course_name,
+    CASE
+        WHEN c.language = \'pa\' THEN \'پشتو\'
+        ELSE \'دری\'
+    END AS course_language,
+    (
+        SELECT COUNT(cc.id)
+        FROM course_contents AS cc
+        JOIN courses AS c2 ON c2.id = cc.course_id
+        WHERE c2.id = c.id
+            AND cc.type = \'video\'
+    ) AS video_count
+FROM courses AS c
+WHERE c.language = \'pa\'
+and c.status = \'1\'
+GROUP BY c.id, c.name, c.language');
+            return view('pages.frontend.course_content_rtl',compact('lang', 'coursesDari', 'coursesPashto'));
+        }
+    }
+
+
+
 
     public function landing()
     {

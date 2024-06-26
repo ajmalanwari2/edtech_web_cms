@@ -19,8 +19,7 @@
                         placeholder="{{ __('contact.full_name') }}" >
                     <input name="email" class="form-control form-control-lg" type="email" required 
                         placeholder="{{ __('contact.email') }}" >
-                    <input name="subject" class="form-control form-control-lg" type="subject" 
-                        placeholder="{{ __('contact.subject') }}" >
+                   
                     <select name="province_id" id="province_id" class="form-control form-control-lg" required
                         >
                         <option selected>انتخاب {{ __('request_form.province') }}</option>
@@ -38,6 +37,8 @@
                                 {{ $district->name }}</option>
                         @endforeach
                     </select>
+                    <input name="subject" class="form-control form-control-lg" type="subject" 
+                    placeholder="{{ __('contact.subject') }}" >
                     <textarea name="message" placeholder="{{ __('contact.message') }}" class="form-control" style="width: 900px"
                         rows="10"></textarea>
                     <input class="btn btn-primary" type="submit" value="{{ __('contact.send') }}" >

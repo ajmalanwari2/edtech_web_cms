@@ -896,7 +896,7 @@ table.dataTable tbody th, table.dataTable tbody td {padding: 13px 10px !importan
 .contactform input, .contactform select, .contactform button, .contactform textarea {font-size:1rem;width:39% !important;margin-right:1%;margin-bottom:15px;padding:5px 12px;border-radius:7px;display: inline-block;}
 .contactform textarea {width:79.4% !important}
 .contactform .btn {width: 15rem !important;}
-.contactform select[name="district_id"]{width:79.4% !important}
+.contactform input[name="subject"]{width:79.4% !important}
 
 .req_form input, .req_form select, .req_form button, .req_form textarea {font-size:1rem; width:100% !important;margin-right:0%;margin-bottom:15px; padding:5px 12px; border-radius:7px; border-color:#ddd}
 .req_form textarea {width:100% !important}
@@ -1016,7 +1016,7 @@ table.dataTable tbody th, table.dataTable tbody td {padding: 13px 10px !importan
   #video_list_scroll {height: auto}
   .contactform input, .contactform select, .contactform button, .contactform textarea {font-size:1rem; width:48% !important;margin-right:0;margin-left:0;}
   .contactform textarea {width:98% !important;margin-right:0; margin-left:0;}
-  .contactform select[name="district_id"]{width:98% !important}
+  .contactform input[name="subject"]{width:98% !important}
   .contactform .btn {width:98% !important;}
   .req_form_container{border:0; box-shadow: 0}
   .footer .contact-list {margin-left:-1rem;margin-right:-1rem}

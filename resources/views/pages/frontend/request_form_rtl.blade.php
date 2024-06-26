@@ -24,38 +24,18 @@
                                     <option value='parent'>{{ __('request_form.parent') }}</option>
                                     <option value='teacher'>{{ __('request_form.teacher') }}</option>
                                 </select>
-                                <input name="first_name" type="text" class="form-control form-control-lg" name=""
-                                    placeholder="{{ __('request_form.full_name') }}" >
-                                <input name="email" class="form-control form-control-lg" type="email" required
-                                    name="" placeholder="{{ __('request_form.email') }}"
-                                    >
-                                <input name="identity_number" class="form-control form-control-lg" type="text"
-                                    name="" placeholder="{{ __('request_form.identity_number') }}"
-                                    >
-                                <input name="dob" class="form-control form-control-lg" type="text" name=""
-                                    placeholder="{{ __('request_form.date_of_birth') }}"
-                                    >
                                 <select name="gender" class="form-control form-control-lg" required
                                     >
                                     <option selected>Select {{ __('request_form.gender') }}</option>
                                     <option value='male'>Male</option>
                                     <option value='female'>Female</option>
                                 </select>
-                            </div>
-                            <div class="col-md-6">
-
-                                <input name="phone_no" class="form-control form-control-lg" type="text" name=""
+                                <input name="identity_number" class="form-control form-control-lg" type="text"
+                                    name="" placeholder="{{ __('request_form.identity_number') }}"
+                                    >
+                                    <input name="phone_no" class="form-control form-control-lg" type="text" name=""
                                     placeholder="{{ __('request_form.phone') }}" >
-                                <select name="province_id" id="province_id" class="form-control form-control-lg" required
-                                    style="width: 500px;margin-top:10px">
-                                    <option selected>Select {{ __('request_form.province') }}</option>
-                                    @foreach($provinces as $province)
-                                        <option {{old('province_id') == $province->id ? 'selected' : ''}}
-                                            value="{{$province->id}}">
-                                            {{$province->name}}</option>
-                                        @endforeach
-                                </select>
-                                <select name="district_id" id="district_id" class="form-control form-control-lg" required
+                                    <select name="district_id" id="district_id" class="form-control form-control-lg" required
                                     style="width: 500px;margin-top:10px">
                                     <option selected>Select {{ __('request_form.district') }}</option>
                                     @foreach($districts as $district)
@@ -73,6 +53,34 @@
                                             {{$grade->name}}</option>
                                         @endforeach
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                            <input name="first_name" type="text" class="form-control form-control-lg" name=""
+                            placeholder="{{ __('request_form.full_name') }}" >
+                            <input name="dob" class="form-control form-control-lg" type="text" name=""
+                                    placeholder="{{ __('request_form.date_of_birth') }}"
+                                    >
+                                    <input name="email" class="form-control form-control-lg" type="email" required
+                                    name="" placeholder="{{ __('request_form.email') }}"
+                                    >
+                              
+                                <select name="province_id" id="province_id" class="form-control form-control-lg" required
+                                    style="width: 500px;margin-top:10px">
+                                    <option selected>Select {{ __('request_form.province') }}</option>
+                                    @foreach($provinces as $province)
+                                        <option {{old('province_id') == $province->id ? 'selected' : ''}}
+                                            value="{{$province->id}}">
+                                            {{$province->name}}</option>
+                                        @endforeach
+                                </select>
+                                
+                                <select name="language" class="form-control form-control-lg" required id="language">
+                                    <option selected>Select {{ __('request_form.language') }}</option>
+                                    <option value='en'>{{ __('request_form.english') }}</option>
+                                    <option value='da'>{{ __('request_form.dari') }}</option>
+                                    <option value='pa'>{{ __('request_form.pashto') }}</option>
+                                </select>
+                               
                                 <input name="password" class="form-control form-control-lg" type="text" name=""
                                     placeholder="{{ __('request_form.password') }}" >
 

@@ -61,6 +61,7 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
         Route::get('request_form', [FrontEndController::class, 'request_form'])->name('request_form');
         Route::post('request_form_submit', [FrontEndController::class, 'request_form_submit'])->name('request_form_submit');
         Route::get('course', [FrontEndController::class, 'course'])->name('course');
+        Route::get('courseContent/{id}', [FrontEndController::class, 'courseContent'])->name('courseContent');
     });
     Route::post('/get_districts', [DistrictController::class, 'getDistrictsThroughProvince']);
     Route::get('/', function () {
