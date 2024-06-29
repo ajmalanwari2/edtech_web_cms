@@ -56,6 +56,8 @@ use App\Http\Controllers\FrontEndController;
 
 Route::post('video/show',[FrontEndController::class, 'showVideo']);
 Route::post('book/show',[FrontEndController::class, 'showBook']);
+Route::post('course_video/show',[FrontEndController::class, 'courseVideoShow']);
+Route::post('course_book/show',[FrontEndController::class, 'courseBookShow']);
 
 Route::group(['domain' => config('app.app_admin_domain')], function () {
   

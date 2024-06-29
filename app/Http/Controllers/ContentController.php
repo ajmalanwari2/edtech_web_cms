@@ -68,6 +68,14 @@ class ContentController extends Controller
                 }else{
                     $newString = $request->title;
                 }
+
+                $str2 = strpos($request->title, '-');
+                if($str2 !== false){
+                    $newString = str_replace(',', '-', $request->title);
+                }else{
+                    $newString = $request->title;
+                }
+
                 $data = [
                     'title' => $newString,
                     'type' => $request->type,

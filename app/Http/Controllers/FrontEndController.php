@@ -8,6 +8,7 @@ use App\Models\Grade;
 use App\Models\School;
 use App\Models\Province;
 use App\Models\District;
+use App\Models\CourseContent;
 use App\models\Content;
 use App\Models\UserCreationRequest;
 use App\Rules\ExistsProvinceForeignKey;
@@ -479,6 +480,8 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
  
     }
 
+
+
     public function courseContent($lang, $id)
     {
         $lang = $this->getLang();
@@ -487,19 +490,22 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         cc.id,
         cc.title,
         cc.body,
-        cc.type
+        cc.type,
+        c.name as course_name,
+        c.id as course_id
     from course_contents cc
     join courses as c
     on c.id = cc.course_id
     where c.language = \''.$lang.'\'
     and cc.course_id = '.$id.'
    ');
-
    $courseContentEnglish = DB::select('select
         cc.id,
         cc.title,
         cc.body,
-        cc.type
+        cc.type,
+        c.name as course_name,
+         c.id as course_id
     from course_contents cc
     join courses as c
     on c.id = cc.course_id
@@ -507,9 +513,9 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
      and cc.course_id = '.$id.'
    ');
         if ($this->lang == 'en') {
-            return view('pages.frontend.course', compact('lang', 'courseContentEnglish'));
+            return view('pages.frontend.course_content', compact('lang', 'courseContentEnglish'));
         } else {
-            return view('pages.frontend.course_rtl', compact('lang', 'courseContents'));
+            return view('pages.frontend.course_content_rtl', compact('lang', 'courseContents'));
         }
     }
 
@@ -538,7 +544,7 @@ FROM courses AS c
 WHERE c.language = \'pa\'
 and c.status = \'1\'
 GROUP BY c.id, c.name, c.language');
-            return view('pages.frontend.course_content',compact('lang', 'coursesEnglish'));
+            return view('pages.frontend.course',compact('lang', 'coursesEnglish'));
         }else{
             $coursesDari = DB::select('
              SELECT
@@ -579,10 +585,48 @@ FROM courses AS c
 WHERE c.language = \'pa\'
 and c.status = \'1\'
 GROUP BY c.id, c.name, c.language');
-            return view('pages.frontend.course_content_rtl',compact('lang', 'coursesDari', 'coursesPashto'));
+            return view('pages.frontend.course_rtl',compact('lang', 'coursesDari', 'coursesPashto'));
         }
     }
 
+
+    public function courseVideoShow(Request $request)
+    {
+        if ($request->ajax()) {
+            $video = CourseContent::select('id', 'title', 'body')
+            ->where('course_id', $request->id)
+            ->where('type', 'video')->first();
+           
+    
+            if ($video) {
+                
+                return response()->json($video);
+            }else{
+                return response()->json('video-not-available');
+            }
+        }
+    
+ 
+    }
+
+    public function courseBookShow(Request $request)
+    {
+        if ($request->ajax()) {
+            $book = CourseContent::select('id', 'title', 'body')
+            ->where('course_id', $request->id)
+            ->where('type', 'file')->first();
+           
+    
+            if ($book) {
+                
+                return response()->json($book);
+            }else{
+                return response()->json('book-not-available');
+            }
+        }
+    
+ 
+    }
 
 
 
