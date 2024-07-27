@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentParent;
+use App\Models\StudentInParent;
 use App\Http\Requests\StoreStudentParentRequest;
 use App\Http\Requests\UpdateStudentParentRequest;
 use App\Models\Province;
@@ -103,25 +104,32 @@ class StudentParentController extends Controller
         if ($user->role === 'parent') {
     
             $studentGroups = [];
-    
+    $number_of_students = DB::select('SELECT count(sip.id) as number_of_student
+        FROM student_in_parents as sip
+        JOIN students as s ON s.id = sip.student_id
+        JOIN student_parents as sp ON sp.id = sip.student_parent_id
+        WHERE sp.user_id = ' . $user_id);
             $students = DB::select('SELECT 
                 u.name as student_name,
                 g.name as grade_name,
                 g.id as grade_id,
-                u.id as student_user_id
+                s.user_id,
+                u.id as student_user_id,
+                s.language
             FROM users as u
             JOIN students as s ON u.id = s.user_id
             JOIN student_in_parents as sip ON s.id = sip.student_id
             JOIN student_parents as sp ON sp.id = sip.student_parent_id
             JOIN grades as g ON g.id = s.grade_id
             WHERE sp.user_id = ' . $user_id);
-    
+    $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
             foreach ($students as $student) {
                 if (!isset($studentGroups[$student->student_user_id])) {
                     $studentGroups[$student->student_user_id] = [
                         'student_name' => $student->student_name,
                         'grade_name' => $student->grade_name,
                         'student_user_id' => $student->student_user_id,
+                        'language' => $student->language,
                         'subjects' => [],
                         'progress' => [], // Initialize the subjects array
                     ];
@@ -132,8 +140,12 @@ class StudentParentController extends Controller
                     WHERE c.grade_id =' . $student->grade_id)[0]->total_chapters;
             $learned_chapters = DB::select('SELECT COUNT(c.id) AS learned_chapters
             FROM chapters AS c
-            WHERE c.state = 1 and c.grade_id =' . $student->grade_id)[0]->learned_chapters;
+            WHERE c.state = "1" and c.grade_id =' . $student->grade_id)[0]->learned_chapters;
 
+            $last_sync_datetime = DB::select('SELECT sync_datetime AS last_sync_datetime
+            FROM users AS u
+            WHERE u.id =' . $student->user_id);
+    $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync_datetime[0]->last_sync_datetime : NULL;
         $learned_chapters_per_month = DB::select('
         SELECT COUNT(chapter_id) AS number_of_learned_chapter_per_month,
         DATE_FORMAT(chapter_start_date, \'%M\') AS month_name
@@ -147,7 +159,8 @@ class StudentParentController extends Controller
                 $progressData = [
                     'total_chapters' => $total_chapters,
                     'learned_chapters' => $learned_chapters,
-                    'learned_chapters_per_month' => $learned_chapters_per_month,
+                    'last_sync_datetime' => $last_sync_datetime,
+                    // 'learned_chapters_per_month' => $learned_chapters_per_month,
                 ];
     
                 $subjects = DB::select('SELECT
@@ -172,6 +185,7 @@ class StudentParentController extends Controller
                     WHERE s.id = ' . $subject->subject_id);
     
                     $attemptedQuizzes = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                    qr.created_at as completed_datetime,
                             ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
                            CASE
                 WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
@@ -211,10 +225,11 @@ class StudentParentController extends Controller
                     $subjectData['quizzes'][] = [
                         'total_quizzes' => $totalQuizzes[0]->total_quizzes,
                         'number_attempted_quizzes' =>$attemptedQuizzes[0]->number_attempted_quizzes,
-                        'number_unattempted_quizzes' => $totalQuizzes[0]->total_quizzes - $attemptedQuizzes[0]->number_attempted_quizzes,
-                        'percentage_mark' => $attemptedQuizzes[0]->percentage_mark,
-                        'student_result' => $attemptedQuizzes[0]->student_result,
-                        'student_quiz_history' => $studentQuizHistory,
+                        'completed_datetime' =>$attemptedQuizzes[0]->completed_datetime,
+                        // 'number_unattempted_quizzes' => $totalQuizzes[0]->total_quizzes - $attemptedQuizzes[0]->number_attempted_quizzes,
+                        // 'percentage_mark' => $attemptedQuizzes[0]->percentage_mark,
+                        // 'student_result' => $attemptedQuizzes[0]->student_result,
+                        // 'student_quiz_history' => $studentQuizHistory,
                     ];
     
                     $studentGroups[$student->student_user_id]['subjects'][] = $subjectData;
@@ -237,4 +252,18 @@ class StudentParentController extends Controller
                 ->header('Content-Type', 'text/json');
         }
     }
+    
+    public function destroy($id)
+    {
+        $student = StudentInParent::where('student_id', $id)->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        $student->delete();
+
+        return response()->json(['message' => 'Student deleted successfully']);
+    }
+    
 }

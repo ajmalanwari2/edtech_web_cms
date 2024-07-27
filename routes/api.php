@@ -107,6 +107,8 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     Route::post('inactive-user', [UserCreationRequestController::class, 'inactiveUser']);
     Route::post('contact', [UserCreationRequestController::class, 'contact']);
 
+ Route::delete('delete-student-by-parent/{id}', [StudentParentController::class, 'destroy']);
+
     //notices
     Route::get('notice-list',[NoticeController::class, 'noticeList']);
     Route::post('read-notice', [NoticeController::class, 'readNotice']);

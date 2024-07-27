@@ -415,29 +415,38 @@ class TeacherController extends Controller
     }
 
 
-    public function teacherAnalysis(Request $request)
+   public function teacherAnalysis(Request $request)
 {
     $user_id = auth()->user()->id;
     $user = User::find($user_id);
     if ($user->role === 'teacher') {
-        $district_id = Teacher::select('district_id')->where('user_id', $user_id)->get();
-        $district_id = $district_id && $district_id[0] ? $district_id[0]->district_id : NULL;
-        if($user == NULL || $district_id == NULL){
+        $province_id = Teacher::select('province_id')->where('user_id', $user_id)->get();
+        $province_id = $province_id && $province_id[0] ? $province_id[0]->province_id : NULL;
+        if($user == NULL || $province_id == NULL){
             return response(['message' => 'The user is not registered'], 400)
                 ->header('Content-Type', 'text/json');
         }
         $studentGroups = [];
 
+        $number_of_students = DB::select('SELECT count(s.id) as number_of_student
+        FROM students as s
+        JOIN teachers as t ON t.province_id = s.province_id
+        WHERE t.province_id = ' . $province_id);
+   $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
         $students = DB::select('SELECT 
             u.name as student_name,
             g.name as grade_name,
             g.id as grade_id,
-            u.id as student_user_id
+            u.id as student_user_id,
+            s.language,
+            s.user_id,
+            p.name as province_name
         FROM users as u
         JOIN students as s ON u.id = s.user_id
         JOIN grades as g ON g.id = s.grade_id
-        JOIN teachers as t ON t.district_id = s.district_id
-        WHERE t.district_id = ' . $district_id);
+        JOIN teachers as t ON t.province_id = s.province_id
+        JOIN provinces as p ON t.province_id = p.id
+        WHERE t.province_id = ' . $province_id);
         foreach ($students as $student) {
 
             if (!isset($studentGroups[$student->student_user_id])) {
@@ -445,6 +454,8 @@ class TeacherController extends Controller
                     'student_name' => $student->student_name,
                     'grade_name' => $student->grade_name,
                     'student_user_id' => $student->student_user_id,
+                    'language' => $student->language,
+                    'province_name' => $student->province_name,
                     'subjects' => [],
                     'progress' => [], // Initialize the subjects array
                 ];
@@ -454,16 +465,23 @@ class TeacherController extends Controller
             $progressData = [
                 'total_chapters' => 0,
                 'learned_chapters' => 0,
-                'learned_chapters_per_month' => [],
+                // 'learned_chapters_per_month' => [],
             ];
 
             // Retrieve the total and learned chapters for the student's grade
             $total_chapters = DB::select('SELECT COUNT(c.id) AS total_chapters
                 FROM chapters AS c
                 WHERE c.grade_id =' . $student->grade_id)[0]->total_chapters;
+
+$last_sync_datetime = DB::select('SELECT sync_datetime AS last_sync_datetime
+FROM users AS u
+WHERE u.id =' . $student->user_id);
+
+$last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync_datetime[0]->last_sync_datetime : NULL;
+
             $learned_chapters = DB::select('SELECT COUNT(c.id) AS learned_chapters
                 FROM chapters AS c
-                WHERE c.state = 1 and c.grade_id =' . $student->grade_id)[0]->learned_chapters;
+                WHERE c.state = "1" and c.grade_id =' . $student->grade_id)[0]->learned_chapters;
 
             // Retrieve the learned chapters per month for the student
             $learned_chapters_per_month = DB::select('
@@ -478,7 +496,8 @@ class TeacherController extends Controller
 
             $progressData['total_chapters'] = $total_chapters;
             $progressData['learned_chapters'] = $learned_chapters;
-            $progressData['learned_chapters_per_month'] = $learned_chapters_per_month;
+            $progressData['last_sync_datetime'] = $last_sync_datetime;
+            // $progressData['learned_chapters_per_month'] = $learned_chapters_per_month;
 
             // Retrieve the subjects for the student's grade
             $subjects = DB::select('SELECT
@@ -546,9 +565,9 @@ class TeacherController extends Controller
                 $subjectData['quizzes'][] = [
                     'total_quizzes' => $totalQuizzes[0]->total_quizzes,
                     'attempted_quizzes' => $attemptedQuizzes[0]->number_attempted_quizzes,
-                    'percentage_mark' => $attemptedQuizzes[0]->percentage_mark,
-                    'student_result' => $attemptedQuizzes[0]->student_result,
-                    'quiz_history' => $studentQuizHistory,
+                    // 'percentage_mark' => $attemptedQuizzes[0]->percentage_mark,
+                    // 'student_result' => $attemptedQuizzes[0]->student_result,
+                    // 'quiz_history' => $studentQuizHistory,
                 ];
 
                 // Add the subject data to the student's subjects array
