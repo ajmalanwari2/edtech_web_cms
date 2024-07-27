@@ -305,22 +305,21 @@ function saveForm(id) {
     var formData = new FormData();
     formData.append('_token', '{{ csrf_token() }}');
     var str = $('#title').val();
-    var index = str.indexOf("ټ");
-    var index2 = str.indexOf("-");
-    if(index){
-         var newStr = str.replace('ټ', 'ت');
-    formData.append('title', newStr);
-    }else{
-         formData.append('title', $('#title').val());
-    }
-   
-    if(index2){
-         var newStr = str.replace('-', ',');
-    formData.append('title', newStr);
-    }else{
-         formData.append('title', $('#title').val());
-    }
+    var charactersToReplace = ['ټ', 'ځ', '-'];
+    var replacements = ['ت', 'خ', '.'];
+    var newStr = str;
 
+    for (var i = 0; i < charactersToReplace.length; i++) {
+    var character = charactersToReplace[i];
+    var replacement = replacements[i];
+    var index = newStr.indexOf(character);
+
+    while (index !== -1) {
+        newStr = newStr.replace(character, replacement);
+        index = newStr.indexOf(character, index + 1);
+    }
+    }
+formData.append('title', newStr);
     formData.append('type', $('#type').val());
     formData.append('chapter_id', $('#chapter_id').val());
     if ($('#type').val() == 'video') {

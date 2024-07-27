@@ -208,7 +208,8 @@ class DistrictController extends Controller
     public function getGradesThroughLanguageMobile(Request $request){
         
         $language = $request->language;
-        $grades = DB::table('grades')->where('language', $language)->get();
+        $grades = DB::table('grades')->where('language', $language)
+         ->where('status', '1')->get();
         return response()->json($grades, 200);
 
     }
@@ -243,7 +244,8 @@ class DistrictController extends Controller
             on g.id = gs.grade_id
             left join schools as s
             on s.id = gs.school_id
-        where gs.school_id = '.$school_id.'    
+        where gs.school_id = '.$school_id.'
+         and g.status = \'1\'
         ');
 //$data = $grades ? $grades[0] : []; 
         return response()->json($grades, 200);

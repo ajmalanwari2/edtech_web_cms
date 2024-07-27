@@ -68,13 +68,19 @@ class LibraryDocumentContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
-                $newString = '';
-                $str = strpos($request->title, 'ټ');
-               if($str !== false){
-                   $newString = str_replace('ت', 'ټ', $request->title);
-               }else{
-                   $newString = $request->title;
-               }
+                 $newString = $request->title;
+
+                if (strpos($newString, 'ت') !== false) {
+                    $newString = str_replace('ت', 'ټ', $newString);
+                }
+                
+                if (strpos($newString, 'خ') !== false) {
+                    $newString = str_replace('خ', 'ځ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '-', $newString);
+                }
                 $data = [
                     'title' => $newString,
                     'is_main' => $request->is_main,
@@ -135,7 +141,20 @@ class LibraryDocumentContentController extends Controller
     {
         if ($request->ajax()) {
             $libraryDocumentContent = LibraryDocumentContent::find($request->id);
-            $libraryDocumentContent->title  = $request->title;
+            $newString = $request->title;
+
+            if (strpos($newString, 'ت') !== false) {
+                $newString = str_replace('ت', 'ټ', $newString);
+            }
+            
+            if (strpos($newString, 'خ') !== false) {
+                $newString = str_replace('خ', 'ځ', $newString);
+            }
+            
+            if (strpos($newString, '.') !== false) {
+                $newString = str_replace('.', '-', $newString);
+            }
+            $libraryDocumentContent->title  = $newString;
             $libraryDocumentContent->is_main  = $request->is_main;
             if (isset($request->file) && $request->file !== 'undefined') {
                 $filePath = str_replace('storage/', '', $libraryDocumentContent->body);

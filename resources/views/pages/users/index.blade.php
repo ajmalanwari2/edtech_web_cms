@@ -529,6 +529,9 @@
 }
 
     function loadRecord(id) {
+        if (!(id === undefined)) {
+        $('#language').prop('disabled', true);
+        }
         $.ajax({
             type: "POST",
             url: site_url + 'api/user/show',
@@ -564,7 +567,7 @@
             $('#email').val(data.email);
             $('#phone_no').val(data.user_phone);
             $('#gender').val(data.user_gender);
-            $('#language').val(data.language);
+            $('#language').val(data.user_language);
             $('#dob').val(data.user_dob);
             $('#province_id').val(data.province_id);
             $('#district_id').val(data.district_id);

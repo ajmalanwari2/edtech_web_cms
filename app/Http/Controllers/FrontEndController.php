@@ -9,7 +9,7 @@ use App\Models\School;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\CourseContent;
-use App\models\Content;
+use App\Models\Content;
 use App\Models\UserCreationRequest;
 use App\Rules\ExistsProvinceForeignKey;
 use App\Rules\ExistsDistrictForeignKey;

@@ -70,13 +70,19 @@ class CourseContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
-                $newString = '';
-                $str = strpos($request->title, 'ټ');
-               if($str !== false){
-                   $newString = str_replace('ت', 'ټ', $request->title);
-               }else{
-                   $newString = $request->title;
-               }
+                 $newString = $request->title;
+
+                if (strpos($newString, 'ت') !== false) {
+                    $newString = str_replace('ت', 'ټ', $newString);
+                }
+                
+                if (strpos($newString, 'خ') !== false) {
+                    $newString = str_replace('خ', 'ځ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '-', $newString);
+                }
                 $data = [
                     'title' => $newString,
                     'type' => $request->type,
@@ -123,7 +129,21 @@ class CourseContentController extends Controller
     {
         if ($request->ajax()) {
             $courseContent = CourseContent::find($request->id);
-            $courseContent->title  = $request->title;
+            $newString = $request->title;
+
+            if (strpos($newString, 'ت') !== false) {
+                $newString = str_replace('ت', 'ټ', $newString);
+            }
+            
+            if (strpos($newString, 'خ') !== false) {
+                $newString = str_replace('خ', 'ځ', $newString);
+            }
+            
+            if (strpos($newString, '.') !== false) {
+                $newString = str_replace('.', '-', $newString);
+            }
+
+            $courseContent->title  = $newString;
             $courseContent->type = $request->type;
 
             if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {

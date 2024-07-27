@@ -190,13 +190,22 @@
         var formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
         var str = $('#title').val();
-        var index = str.indexOf("ټ");
-        if(index){
-            var newStr = str.replace('ټ', 'ت');
-        formData.append('title', newStr);
-        }else{
-            formData.append('title', $('#title').val());
-        }
+    var charactersToReplace = ['ټ', 'ځ', '-'];
+    var replacements = ['ت', 'خ', '.'];
+    var newStr = str;
+
+    for (var i = 0; i < charactersToReplace.length; i++) {
+    var character = charactersToReplace[i];
+    var replacement = replacements[i];
+    var index = newStr.indexOf(character);
+
+    while (index !== -1) {
+        newStr = newStr.replace(character, replacement);
+        index = newStr.indexOf(character, index + 1);
+    }
+    }
+
+formData.append('title', newStr);
         formData.append('is_main', $('#is_main').val());
         formData.append('library_document_id', $('#library_document_id').val());
         formData.append('file', $('#file')[0].files[0]);

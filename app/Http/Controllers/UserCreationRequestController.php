@@ -306,7 +306,7 @@ class UserCreationRequestController extends Controller
                 $user->user_province = Province::find($user->teacher->province_id)->name;
                 $user->user_district = District::find($user->teacher->district_id)->name;
                 $user->user_school = School::find($user->teacher->school_id)->name;
-                $user->user_grade = Grade::find($user->teacher->grade_id)->name;
+                // $user->user_grade = Grade::find($user->teacher->grade_id)->name;
             }elseif($user->parent){
                 $user->user_phone = $user->parent->phone_no;
                 $user->user_gender = $user->parent->gender;
@@ -320,7 +320,7 @@ class UserCreationRequestController extends Controller
                 $user->user_province = Province::find($user->parent->province_id)->name;
                 $user->user_district = District::find($user->parent->district_id)->name;
                 $user->user_school = School::find($user->parent->school_id)->name;
-                $user->user_grade = Grade::find($user->parent->grade_id)->name;
+                // $user->user_grade = Grade::find($user->parent->grade_id)->name;
             }else{
                 $user->user_phone = '';
                 $user->user_province = '';

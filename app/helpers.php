@@ -174,7 +174,7 @@ if (!function_exists('storeAudioFiles')) {
                 $extension = $request->file($type)->getClientOriginalExtension();
                 $fileSize = $request->file($type)->getSize();
                 $originalFileName = $request->file($type)->getClientOriginalName();
-                if (in_array($extension, ['mp3'])) {
+                if (in_array($extension, ['mp3', 'wav', 'm4a','wma', 'WAV','AIFF', 'aiff', 'OGG', 'ogg', 'wav', 'WMA', 'MP3', 'WAV', 'M4A'])) {
                     $file = $request->file($type);
                     // $fileName = $document_id . '-' . time() . '.' . $extension;
                     $fileName = $originalFileName;

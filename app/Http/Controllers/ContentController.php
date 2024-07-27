@@ -61,19 +61,18 @@ class ContentController extends Controller
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
-                 $newString = '';
-                 $str = strpos($request->title, 'ټ');
-                if($str !== false){
-                    $newString = str_replace('ت', 'ټ', $request->title);
-                }else{
-                    $newString = $request->title;
-                }
+                   $newString = $request->title;
 
-                $str2 = strpos($request->title, '-');
-                if($str2 !== false){
-                    $newString = str_replace(',', '-', $request->title);
-                }else{
-                    $newString = $request->title;
+                if (strpos($newString, 'ت') !== false) {
+                    $newString = str_replace('ت', 'ټ', $newString);
+                }
+                
+                if (strpos($newString, 'خ') !== false) {
+                    $newString = str_replace('خ', 'ځ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '-', $newString);
                 }
 
                 $data = [
@@ -159,7 +158,20 @@ class ContentController extends Controller
 {
     if ($request->ajax()) {
         $chapterContent = Content::find($request->id);
-        $chapterContent->title = $request->title;
+        $newString = $request->title;
+
+            if (strpos($newString, 'ت') !== false) {
+                $newString = str_replace('ت', 'ټ', $newString);
+            }
+            
+            if (strpos($newString, 'خ') !== false) {
+                $newString = str_replace('خ', 'ځ', $newString);
+            }
+            
+            if (strpos($newString, '.') !== false) {
+                $newString = str_replace('.', '-', $newString);
+            }
+        $chapterContent->title = $newString;
         $chapterContent->type = $request->type;
         if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {
             $filePath = str_replace('storage/', '', $chapterContent->body);
