@@ -95,7 +95,7 @@ class TeacherController extends Controller
     }
 
 
-    public function teacherGradeList(){
+      public function teacherGradeList(){
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
 
@@ -133,38 +133,21 @@ class TeacherController extends Controller
                         WHEN g.language = "da" THEN "Dari"
                         ELSE "Pashto"
                     END AS language,
-                       (select count(s.id) as count
-                       from subjects as s
-                       join subjects_in_grades as inner_sig
-                        on s.id = inner_sig.subject_id
-                        where inner_sig.grade_id = sig.grade_id) as count,
-                        (select count(sl.id) from subject_lessons as sl
-                        join chapters as ch
-                        on ch.id = sl.chapter_id
-                         join subjects as s
-                         on s.id = ch.subject_id
-                         join subjects_in_grades as inner_sig
-                        on s.id = inner_sig.subject_id
-                        where inner_sig.grade_id = sig.grade_id
-                        and sl.type = \'video\') as video_count,
+                     (select count(sl.id) from subject_lessons as sl
+                            join chapters as ch
+                            on ch.id = sl.chapter_id
+                            where ch.subject_id = sub.id
+                            and sl.type = \'video\') as video_count,
                            (select count(sl.id) from subject_lessons as sl
-                        join chapters as ch
-                        on ch.id = sl.chapter_id
-                         join subjects as s
-                         on s.id = ch.subject_id
-                         join subjects_in_grades as inner_sig
-                        on s.id = inner_sig.subject_id
-                        where inner_sig.grade_id = sig.grade_id
-                        and sl.type = \'file\') as doc_count,
+                            join chapters as ch
+                            on ch.id = sl.chapter_id
+                            where ch.subject_id = sub.id
+                            and sl.type = \'file\') as doc_count,
                            (select count(sl.id) from subject_lessons as sl
-                        join chapters as ch
-                        on ch.id = sl.chapter_id
-                        join subjects as s
-                         on s.id = ch.subject_id
-                         join subjects_in_grades as inner_sig
-                        on s.id = inner_sig.subject_id
-                        where inner_sig.grade_id = sig.grade_id
-                        and sl.type = \'audio\') as audio_count
+                            join chapters as ch
+                            on ch.id = sl.chapter_id
+                            where ch.subject_id = sub.id
+                            and sl.type = \'audio\') as audio_count
                     from users as u
                        join teachers as t
                        on u.id = t.user_id
@@ -175,7 +158,9 @@ class TeacherController extends Controller
                        join grades as g
                        on g.id = gis.grade_id
                        left join subjects_in_grades as sig
-                           on g.id = sig.grade_id   
+                           on g.id = sig.grade_id 
+                       left join subjects as sub
+                        on sub.id = sig.subject_id      
                    where u.id = '.$user_id .'
                    and sh.id= '.$school_id.'
                    and g.language = \''.$grade_language.'\'');
@@ -432,7 +417,7 @@ class TeacherController extends Controller
         FROM students as s
         JOIN teachers as t ON t.province_id = s.province_id
         WHERE t.province_id = ' . $province_id);
-   $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
+//   $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
         $students = DB::select('SELECT 
             u.name as student_name,
             g.name as grade_name,

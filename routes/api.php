@@ -106,9 +106,11 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     Route::post('sync-user', [UserCreationRequestController::class, 'syncUser']);
     Route::post('inactive-user', [UserCreationRequestController::class, 'inactiveUser']);
     Route::post('contact', [UserCreationRequestController::class, 'contact']);
-
+    
+    Route::get('all-data-offline-mod-api',[StudentController::class, 'singleAPI']);
+    
  Route::delete('delete-student-by-parent/{id}', [StudentParentController::class, 'destroy']);
-
+  Route::post('add-student', [StudentParentController::class, 'addStudent']);
     //notices
     Route::get('notice-list',[NoticeController::class, 'noticeList']);
     Route::post('read-notice', [NoticeController::class, 'readNotice']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentParent;
+use App\Models\Student;
 use App\Models\StudentInParent;
 use App\Http\Requests\StoreStudentParentRequest;
 use App\Http\Requests\UpdateStudentParentRequest;
@@ -122,7 +123,7 @@ class StudentParentController extends Controller
             JOIN student_parents as sp ON sp.id = sip.student_parent_id
             JOIN grades as g ON g.id = s.grade_id
             WHERE sp.user_id = ' . $user_id);
-    $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
+    // $studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
             foreach ($students as $student) {
                 if (!isset($studentGroups[$student->student_user_id])) {
                     $studentGroups[$student->student_user_id] = [
@@ -265,5 +266,36 @@ class StudentParentController extends Controller
 
         return response()->json(['message' => 'Student deleted successfully']);
     }
+    
+    
+        public function addStudent(Request $request)
+{
+    $user_id = auth()->user()->id;
+    $studentParent = StudentParent::where('user_id', $user_id)->first();
+    
+    if ($request->has('student_ids') && $request->student_ids != null) {
+        $studentIds = explode(',', $request->student_ids);
+    
+        foreach ($studentIds as $studentId) {
+            $student = Student::withTrashed()->where('user_id', $studentId)->first();
+    
+            if ($student) {
+                $studentInParent = new StudentInParent();
+                $studentInParent->student_parent_id = $studentParent->id;
+                $studentInParent->student_id = $student->id;
+                $studentInParent->created_by = $user_id;
+                $studentInParent->save();
+            } else {
+                // Handle the case where a student with the given ID is not found
+                return response()->json(['error' => 'Student not found with ID: ' . $studentId], 404);
+            }
+        }
+    
+        return response()->json(['message' => 'Students added successfully']);
+    }
+    
+    // Return error response if student_ids parameter is missing or empty
+    return response()->json(['error' => 'No student IDs provided'], 400);
+}
     
 }
