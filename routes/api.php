@@ -40,7 +40,7 @@ use App\Http\Controllers\LibraryVideoBookmarkController;
 use App\Http\Controllers\LibraryAudioBookmarkController;
 use App\Http\Controllers\LibraryKitBookmarkController;
 use App\Http\Controllers\FrontEndController;
-
+use App\Http\Controllers\ZoomController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -131,7 +131,7 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     //Bookmark
     Route::get('bookmark-list',[BookmarkController::class, 'bookmarkList']);
     Route::post('submit-bookmark', [BookmarkController::class, 'update']);
-
+    Route::post('zoom_meeting', [ZoomController::class, 'store']);
     //course Bookmark
     Route::get('course-bookmark-list',[CourseBookmarkController::class, 'bookmarkList']);
     Route::post('submit-course-bookmark', [CourseBookmarkController::class, 'update']);

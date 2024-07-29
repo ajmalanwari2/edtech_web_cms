@@ -1763,11 +1763,11 @@ if($user == NULL || $province_id == NULL){
 }
 $studentGroups = [];
 
-$number_of_students = DB::select('SELECT count(s.id) as number_of_student
-FROM students as s
-JOIN teachers as t ON t.province_id = s.province_id
-WHERE t.province_id = ' . $province_id);
-$studentGroups[0]['number_of_student'] = $number_of_students[0]->number_of_student;
+// $number_of_students = DB::select('SELECT count(s.id) as number_of_student
+//FROM students as s
+//JOIN teachers as t ON t.province_id = s.province_id
+//WHERE t.province_id = ' . $province_id);
+//$studentGroups[0]['number_of_student'] = $number_of_students[0]//->number_of_student;
 $students = DB::select('SELECT 
     u.name as student_name,
     g.name as grade_name,
@@ -1909,10 +1909,12 @@ $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync
         $studentGroups[$student->student_user_id]['subjects'][] = $subjectData;
     }
 
-    // Add the progress data to the student's progress array
-    $studentGroups[$student->student_user_id]['progress'][] = $progressData;
+    
 }
 
+
+// Add the progress data to the student's progress array
+    $studentGroups[$student->student_user_id]['progress'][] = $progressData;
 // Convert the associative array to a sequential array
 $groupedSubjects = array_values($studentGroups);
 

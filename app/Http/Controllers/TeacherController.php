@@ -559,10 +559,11 @@ $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync
                 $studentGroups[$student->student_user_id]['subjects'][] = $subjectData;
             }
 
-            // Add the progress data to the student's progress array
-            $studentGroups[$student->student_user_id]['progress'][] = $progressData;
+           
         }
 
+ // Add the progress data to the student's progress array
+            $studentGroups[$student->student_user_id]['progress'][] = $progressData;
         // Convert the associative array to a sequential array
         $groupedSubjects = array_values($studentGroups);
 
