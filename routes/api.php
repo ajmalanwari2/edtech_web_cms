@@ -74,6 +74,8 @@ Route::group(['domain' => config('app.app_admin_domain')], function () {
     Route::get('grades-based-on-school/{school_id}', [DistrictController::class, 'getGradeThroughSchoolMobile']);
     Route::get('grades-based-on-language/{language}', [DistrictController::class, 'getGradesThroughLanguageMobile']);
     
+     Route::get('user-list-based-on-province/{province_id}', [DistrictController::class, 'getUsersBasedOnProvince']);
+    
     Route::post('token', [AuthController::class, 'requestToken']);
     Route::post('/forgot-password', [AuthController::class,'resetPassword'])->middleware('guest');
 

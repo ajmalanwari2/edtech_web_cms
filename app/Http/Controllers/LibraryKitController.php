@@ -6,6 +6,7 @@ use App\Models\LibraryKit;
 use App\Models\libraryKitContent;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Subject;
 use App\Http\Requests\StoreIqraKitRequest;
 use App\Http\Requests\UpdateIqraKitRequest;

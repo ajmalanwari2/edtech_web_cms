@@ -478,10 +478,15 @@ $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync
                 GROUP BY month_name
                 ORDER BY MIN(chapter_start_date);
             ');
+$total_chapters = $total_chapters ?? null;
+$learned_chapters = $learned_chapters ?? null;
+$last_sync_timestamp = $last_sync_timestamp ?? null;
 
-            $progressData['total_chapters'] = $total_chapters;
-            $progressData['learned_chapters'] = $learned_chapters;
-            $progressData['last_sync_datetime'] = $last_sync_datetime;
+$progressData = [
+    'total_chapters' => $total_chapters,
+    'learned_chapters' => $learned_chapters,
+    'last_sync_timestamp' => $last_sync_timestamp,
+];
             // $progressData['learned_chapters_per_month'] = $learned_chapters_per_month;
 
             // Retrieve the subjects for the student's grade
@@ -563,7 +568,7 @@ $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync
         }
 
  // Add the progress data to the student's progress array
-            $studentGroups[$student->student_user_id]['progress'][] = $progressData;
+            $studentGroups[$student->student_user_id]['progress'] = $progressData;
         // Convert the associative array to a sequential array
         $groupedSubjects = array_values($studentGroups);
 

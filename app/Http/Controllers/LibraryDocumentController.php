@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LibraryDocument;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Subject;
 use App\Http\Requests\StoreIqraKitRequest;
 use App\Http\Requests\UpdateIqraKitRequest;
