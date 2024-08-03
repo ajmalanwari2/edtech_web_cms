@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\MeetingZoomTrait;
 use Illuminate\Http\Request;
 use App\Models\ZoomMeeting;
+use App\Models\UserMeetingList;
 use MacsiDigital\Zoom\Facades\Zoom;
 use Illuminate\Support\Facades\DB;
 class ZoomController extends Controller
@@ -127,4 +128,77 @@ class ZoomController extends Controller
     {
         //
     }
+    
+    
+     public function shareMeeting(Request $request)
+{
+    $created_user_id = auth()->user()->id;
+    
+    
+    if ($request->has('user_ids') && $request->user_ids != null) {
+        $userIds = explode(',', $request->user_ids);
+    
+        foreach ($userIds as $userId) {
+          
+                $userShareMeeting = new UserMeetingList();
+                $userShareMeeting->user_id = $userId;
+                $userShareMeeting->topic = $request->topic;
+                $userShareMeeting->start_at = $request->start_at;
+                $userShareMeeting->duration = $request->duration;
+                $userShareMeeting->meeting_password = $request->meeting_password;
+                $userShareMeeting->meeting_url = $request->meeting_url;
+                $userShareMeeting->state = '1';
+                $userShareMeeting->created_by = $created_user_id;
+                $userShareMeeting->save();
+        }
+    
+        return response()->json(['message' => 'Meeting Link Successfully shared']);
+    }
+    
+    // Return error response if student_ids parameter is missing or empty
+    return response()->json(['error' => 'Meeting link is not shared'], 400);
+}
+
+
+public function ListOfAvailableMeetings(Request $request){
+    $user_id = auth()->user()->id;
+
+    $listOfMeetings = DB::select('select 
+                    uml.topic,                
+                    uml.start_at,
+                    uml.duration,
+                    uml.meeting_url,
+                    uml.meeting_password
+                from user_meeting_lists as uml
+                where uml.user_id  = '.$user_id.'');
+
+            if($listOfMeetings == []){
+                return response(['message' => 'There is not any meeting available'], 422)
+                    ->header('Content-Type', 'text/json');
+            }else{
+                return response()->json($listOfMeetings, 200);
+            }   
+
+}
+
+public function ListOfCreateMeetingUsers(Request $request){
+    $user_id = auth()->user()->id;
+
+    $listOfMeetings = DB::select('select 
+                    zm.topic,                
+                    zm.start_at,
+                    zm.duration,
+                    zm.join_url as meeting_url,
+                    zm.password as meeting_password
+                from zoom_meetings as zm
+                where zm.user_id  = '.$user_id.'');
+
+            if($listOfMeetings == []){
+                return response(['message' => 'No meeting is created by this user'], 422)
+                    ->header('Content-Type', 'text/json');
+            }else{
+                return response()->json($listOfMeetings, 200);
+            }   
+
+}
 }

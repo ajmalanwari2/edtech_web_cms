@@ -18,12 +18,10 @@
                 <!-- if you are using youtube iframe -->
                 
                 <div id="youtube-video" class="video_youtube">
-                    
-                    <iframe id="main-video" width="560" height="500" src="https://www.youtube.com/embed/qQxDvw6r_t8?autoplay=1"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-                   
+                    <iframe id="main-video" width="560" height="500" src="" title="YouTube video player" frameborder="0"
+                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                                    <div class="main-vid-title"></div> <!-- Placeholder for video title -->
                 </div>
                 <div class="title main-vid-title">
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->grade_name : '' }} ,
@@ -51,7 +49,7 @@
                     </div>
                    
                     <div class="p-2">
-                        <a id="book" onclick="book('{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
+                        <a id="book" onclick="book(event, '{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
                             <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
                         </a>
                        
@@ -135,7 +133,8 @@ var videoId = getYouTubeVideoId(videoUrl);
     });
 }
 
-function book(id, grade_name, subject_name) {
+function book(event, id, grade_name, subject_name) {
+    var element = event.currentTarget; // Get the target element that triggered the event
     $.ajax({
         type: "POST",
         url: site_url + 'api/book/show',
@@ -152,8 +151,12 @@ function book(id, grade_name, subject_name) {
         },
         success: function(data) {
             if (data !== 'book-not-available') {
-                var bookLink = document.getElementById('book');
-                bookLink.href = data.body;
+                element.href = 'https://edtecheqra.com/' + data.body;
+                element.target = "_blank"; // Open link in a new tab
+
+                // Open the link in a new tab
+                var newTab = window.open(element.href, '_blank');
+                newTab.focus();
             } else {
                 // Show popup message for unavailable book
                 alert('Sorry, the book is currently not available.');

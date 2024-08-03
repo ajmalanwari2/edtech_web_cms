@@ -19,14 +19,12 @@
             <div class="col-md-8 vid_subject">
                 <!-- Video Play Section Start -->
                 <!-- if you are using youtube iframe -->
-                <div id="youtube-video" class="video_youtube">
-                   
-                    <iframe id="main-video" width="560" height="500"  src="https://www.youtube.com/embed/qQxDvw6r_t8?autoplay=1"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-                  
-                </div>
+                 <div id="youtube-video" class="video_youtube">
+    <iframe id="main-video" width="560" height="500" src="" title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    <div class="main-vid-title"></div> <!-- Placeholder for video title -->
+</div>
                 <div class="title main-vid-title">
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->grade_name : '' }} ,
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->subject_name : '' }} ,
@@ -53,7 +51,7 @@
                     </div>
                    
                     <div class="p-2">
-                        <a id="book" onclick="book('{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
+                        <a id="book" onclick="book(event, '{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')"  >
                             <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
                         </a>
                        
@@ -119,30 +117,33 @@ function video(id, grade_name, subject_name) {
             });
         }),
         success: (function(data) {
-            var videoNotAvailabe = document.getElementById('video-not-available');
+            var videoNotAvailable = document.getElementById('video-not-available');
             var videoYoutube = document.getElementById('youtube-video');
-            if(data != 'video-not-available'){
-                videoNotAvailabe.style.display = 'none';
+            
+            if (data !== 'video-not-available') {
+                videoNotAvailable.style.display = 'none';
                 videoYoutube.style.display = 'block';
-           // Example usage
-           var videoUrl = data.body;
-var videoId = getYouTubeVideoId(videoUrl);
-            // Set chapter details
-            const mainVideo = document.getElementById('main-video');
-    const mainVideoTitle = document.querySelector('.main-vid-title');
-    mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
-    mainVideoTitle.innerText = grade_name + ' ،' + subject_name + ' ،' + data.title;
-}else{
-    
-    videoNotAvailabe.style.display = 'block';
-    videoYoutube.style.display = 'none';
-}       
+                
+                // Extract the video ID from the URL
+                var videoUrl = data.body;
+                var videoId = getYouTubeVideoId(videoUrl);
+                
+                // Set the video URL and title
+                const mainVideo = document.getElementById('main-video');
+                const mainVideoTitle = document.querySelector('.main-vid-title');
+                mainVideo.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+                mainVideoTitle.innerText = grade_name + ' ،' + subject_name + ' ، ' + data.title;
+            } else {
+                videoNotAvailable.style.display = 'block';
+                videoYoutube.style.display = 'none';
+            }
         }),
         dataType: 'json'
     });
 }
 
-function book(id, grade_name, subject_name) {
+function book(event, id, grade_name, subject_name) {
+    var element = event.currentTarget; // Get the target element that triggered the event
     $.ajax({
         type: "POST",
         url: site_url + 'api/book/show',
@@ -159,8 +160,12 @@ function book(id, grade_name, subject_name) {
         },
         success: function(data) {
             if (data !== 'book-not-available') {
-                var bookLink = document.getElementById('book');
-                bookLink.href = data.body;
+                element.href = 'https://edtecheqra.com/' + data.body;
+                element.target = "_blank"; // Open link in a new tab
+
+                // Open the link in a new tab
+                var newTab = window.open(element.href, '_blank');
+                newTab.focus();
             } else {
                 // Show popup message for unavailable book
                 alert('Sorry, the book is currently not available.');

@@ -261,32 +261,34 @@ class DistrictController extends Controller
     
      public function getUsersBasedOnProvince(Request $request){
         $pro_id = intval($request->province_id);
-        $users = DB::select('SELECT 
-        u.id as id,
-        u.name,
-        u.identity_number,
-        u.email,
-        u.role,
-        CASE 
-            WHEN s.id IS NOT NULL THEN ps.name
-            WHEN t.id IS NOT NULL THEN pt.name
-            WHEN sp.id IS NOT NULL THEN psp.name
-        END as province_name
-    FROM users as u
-    LEFT JOIN students as s ON u.id = s.user_id  
-    LEFT JOIN teachers as t ON u.id = t.user_id  
-    LEFT JOIN student_parents as sp ON u.id = sp.user_id  
-    LEFT JOIN provinces as ps ON ps.id = s.province_id
-    LEFT JOIN provinces as pt ON pt.id = t.province_id 
-    LEFT JOIN provinces as psp ON psp.id = sp.province_id           
-    WHERE s.province_id = '.$pro_id.'
-        OR t.province_id = '.$pro_id.'
-        OR sp.province_id = '.$pro_id.''
-    );
+        $dis_id = intval($request->district_id);
 
-    
+    $users = DB::select('SELECT 
+    u.id as id,
+    u.name,
+    u.identity_number,
+    u.email,
+    u.role,
+    CASE 
+        WHEN s.id IS NOT NULL THEN ps.name
+        WHEN t.id IS NOT NULL THEN pt.name
+        WHEN sp.id IS NOT NULL THEN psp.name
+    END as province_name
+FROM users as u
+LEFT JOIN students as s ON u.id = s.user_id  
+LEFT JOIN teachers as t ON u.id = t.user_id  
+LEFT JOIN student_parents as sp ON u.id = sp.user_id  
+LEFT JOIN provinces as ps ON ps.id = s.province_id
+LEFT JOIN provinces as pt ON pt.id = t.province_id 
+LEFT JOIN provinces as psp ON psp.id = sp.province_id           
+WHERE (s.province_id = '.$pro_id.'
+    OR t.province_id = '.$pro_id.'
+    OR sp.province_id = '.$pro_id.')
+    and (s.district_id = '.$dis_id.'
+    OR t.district_id = '.$dis_id.'
+    OR sp.district_id = '.$dis_id.') '
+);
     return response()->json($users, 200);
-
     }
     
 }

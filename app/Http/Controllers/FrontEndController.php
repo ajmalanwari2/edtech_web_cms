@@ -404,12 +404,16 @@ $grade = Grade::find($id);
     g.name AS grade_name,
     s.name AS subject_name,
     ch.number AS chapter_number,
-    ch.name as chapter_name
+    ch.name as chapter_name,
+    sl.title,
+    sl.body,
+    sl.type
 FROM chapters ch
 JOIN subjects s ON s.id = ch.subject_id
 JOIN subjects_in_grades sig ON s.id = sig.subject_id
 JOIN grades g ON g.id = sig.grade_id
-    AND s.id = :subject_id
+Left join subject_lessons as sl on sl.chapter_id = ch.id
+    where s.id = :subject_id
     AND g.id = :grade_id';
 
 $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' => $grade_id]);
@@ -590,11 +594,12 @@ GROUP BY c.id, c.name, c.language');
     }
 
 
+    
     public function courseVideoShow(Request $request)
     {
         if ($request->ajax()) {
             $video = CourseContent::select('id', 'title', 'body')
-            ->where('course_id', $request->id)
+            ->where('id', $request->id)
             ->where('type', 'video')->first();
            
     

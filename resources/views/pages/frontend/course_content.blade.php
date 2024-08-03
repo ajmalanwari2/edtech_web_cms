@@ -19,20 +19,18 @@
             <div class="col-md-8 vid_subject">
                 <!-- Video Play Section Start -->
                 <!-- if you are using youtube iframe -->
-                <div class="video_youtube">
-                   
-
-                   
-                    <iframe id="main-video" width="560" height="500" src="https://www.youtube.com/embed/qQxDvw6r_t8?autoplay=1"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-                   
+                <div id="youtube-video" class="video_youtube">
+                    <iframe id="main-video" width="560" height="500" src="" title="YouTube video player" frameborder="0"
+                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                                    <div class="main-vid-title"></div> <!-- Placeholder for video title -->
                 </div>
                 <div class="title main-vid-title">
                     {{ $courseContentEnglish && $courseContentEnglish[0] ? $courseContentEnglish[0]->course_name : '' }} ,
                     {{ $courseContentEnglish && $courseContentEnglish[0] ? $courseContentEnglish[0]->title : '' }}
                 </div>
+                <br><br>
+                <div id="video-not-available" style="display:none"><p>Learning video for this lesson is not available</p></div>
             </div><!-- Video Play Section End -->
 
             <div class="col-md-4">
@@ -46,13 +44,13 @@
                         <div class="p-2"><span class="p-2 vid-number">{{ $loop->iteration }}</span>
                        
                             <a
-                                onclick="video('{{$item->course_id}}', '{{$item->course_name}}', '{{$item->title}}')">
-                                {{$item->course_name}}
+                                onclick="video('{{$item->id}}', '{{$item->course_name}}', '{{$item->title}}')">
+                                {{$item->title}}
                             </a>
                     </div>
                    
                     <div class="p-2">
-                        <a id="book" onclick="book('{{$item->course_id}}', '{{$item->course_name}}', '{{$item->title}}')">
+                         <a id="book" onclick="book(event, '{{$item->id}}', '{{$item->course_name}}', '{{$item->title}}')"  >
                             <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
                         </a>
                        
@@ -101,12 +99,51 @@ function playVideo(id, title, grade_name) {
     mainVideoTitle.innerText = grade_name  + ' ,' + title;
 
 }
-function video(course_id, course_name, title) {
+// function video(course_id, course_name, title) {
+//     $.ajax({
+//         type: "POST",
+//         url: site_url + 'api/course_video/show',
+//         data: {
+//             id: course_id,
+//             '_token': '{{ csrf_token() }}'
+//         },
+//         fail: (function() {
+//             $.toaster({
+//                 priority: 'danger',
+//                 title: 'Info',
+//                 message: 'There was an error loading the record.'
+//             });
+//         }),
+//         success: (function(data) {
+//             var videoNotAvailabe = document.getElementById('video-not-available');
+//             var videoYoutube = document.getElementById('youtube-video');
+//             if(data != 'video-not-available'){
+//                 videoNotAvailabe.style.display = 'none';
+//                 videoYoutube.style.display = 'block';
+//           // Example usage
+//           var videoUrl = data.body;
+// var videoId = getYouTubeVideoId(videoUrl);
+//             // Set chapter details
+//             const mainVideo = document.getElementById('main-video');
+//     const mainVideoTitle = document.querySelector('.main-vid-title');
+//     mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
+//     mainVideoTitle.innerText =  course_name + ' ،' + data.title;
+// }else{
+    
+//     videoNotAvailabe.style.display = 'block';
+//     videoYoutube.style.display = 'none';
+// }       
+//         }),
+//         dataType: 'json'
+//     });
+// }
+
+function video(id, course_name, title) {
     $.ajax({
         type: "POST",
         url: site_url + 'api/course_video/show',
         data: {
-            id: course_id,
+            id: id,
             '_token': '{{ csrf_token() }}'
         },
         fail: (function() {
@@ -117,35 +154,67 @@ function video(course_id, course_name, title) {
             });
         }),
         success: (function(data) {
-            var videoNotAvailabe = document.getElementById('video-not-available');
+            var videoNotAvailable = document.getElementById('video-not-available');
             var videoYoutube = document.getElementById('youtube-video');
-            if(data != 'video-not-available'){
-                videoNotAvailabe.style.display = 'none';
+            
+            if (data !== 'video-not-available') {
+                videoNotAvailable.style.display = 'none';
                 videoYoutube.style.display = 'block';
-           // Example usage
-           var videoUrl = data.body;
-var videoId = getYouTubeVideoId(videoUrl);
-            // Set chapter details
-            const mainVideo = document.getElementById('main-video');
-    const mainVideoTitle = document.querySelector('.main-vid-title');
-    mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
-    mainVideoTitle.innerText =  course_name + ' ،' + data.title;
-}else{
-    
-    videoNotAvailabe.style.display = 'block';
-    videoYoutube.style.display = 'none';
-}       
+                
+                // Extract the video ID from the URL
+                var videoUrl = data.body;
+                var videoId = getYouTubeVideoId(videoUrl);
+                
+                // Set the video URL and title
+                const mainVideo = document.getElementById('main-video');
+                const mainVideoTitle = document.querySelector('.main-vid-title');
+                mainVideo.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+                mainVideoTitle.innerText = course_name + ' ،' + title;
+            } else {
+                videoNotAvailable.style.display = 'block';
+                videoYoutube.style.display = 'none';
+            }
         }),
         dataType: 'json'
     });
 }
 
-function book(course_id, course_name, title) {
+
+// function book(course_id, course_name, title) {
+//     $.ajax({
+//         type: "POST",
+//         url: site_url + 'api/course_book/show',
+//         data: {
+//             id: course_id,
+//             '_token': '{{ csrf_token() }}'
+//         },
+//         fail: function() {
+//             $.toaster({
+//                 priority: 'danger',
+//                 title: 'Info',
+//                 message: 'There was an error loading the record.'
+//             });
+//         },
+//         success: function(data) {
+//             if (data !== 'book-not-available') {
+//                 var bookLink = document.getElementById('book');
+//                 bookLink.href = data.body;
+//             } else {
+//                 // Show popup message for unavailable book
+//                 alert('Sorry, the book is currently not available.');
+//             }
+//         },
+//         dataType: 'json'
+//     });
+// }
+
+function book(event, id, course_name, title) {
+    var element = event.currentTarget; // Get the target element that triggered the event
     $.ajax({
         type: "POST",
         url: site_url + 'api/course_book/show',
         data: {
-            id: course_id,
+            id: id,
             '_token': '{{ csrf_token() }}'
         },
         fail: function() {
@@ -157,8 +226,12 @@ function book(course_id, course_name, title) {
         },
         success: function(data) {
             if (data !== 'book-not-available') {
-                var bookLink = document.getElementById('book');
-                bookLink.href = data.body;
+                element.href = 'https://edtecheqra.com/' + data.body;
+                element.target = "_blank"; // Open link in a new tab
+
+                // Open the link in a new tab
+                var newTab = window.open(element.href, '_blank');
+                newTab.focus();
             } else {
                 // Show popup message for unavailable book
                 alert('Sorry, the book is currently not available.');

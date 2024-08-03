@@ -164,7 +164,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="me-1">Subject Name:</div>
-                        <div id="library_kit__subject_name" class="text-muted"></div>
+                        <div id="library_kit_subject_name" class="text-muted"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
@@ -383,12 +383,13 @@ function loadRecord(id) {
         }),
         success: (function(data) {
             $('#library_kit_number').text(data.number);
-            $('#library_kit__subject_name').text(data.subject_name);
+            $('#library_kit_subject_name').text(data.subject_name);
             $('#library_kit_status').text(data.library_kit_status);
             $('#library_kit_description').text(data.description);
             $('#library_kit_language').text(data.language);
             $('#number').val(data.number);
             $('#subject_id').val(data.subject_id);
+            $('#name').val(data.name);
             $('#status').val(data.status);
             $('#description').val(data.description);
             $('#language').val(data.language);

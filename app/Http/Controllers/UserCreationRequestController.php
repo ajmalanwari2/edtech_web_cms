@@ -701,6 +701,7 @@ class UserCreationRequestController extends Controller
                 WHEN s.language = "da" THEN "Dari"
                 ELSE "Pashto"
             END AS language,
+            s.province_id,
              s.district_id
              from users as u
                join students as s
@@ -734,6 +735,7 @@ class UserCreationRequestController extends Controller
                 WHEN t.language = "da" THEN "Dari"
                 ELSE "Pashto"
                 END AS language,
+                t.province_id,
                 t.district_id
              from users as u
                 left join teachers as t
@@ -759,6 +761,7 @@ class UserCreationRequestController extends Controller
                 concat(p.name, " ", d.name) as address,
                 sp.gender,
                 sp.dob,
+                sp.province_id,
                 sp.district_id
              from users as u
                 left join student_parents as sp

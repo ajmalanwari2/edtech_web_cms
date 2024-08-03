@@ -73,8 +73,8 @@ Route::group(['domain' => config('app.app_admin_domain')], function () {
     Route::get('schools-based-on-district/{district_id}', [DistrictController::class, 'getSchoolThroughDistrictMobile']);
     Route::get('grades-based-on-school/{school_id}', [DistrictController::class, 'getGradeThroughSchoolMobile']);
     Route::get('grades-based-on-language/{language}', [DistrictController::class, 'getGradesThroughLanguageMobile']);
-    
-     Route::get('user-list-based-on-province/{province_id}', [DistrictController::class, 'getUsersBasedOnProvince']);
+   
+     Route::get('user-list-based-on-province/{province_id}/{district_id}', [DistrictController::class, 'getUsersBasedOnProvince']);
     
     Route::post('token', [AuthController::class, 'requestToken']);
     Route::post('/forgot-password', [AuthController::class,'resetPassword'])->middleware('guest');
@@ -113,6 +113,9 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     
  Route::delete('delete-student-by-parent/{id}', [StudentParentController::class, 'destroy']);
   Route::post('add-student', [StudentParentController::class, 'addStudent']);
+   Route::post('share-meeting', [ZoomController::class,'shareMeeting']);
+   Route::get('list-of-available-meetings', [ZoomController::class, 'ListOfAvailableMeetings']);
+   Route::get('list-of-created-meeting-users', [ZoomController::class, 'ListOfCreateMeetingUsers']);
     //notices
     Route::get('notice-list',[NoticeController::class, 'noticeList']);
     Route::post('read-notice', [NoticeController::class, 'readNotice']);
@@ -133,7 +136,7 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     //Bookmark
     Route::get('bookmark-list',[BookmarkController::class, 'bookmarkList']);
     Route::post('submit-bookmark', [BookmarkController::class, 'update']);
-    Route::post('zoom_meeting', [ZoomController::class, 'store']);
+    Route::post('zoom-meeting', [ZoomController::class, 'store']);
     //course Bookmark
     Route::get('course-bookmark-list',[CourseBookmarkController::class, 'bookmarkList']);
     Route::post('submit-course-bookmark', [CourseBookmarkController::class, 'update']);

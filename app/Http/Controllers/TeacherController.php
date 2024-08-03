@@ -125,6 +125,7 @@ class TeacherController extends Controller
             return response(['message' => 'The user is not registered'], 400)
                 ->header('Content-Type', 'text/json');
         }
+        
         $subjects = DB::select('select 
         distinct g.id as grade_id,
                        g.name as grade_name,
@@ -133,21 +134,38 @@ class TeacherController extends Controller
                         WHEN g.language = "da" THEN "Dari"
                         ELSE "Pashto"
                     END AS language,
-                     (select count(sl.id) from subject_lessons as sl
-                            join chapters as ch
-                            on ch.id = sl.chapter_id
-                            where ch.subject_id = sub.id
-                            and sl.type = \'video\') as video_count,
+                       (select count(s.id) as count
+                       from subjects as s
+                       join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id) as count,
+                        (select count(sl.id) from subject_lessons as sl
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                         join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
+                        and sl.type = \'video\') as video_count,
                            (select count(sl.id) from subject_lessons as sl
-                            join chapters as ch
-                            on ch.id = sl.chapter_id
-                            where ch.subject_id = sub.id
-                            and sl.type = \'file\') as doc_count,
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                         join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
+                        and sl.type = \'file\') as doc_count,
                            (select count(sl.id) from subject_lessons as sl
-                            join chapters as ch
-                            on ch.id = sl.chapter_id
-                            where ch.subject_id = sub.id
-                            and sl.type = \'audio\') as audio_count
+                        join chapters as ch
+                        on ch.id = sl.chapter_id
+                        join subjects as s
+                         on s.id = ch.subject_id
+                         join subjects_in_grades as inner_sig
+                        on s.id = inner_sig.subject_id
+                        where inner_sig.grade_id = sig.grade_id
+                        and sl.type = \'audio\') as audio_count
                     from users as u
                        join teachers as t
                        on u.id = t.user_id
@@ -158,12 +176,50 @@ class TeacherController extends Controller
                        join grades as g
                        on g.id = gis.grade_id
                        left join subjects_in_grades as sig
-                           on g.id = sig.grade_id 
-                       left join subjects as sub
-                        on sub.id = sig.subject_id      
+                           on g.id = sig.grade_id   
                    where u.id = '.$user_id .'
                    and sh.id= '.$school_id.'
                    and g.language = \''.$grade_language.'\'');
+        // $subjects = DB::select('select 
+        // distinct g.id as grade_id,
+        //               g.name as grade_name,
+        //               CASE
+        //                 WHEN g.language = "en" THEN "English"
+        //                 WHEN g.language = "da" THEN "Dari"
+        //                 ELSE "Pashto"
+        //             END AS language,
+        //              (select count(sl.id) from subject_lessons as sl
+        //                     join chapters as ch
+        //                     on ch.id = sl.chapter_id
+        //                     where ch.subject_id = sub.id
+        //                     and sl.type = \'video\') as video_count,
+        //                   (select count(sl.id) from subject_lessons as sl
+        //                     join chapters as ch
+        //                     on ch.id = sl.chapter_id
+        //                     where ch.subject_id = sub.id
+        //                     and sl.type = \'file\') as doc_count,
+        //                   (select count(sl.id) from subject_lessons as sl
+        //                     join chapters as ch
+        //                     on ch.id = sl.chapter_id
+        //                     where ch.subject_id = sub.id
+        //                     and sl.type = \'audio\') as audio_count
+        //             from users as u
+        //               join teachers as t
+        //               on u.id = t.user_id
+        //               join schools as sh
+        //               on sh.id = t.school_id
+        //               join grades_in_schools as gis
+        //                   on sh.id = gis.school_id
+        //               join grades as g
+        //               on g.id = gis.grade_id
+        //               left join subjects_in_grades as sig
+        //                   on g.id = sig.grade_id 
+        //               left join subjects as sub
+        //                 on sub.id = sig.subject_id      
+        //           where u.id = '.$user_id .'
+        //           and sh.id= '.$school_id.'
+        //           and g.language = \''.$grade_language.'\'
+        //           GROUP BY g.id, g.name, g.language');
 
                 if($subjects == []){
                     return response(['message' => 'The teacher is not registered'], 422)
@@ -442,16 +498,17 @@ class TeacherController extends Controller
                     'language' => $student->language,
                     'province_name' => $student->province_name,
                     'subjects' => [],
-                    'progress' => [], // Initialize the subjects array
+                    'progress' => [ // Initialize the progress array with default values
+                        [
+                            'total_chapters' => 0,
+                            'learned_chapters' => 0,
+                            'last_sync_timestamp' => NULL,
+                        ]
+                    ],
                 ];
             }
 
-            // Retrieve the student's progress data for each subject
-            $progressData = [
-                'total_chapters' => 0,
-                'learned_chapters' => 0,
-                // 'learned_chapters_per_month' => [],
-            ];
+       
 
             // Retrieve the total and learned chapters for the student's grade
             $total_chapters = DB::select('SELECT COUNT(c.id) AS total_chapters
@@ -478,15 +535,11 @@ $last_sync_datetime = $last_sync_datetime && $last_sync_datetime[0] ? $last_sync
                 GROUP BY month_name
                 ORDER BY MIN(chapter_start_date);
             ');
-$total_chapters = $total_chapters ?? null;
-$learned_chapters = $learned_chapters ?? null;
-$last_sync_timestamp = $last_sync_timestamp ?? null;
-
-$progressData = [
-    'total_chapters' => $total_chapters,
-    'learned_chapters' => $learned_chapters,
-    'last_sync_timestamp' => $last_sync_timestamp,
-];
+  $progressData = [
+                'total_chapters' => $total_chapters ?? 0,
+                'learned_chapters' => $learned_chapters ?? 0,
+                'last_sync_timestamp' => $last_sync_timestamp ?? NULL,
+            ];
             // $progressData['learned_chapters_per_month'] = $learned_chapters_per_month;
 
             // Retrieve the subjects for the student's grade

@@ -132,7 +132,13 @@ class StudentParentController extends Controller
                         'student_user_id' => $student->student_user_id,
                         'language' => $student->language,
                         'subjects' => [],
-                        'progress' => [], // Initialize the subjects array
+                         'progress' => [ // Initialize the progress array with default values
+                        [
+                            'total_chapters' => 0,
+                            'learned_chapters' => 0,
+                            'last_sync_timestamp' => NULL,
+                        ]
+                    ],
                     ];
                 }
                 
@@ -157,12 +163,11 @@ class StudentParentController extends Controller
         ORDER BY MIN(chapter_start_date);
         ');
 
-                $progressData = [
-                    'total_chapters' => $total_chapters,
-                    'learned_chapters' => $learned_chapters,
-                    'last_sync_datetime' => $last_sync_datetime,
-                    // 'learned_chapters_per_month' => $learned_chapters_per_month,
-                ];
+                 $progressData = [
+                'total_chapters' => $total_chapters ?? 0,
+                'learned_chapters' => $learned_chapters ?? 0,
+                'last_sync_timestamp' => $last_sync_timestamp ?? NULL,
+            ];
     
                 $subjects = DB::select('SELECT
                     s.name as subject_name,

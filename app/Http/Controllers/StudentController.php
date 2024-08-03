@@ -591,10 +591,31 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                         WHERE c.id = ?
                         GROUP BY c.id, c.total_quiz_time, s.name, cs.state, qr.state', [$chapter_id]);
 
+
+
+                        $quizResult = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                        ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+                       CASE
+            WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+                THEN \'passed\'
+            ELSE
+                CASE
+                    WHEN COUNT(qr.id) = 0 THEN NULL
+                    ELSE \'failed\'
+                END
+        END AS student_result
+                    FROM quiz_results AS qr
+                    JOIN chapters AS c ON c.id = qr.chapter_id
+                    JOIN subjects AS s ON s.id = c.subject_id
+                    WHERE c.id = ' . $chapter_id
+                    .' AND qr.student_id = '.$user_id);
+                    
+
                     $content['subject'] = $startQuiz[0]->subject;
                     $content['total_question'] = $startQuiz[0]->total_question;
                     $content['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
-                    $content['quiz_status'] = $startQuiz[0]->quiz_status;
+                    $content['quiz_status'] = $quizResult[0]->student_result && $quizResult[0]->student_result == 'pass' ?
+                    '1' : '0';
                     $content['chapter_quiz_questions'] = [];
 
 $questions = DB::select('
