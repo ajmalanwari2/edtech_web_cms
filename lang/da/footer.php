@@ -16,4 +16,5 @@ return [
     'courses' => 'کورس ها',
     'android' => 'اندوراید',
     'apple' => 'اپل',
+    'terms_and_policy' => 'شرایط و مقررات',
 ];

@@ -162,8 +162,21 @@ public function quizAnswer(Request $request){
         try {
             if ($request->ajax()) {
                 DB::beginTransaction();
+                 $newString = $request->q_text;
+
+                if (strpos($newString, 'ت') !== false) {
+                    $newString = str_replace('ت', 'ت', $newString);
+                }
+                
+                if (strpos($newString, 'خ') !== false) {
+                    $newString = str_replace('خ', 'خ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '.', $newString);
+                }
                 $data = [
-                    'question_text' => $request->q_text,
+                    'question_text' => $newString,
                     'difficulty_level' => $request->difficulty_level,
                     'correct_answer' => $request->answer,
                     'chapter_id' => $request->chapter_id,
@@ -289,7 +302,20 @@ public function quizAnswer(Request $request){
                 DB::beginTransaction();
                 $rec = Quiz::find($request->id);
 
-                $rec->question_text =  $request->q_text;
+                $newString = $request->q_text;
+
+                if (strpos($newString, 'ت') !== false) {
+                    $newString = str_replace('ت', 'ت', $newString);
+                }
+                
+                if (strpos($newString, 'خ') !== false) {
+                    $newString = str_replace('خ', 'خ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '.', $newString);
+                }
+                $rec->question_text =  $newString;
                 $rec->difficulty_level = $request->difficulty_level;
                 $rec->correct_answer = $request->answer;
                 $rec->option_a_text = $request->option_a_text;
@@ -496,7 +522,7 @@ public function quizAnswer(Request $request){
             }
     }
 
-    public function submitQuizQuesAnswareMobile(Request $request)
+  public function submitQuizQuesAnswareMobile(Request $request)
     {
         $user_id = auth()->user()->id;
     
@@ -551,34 +577,153 @@ public function quizAnswer(Request $request){
         $chapter->state = '1';
         $chapter->save();
 
-        $chapterState = ChapterState::where('chapter_id', $chapterId)->where('user_id',  $user_id)->first();
+        $quizResult = DB::select('
+        SELECT 
+            CASE
+                WHEN (SUM(qr.total_correct_answers) * 100.0 / NULLIF(SUM(qr.total_questions), 0)) >= 70 THEN \'passed\'
+                ELSE
+                    CASE
+                        WHEN COUNT(qr.id) = 0 THEN NULL
+                        ELSE \'failed\'
+                    END
+            END AS student_result
+        FROM 
+            quiz_results AS qr
+        JOIN 
+            chapters AS c ON c.id = qr.chapter_id
+        JOIN 
+            subjects AS s ON s.id = c.subject_id
+        WHERE 
+            c.id = ? AND qr.student_id = ?
+    ', [$chapterId, $user_id]); // Use parameter binding to prevent SQL injection
     
-       if(!empty($chapterState)){
+    if (!empty($quizResult)) {
+        if ($quizResult[0]->student_result === 'passed') {
+            $chapterState = ChapterState::where('chapter_id', $chapterId)
+                ->where('user_id', $user_id)
+                ->first();
+    
+            if (!empty($chapterState)) {
+                $chapterState->state = '1';
+                $chapterState->save();
+            } else {
+                $chapterState = [
+                    'chapter_id' => $chapterId,
+                    'user_id' => $user_id,
+                    'state' => '1',
+                ];
+                ChapterState::create($chapterState);
+            }
+    
+            $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)
+                ->where('chapter_id', $chapterId)
+                ->first();
+    
+            if ($studentTrackingChapter) {
+                $studentTrackingChapter->chapter_end_date = now(); // Use Carbon for current timestamp
+                $studentTrackingChapter->save();
+            }
+    
+            // Return a response
+            return response()->json(['message' => 'Quiz submitted successfully'], 200);
+        } else {
+            $deleted = DB::table('quiz_results')
+            ->where('chapter_id', $chapterId)
+            ->where('student_id', $user_id)
+            ->delete(); // Use the delete method on the query builder
+
+        return response()->json(['message' => 'Quiz failed, Try again'], 200);
+        }
+    } else {
+        return response()->json(['message' => 'Quiz Not Submitted'], 404); // Handle empty result case
+    }
        
-        $chapterState->state = '1';
-        $chapterState->save();
-       }else{
-        $chapter_state = [
-            'chapter_id' =>  $chapterId,
-            'user_id' =>  $user_id,
-            'state' => '1',
-        ];
-        ChapterState::create($chapter_state);
-       }
+    }
 
-
-        $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)
-        ->where('chapter_id', $chapterId)
-        ->first(); // Retrieve the model instance using "first()" or "firstOrFail()"
+    // public function submitQuizQuesAnswareMobile(Request $request)
+    // {
+    //     $user_id = auth()->user()->id;
     
-    if ($studentTrackingChapter) {
-        $studentTrackingChapter->chapter_end_date = date("Y-m-d H:i:s");
-        $studentTrackingChapter->save();
-    }
+    //     // Validate the request data
+    //     $validatedData = $request->validate([
+    //         'chapter_id' => 'required',
+    //         'questions' => 'required|array',
+    //         'questions.*.question_id' => 'required',
+    //         'questions.*.answer' => 'required',
+    //         'time_taken' => 'required',
+    //     ]);
+    
+    //     $chapterId = $validatedData['chapter_id'];
+    //     $timeTaken = $validatedData['time_taken'];
+    
+    //     $totalCorrectAnswers = 0;
+    
+    //     // Store the quiz data
+    //     foreach ($validatedData['questions'] as $questionData) {
+    //         $questionId = $questionData['question_id'];
+    //          QuizAnswer::where('created_by', $user_id)->where('question_id', $questionId)->delete();
+    //         $answer = $questionData['answer'];
+    
+    //         // Create a new quiz answer instance
+    //         $quizAnswer = new QuizAnswer();
+    //         $quizAnswer->question_id = $questionId;
+    //         $quizAnswer->answer = $answer;
+    //         $quizAnswer->created_by = $user_id;
+    
+    //         // Save the quiz answer
+    //         $quizAnswer->save();
+    
+    //         // Check if the answer is correct
+    //         $isCorrect = $this->isAnswerCorrect($questionId, $answer);
+    
+    //         if ($isCorrect) {
+    //             $totalCorrectAnswers++;
+    //         }
+    //     }
+    // QuizResult::where('student_id', $user_id)->where('chapter_id', $chapterId)->delete();
+    //     // Create a new quiz result instance
+    //     $quizResult = new QuizResult();
+    //     $quizResult->chapter_id = $chapterId;
+    //     $quizResult->total_correct_answers = $totalCorrectAnswers;
+    //     $quizResult->time_taken = $timeTaken;
+    //     $quizResult->total_questions = count($validatedData['questions']);
+    //     $quizResult->student_id = $user_id;
+    //     $quizResult->state = '1';
 
-        // Return a response
-        return response()->json(['message' => 'Quiz submitted successfully'], 200);
-    }
+    //     $quizResult->save();
+
+    //     $chapter = Chapter::findOrFail($chapterId);
+    //     $chapter->state = '1';
+    //     $chapter->save();
+
+    //     $chapterState = ChapterState::where('chapter_id', $chapterId)->where('user_id',  $user_id)->first();
+    
+    //   if(!empty($chapterState)){
+       
+    //     $chapterState->state = '1';
+    //     $chapterState->save();
+    //   }else{
+    //     $chapter_state = [
+    //         'chapter_id' =>  $chapterId,
+    //         'user_id' =>  $user_id,
+    //         'state' => '1',
+    //     ];
+    //     ChapterState::create($chapter_state);
+    //   }
+
+
+    //     $studentTrackingChapter = StudentTrackingChapter::where('student_id', $user_id)
+    //     ->where('chapter_id', $chapterId)
+    //     ->first(); // Retrieve the model instance using "first()" or "firstOrFail()"
+    
+    // if ($studentTrackingChapter) {
+    //     $studentTrackingChapter->chapter_end_date = date("Y-m-d H:i:s");
+    //     $studentTrackingChapter->save();
+    // }
+
+    //     // Return a response
+    //     return response()->json(['message' => 'Quiz submitted successfully'], 200);
+    // }
     
     private function isAnswerCorrect($questionId, $answer)
     {

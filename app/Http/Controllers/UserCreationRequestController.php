@@ -659,18 +659,16 @@ class UserCreationRequestController extends Controller
 
     public function destroy(Request $request)
     {
-        if ($request->ajax()) {
-            $result = User::destroy($request->id);
+        \Log::info($request->id);
+        
+       
+            $result = User::where('id', $request->id)->delete();
             Student::where('user_id', $request->id)->delete();
             Teacher::where('user_id', $request->id)->delete();
             StudentParent::where('user_id', $request->id)->delete();
             if (!empty($result))
-                return response([$result], 200)
-                    ->header('Content-Type', 'text/json');
-            else
-                return response([$result], 400)
-                    ->header('Content-Type', 'text/json');
-        }
+                return response()->json(['message' => 'Meeting deleted successfully']);
+           
     }
 
 
@@ -685,6 +683,7 @@ class UserCreationRequestController extends Controller
         if($user->role == 'student'){
             $userprofile = DB::select('
             select 
+            u.id,
                 u.name,
                 s.phone_no,
                 u.identity_number,
@@ -721,6 +720,7 @@ class UserCreationRequestController extends Controller
         if($user->role == 'teacher'){
             $userprofile = DB::select('
             select
+                u.id,
                 u.name, 
                 t.phone_no,
                 u.identity_number,
@@ -752,6 +752,7 @@ class UserCreationRequestController extends Controller
         if($user->role == 'parent'){
             $userprofile = DB::select('
             select 
+                u.id,
                 u.name,    
                 sp.phone_no,
                 u.identity_number,

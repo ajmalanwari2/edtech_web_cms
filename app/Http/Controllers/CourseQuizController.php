@@ -371,6 +371,7 @@ class CourseQuizController extends Controller
         // Store the quiz data
         foreach ($validatedData['questions'] as $questionData) {
             $questionId = $questionData['question_id'];
+             CourseQuizAnswer::where('created_by', $user_id)->where('question_id', $questionId)->delete();
             $answer = $questionData['answer'];
     
             // Create a new quiz answer instance
@@ -390,6 +391,8 @@ class CourseQuizController extends Controller
             }
         }
    
+    CourseQuizResult::where('student_id', $user_id)->where('course_id', $courseId)->delete();
+   
         // Create a new quiz result instance
         $quizResult = new CourseQuizResult();
         $quizResult->course_id = $courseId;
@@ -407,7 +410,29 @@ class CourseQuizController extends Controller
 
         $courseState = CourseState::where('course_id', $courseId)->where('user_id',  $user_id)->first();
     
-        if(!empty($courseState)){
+    
+      $quizResult = DB::select('
+        SELECT 
+            CASE
+                WHEN (SUM(cqr.total_correct_answers) * 100.0 / NULLIF(SUM(cqr.total_questions), 0)) >= 70 THEN \'passed\'
+                ELSE
+                    CASE
+                        WHEN COUNT(cqr.id) = 0 THEN NULL
+                        ELSE \'failed\'
+                    END
+            END AS student_result
+        FROM 
+            course_quiz_results AS cqr
+        JOIN 
+            courses AS c ON c.id = cqr.course_id
+        WHERE 
+            c.id = ? AND cqr.student_id = ?
+    ', [$courseId, $user_id]); // Use parameter binding to prevent SQL injection
+    
+        
+    if (!empty($quizResult)) {
+        if ($quizResult[0]->student_result === 'passed') {
+             if(!empty($courseState)){
         
          $courseState->state = '1';
          $courseState->save();
@@ -421,6 +446,18 @@ class CourseQuizController extends Controller
         }
         // Return a response
         return response()->json(['message' => 'Quiz submitted successfully'], 200);
+        } else {
+            $deleted = DB::table('course_quiz_results')
+            ->where('course_id', $courseId)
+            ->where('student_id', $user_id)
+            ->delete(); // Use the delete method on the query builder
+
+        return response()->json(['message' => 'Quiz failed, Try again'], 200);
+        }
+    } else {
+        return response()->json(['message' => 'Quiz Not Submitted'], 404); // Handle empty result case
+    }
+        
     }
     
     private function isAnswerCorrect($questionId, $answer)

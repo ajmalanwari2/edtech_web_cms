@@ -323,51 +323,52 @@ $subjects['grade_name'] = $grade[0]->grade_name;
 $subjects['grade_language'] = $grade[0]->grade_language;
 $subjects['subject_count'] = $subjectCount[0]->subject_count;
 $subjects['total_grade_lessons'] = $totalGradeLessons[0]->total_grade_lessons;
-$subjects['total_grade_passed_lessons'] = $totalGradePassedLessons[0]->total_grade_passed_lessons;
-        $subjects['subjects'] = DB::select('select 
-        sub.id as subject_id,
-                       sub.name as subject_name,
-                       CASE
-                       WHEN sub.icon != "" THEN CONCAT("storage/uploads/icon/", sub.icon)
-                   ELSE NULL
-                   END AS subject_icon,
-                   (select count(sl.id) from subject_lessons as sl
-        join chapters as ch
-        on ch.id = sl.chapter_id
-        where ch.subject_id = sub.id
-        and sl.type = \'video\') as video_count,
-           (select count(sl.id) from subject_lessons as sl
-        join chapters as ch
-        on ch.id = sl.chapter_id
-        where ch.subject_id = sub.id
-        and sl.type = \'file\') as doc_count,
-           (select count(sl.id) from subject_lessons as sl
-        join chapters as ch
-        on ch.id = sl.chapter_id
-        where ch.subject_id = sub.id
-        and sl.type = \'audio\') as audio_count,
-        (select
-        count(ch.id) 
-    from chapters as ch
-    where ch.subject_id = sub.id) as total_subject_lessons,
+$subjects['total_grade_passed_lessons'] = isset($totalGradePassedLessons[0]) && isset($totalGradePassedLessons[0]->total_grade_passed_lessons)
+    ? $totalGradePassedLessons[0]->total_grade_passed_lessons 
+    : 0;
+   
+        $subjects['subjects'] = DB::select('SELECT 
+    sub.id AS subject_id,
+    sub.name AS subject_name,
+    CASE 
+        WHEN sub.icon != "" THEN CONCAT("storage/uploads/icon/", sub.icon)
+        ELSE NULL 
+    END AS subject_icon,
+    (SELECT COUNT(sl.id) 
+     FROM subject_lessons AS sl
+     JOIN chapters AS ch ON ch.id = sl.chapter_id
+     WHERE ch.subject_id = sub.id AND sl.type = \'video\') AS video_count,
+    (SELECT COUNT(sl.id) 
+     FROM subject_lessons AS sl
+     JOIN chapters AS ch ON ch.id = sl.chapter_id
+     WHERE ch.subject_id = sub.id AND sl.type = \'file\') AS doc_count,
+    (SELECT COUNT(sl.id) 
+     FROM subject_lessons AS sl
+     JOIN chapters AS ch ON ch.id = sl.chapter_id
+     WHERE ch.subject_id = sub.id AND sl.type = \'audio\') AS audio_count,
+    (SELECT COUNT(ch.id) 
+     FROM chapters AS ch
+     WHERE ch.subject_id = sub.id) AS total_subject_lessons,
     (select
     count(ch.id)
 from chapters as ch
 where ch.subject_id = sub.id
 and ch.id in (select chapter_id from chapter_states where user_id = '.$user_id.' )) as total_subject_passed_lessons
-                    from users as u
-                       left join students as s
-                       on u.id = s.user_id
-                       left join schools as sh
-                       on sh.id = s.school_id
-                       left join grades as g
-                       on g.id = s.grade_id
-                       left join subjects_in_grades as sig
-                           on g.id = sig.grade_id
-                       left join subjects as sub
-                           on sub.id = sig.subject_id
-                   where u.id = '.$user_id .'
-                   and s.grade_id = '.$grade_id.'');
+FROM 
+    users AS u
+LEFT JOIN 
+    students AS s ON u.id = s.user_id
+LEFT JOIN 
+    schools AS sh ON sh.id = s.school_id
+LEFT JOIN 
+    grades AS g ON g.id = s.grade_id
+LEFT JOIN 
+    subjects_in_grades AS sig ON g.id = sig.grade_id
+LEFT JOIN 
+    subjects AS sub ON sub.id = sig.subject_id
+WHERE 
+    u.id =  '.$user_id.'
+    AND s.grade_id = '.$grade_id.';');
 
                 if($subjects == []){
                     return response(['message' => 'The student is not registered'], 422)
@@ -387,7 +388,163 @@ and ch.id in (select chapter_id from chapter_states where user_id = '.$user_id.'
 
 
 
-    public function studentSubjectChapterList(Request $request){
+//     public function studentSubjectChapterList(Request $request){
+//         $subject_id = $request->subject_id;
+//         $user_id = auth()->user()->id;
+//         $user = User::find($user_id);
+//         $grade_id = Student::select('grade_id')->where('user_id', $user_id)->get();
+//         $grade_id = $grade_id && $grade_id[0] ? $grade_id[0]->grade_id : NULL;
+//         if($user == NULL || $grade_id == NULL){
+//             return response(['message' => 'The user is not registered'], 400)
+//                 ->header('Content-Type', 'text/json');
+//         }
+
+//         $grade = DB::select('
+//         SELECT
+//         s.id as subject_id,
+//         s.name AS subject_name,
+//         CASE
+//             WHEN g.language = "en" THEN "English"
+//             WHEN g.language = "da" THEN "Dari"
+//             ELSE "Pashto"
+//         END AS grade_language
+//         FROM
+//         grades as g
+//         join subjects_in_grades as sig
+//         on g.id = sig.grade_id
+//         join subjects as s
+//         on s.id = sig.subject_id
+//         where sig.grade_id = '.$grade_id.'
+//         AND sig.subject_id = '.$subject_id.'
+//         ');
+     
+//         $subjectCount = DB::select('
+//         select 
+//             count(c.id) as lessons_count
+//         from chapters as c
+//         where c.subject_id = '.$subject_id.'        
+//     ');
+
+//     $chapters = [];
+// $chapters['subject_id'] = $grade[0]->subject_id;
+// $chapters['subject_name'] = $grade[0]->subject_name;
+// $chapters['grade_language'] = $grade[0]->grade_language;
+// $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
+
+
+//         $chapters['lessons'] = DB::select('SELECT DISTINCT
+//         c.id AS chapter_id,
+//         c.name AS chapter_name,
+//         c.subject_id,
+//         COALESCE(b.state, 0) AS bookmark_state,
+//         (
+//             SELECT COUNT(q.id)
+//             FROM quizes AS q 
+//             WHERE q.chapter_id = c.id
+//         ) AS quiz_count,
+//         (
+//             SELECT COUNT(sll.id)
+//             FROM subject_lessons AS sll
+//             WHERE sll.type = \'video\' AND sll.chapter_id = c.id
+//         ) AS video_lesson_count,
+//         (
+//             SELECT COUNT(sll.id)
+//             FROM subject_lessons AS sll
+//             WHERE sll.type = \'audio\' AND sll.chapter_id = c.id
+//         ) AS audio_lesson_count,
+//         (
+//             SELECT COUNT(sll.id)
+//             FROM subject_lessons AS sll
+//             WHERE sll.type = \'file\' AND sll.chapter_id = c.id
+//         ) AS file_lesson_count
+//     FROM
+//         users AS u
+//         LEFT JOIN students AS s ON u.id = s.user_id
+//         LEFT JOIN schools AS sh ON sh.id = s.school_id
+//         LEFT JOIN grades AS g ON g.id = s.grade_id
+//         LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
+//         LEFT JOIN subjects AS sub ON sub.id = sig.subject_id
+//         LEFT JOIN chapters AS c ON sub.id = c.subject_id
+//         LEFT JOIN chapter_states AS cs ON c.id = cs.chapter_id and cs.user_id = '.$user_id.'
+//         left join bookmarks as b on c.id = b.chapter_id and b.state = \'1\' and b.user_id = '.$user_id.'
+//     WHERE
+//         c.subject_id = '.$subject_id.'
+//         AND sig.grade_id = '.$grade_id.'
+//         AND u.id = '.$user_id .'');
+
+
+
+        
+
+// // Check if $attemptedQuizzes is not empty before accessing its properties
+
+
+//     // Loop through each lesson object and assign the "chapter_state" value from $attemptedQuizzes
+//     foreach ($chapters['lessons'] as &$lesson) {
+//     $attemptedQuizzes = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+//                                     ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+//                                     CASE
+//                                         WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+//                                             THEN \'passed\'
+//                                         ELSE
+//                                             CASE
+//                                                 WHEN COUNT(qr.id) = 0 THEN NULL
+//                                                 ELSE \'failed\'
+//                                             END
+//                                     END AS student_result
+//                                     FROM quiz_results AS qr
+//                                     JOIN chapters AS c ON c.id = qr.chapter_id
+//                                     JOIN subjects AS s ON s.id = c.subject_id
+//                                     WHERE c.id = ' . $lesson->chapter_id . '
+//                                     AND qr.student_id = ' . $user_id);
+
+//     if (!empty($attemptedQuizzes)) {
+//         $chapterState = $attemptedQuizzes[0]->student_result;
+
+//         if ($chapterState === 'passed') {
+//             $lesson->chapter_state = '1';
+//         } elseif ($chapterState === 'failed') {
+//             $lesson->chapter_state = '0';
+//         } else {
+//             $lesson->chapter_state = NULL;
+//         }
+//     } else {
+//         // Handle the case where $attemptedQuizzes is empty
+//         $lesson->chapter_state = NULL;
+//     }
+// }
+
+//                                 //    $updatedChapters = [];
+
+//                             //   foreach ($chapters as $chapter) {
+//                             //         $count = DB::select('select 
+//                             //             count(sl.id) as chapter_content_count
+//                             //             from subject_lessons as sl
+//                             //             where sl.chapter_id = '.$chapter->chapter_id.'');
+                                    
+//                             //         $chapter->chapter_content_count = $count[0]->chapter_content_count;
+                                    
+//                             //         $updatedChapters[] = $chapter;
+//                             //     }
+// $chapters['textbook'] = DB::select('select
+//     ldc.title as document_title,
+//     ldc.body as document_content_path,
+//     ldc.file_size
+//     from library_document_contents as ldc
+//     join library_documents as ld
+//     on ld.id = ldc.library_document_id
+//     where ld.subject_id = '.$subject_id.'
+//     and ldc.is_main = \'1\'');
+//                                 if (empty($chapters)) {
+//                                     return response(['message' => 'This subject dont have any chapter'], 422)
+//                                         ->header('Content-Type', 'text/json');
+//                                 } else {
+//                                     return response()->json($chapters, 200);
+// }
+
+//     }
+
+public function studentSubjectChapterList(Request $request){
         $subject_id = $request->subject_id;
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
@@ -435,7 +592,6 @@ $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
         c.id AS chapter_id,
         c.name AS chapter_name,
         c.subject_id,
-        cs.state AS chapter_state,
         COALESCE(b.state, 0) AS bookmark_state,
         (
             SELECT COUNT(q.id)
@@ -472,18 +628,230 @@ $chapters['lesson_count'] = $subjectCount[0]->lessons_count;
         AND sig.grade_id = '.$grade_id.'
         AND u.id = '.$user_id .'');
 
-                                //    $updatedChapters = [];
 
-                            //   foreach ($chapters as $chapter) {
-                            //         $count = DB::select('select 
-                            //             count(sl.id) as chapter_content_count
-                            //             from subject_lessons as sl
-                            //             where sl.chapter_id = '.$chapter->chapter_id.'');
-                                    
-                            //         $chapter->chapter_content_count = $count[0]->chapter_content_count;
-                                    
-                            //         $updatedChapters[] = $chapter;
-                            //     }
+
+        
+
+// Check if $attemptedQuizzes is not empty before accessing its properties
+
+
+    // Loop through each lesson object and assign the "chapter_state" value from $attemptedQuizzes
+    foreach ($chapters['lessons'] as &$lesson) {
+    $attemptedQuizzes = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                                    ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+                                    CASE
+                                        WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+                                            THEN \'passed\'
+                                        ELSE
+                                            CASE
+                                                WHEN COUNT(qr.id) = 0 THEN NULL
+                                                ELSE \'failed\'
+                                            END
+                                    END AS student_result
+                                    FROM quiz_results AS qr
+                                    JOIN chapters AS c ON c.id = qr.chapter_id
+                                    JOIN subjects AS s ON s.id = c.subject_id
+                                    WHERE c.id = ' . $lesson->chapter_id . '
+                                    AND qr.student_id = ' . $user_id);
+
+    if (!empty($attemptedQuizzes)) {
+        $chapterState = $attemptedQuizzes[0]->student_result;
+
+        if ($chapterState === 'passed') {
+            $lesson->chapter_state = '1';
+        } elseif ($chapterState === 'failed') {
+            $lesson->chapter_state = '0';
+        } else {
+            $lesson->chapter_state = NULL;
+        }
+    } else {
+        // Handle the case where $attemptedQuizzes is empty
+        $lesson->chapter_state = NULL;
+    }
+   
+
+    $data = [
+        'student_id' => $user_id,
+        'chapter_id' => $lesson->chapter_id,
+        'chapter_start_date' => date("Y-m-d H:i:s"),
+        'chapter_end_date' => NULL,
+    ];
+    $res = StudentTrackingChapter::create($data);
+
+    if ($user->last_seen === null) {
+        $user->update(['last_seen' => date("Y-m-d H:i:s")]);
+    } else {
+        $user->update(['last_seen' => date("Y-m-d H:i:s")]);
+    }
+
+    
+    $grade = DB::select('
+    SELECT
+    ch.id as chapter_id,
+    ch.name AS chapter_name,
+    CASE
+        WHEN g.language = "en" THEN "English"
+        WHEN g.language = "da" THEN "Dari"
+        ELSE "Pashto"
+    END AS grade_language
+    FROM
+    grades as g
+    join subjects_in_grades as sig
+    on g.id = sig.grade_id
+    join subjects as s
+    on s.id = sig.subject_id
+    join chapters as ch
+    on s.id = ch.subject_id
+    where ch.id = '.$lesson->chapter_id.'
+    ');
+ 
+    $ContentCount = DB::select('
+    select 
+        count(sl.id) as content_count
+    from subject_lessons as sl
+    where sl.chapter_id = '.$lesson->chapter_id.'        
+');
+
+$lesson->contents['chapter_id'] = $grade[0]->chapter_id;
+$lesson->contents['chapter_name'] = $grade[0]->chapter_name;
+$lesson->contents['grade_language'] = $grade[0]->grade_language;
+$lesson->contents['lesson_count'] = $ContentCount[0]->content_count;
+    
+            $chapterContents = DB::select('
+                    select
+                        sl.title as content_title,
+                        sl.type as content_type, 
+                        sl.body as chapter_content_path,
+                        sl.file_size
+                    from subject_lessons as sl
+                    where sl.chapter_id = '.$lesson->chapter_id .'');
+
+                    $lesson->contents['chapter_id'] = $lesson->chapter_id;
+        $lesson->contents['chapter_content'] = $chapterContents;
+            $startQuiz = DB::select('
+                select
+                (select count(q.id)
+                from quizes as q
+            where c.id = q.chapter_id) as total_question,
+                        c.total_quiz_time,
+                        s.name as subject,
+                        cs.state as quiz_status
+                from chapters as c
+                    left join subjects as s
+                        on s.id = c.subject_id
+                left join quiz_results as qr
+                    on c.id = qr.chapter_id 
+                LEFT JOIN chapter_states AS cs ON c.id = cs.chapter_id and cs.user_id = '.$user_id.'                    
+                    WHERE c.id = ?
+                    GROUP BY c.id, c.total_quiz_time, s.name, cs.state, qr.state', [$lesson->chapter_id]);
+
+
+                    $quizResult = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                    ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+                   CASE
+        WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+            THEN \'passed\'
+        ELSE
+            CASE
+                WHEN COUNT(qr.id) = 0 THEN NULL
+                ELSE \'failed\'
+            END
+    END AS student_result
+                FROM quiz_results AS qr
+                JOIN chapters AS c ON c.id = qr.chapter_id
+                JOIN subjects AS s ON s.id = c.subject_id
+                WHERE c.id = ' . $lesson->chapter_id
+                .' AND qr.student_id = '.$user_id);
+                
+                $lesson->contents['subject'] = $startQuiz[0]->subject;
+                $lesson->contents['total_question'] = $startQuiz[0]->total_question;
+                $lesson->contents['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
+                 $lesson->contents['quiz_status'] = NULL;
+                 $lesson->contents['chapter_quiz_questions'] = [];
+                if(isset($quizResult[0])){
+                   
+                        if($quizResult[0]->student_result === 'passed'){
+                            $lesson->contents['quiz_status'] = '1';
+                        }elseif($quizResult[0]->student_result === 'failed'){
+                            $lesson->contents['quiz_status'] = '0';
+                        }else{
+                            $lesson->contents['quiz_status'] = NULL;
+                        }
+                }
+                $chapter_id = $lesson->chapter_id;
+                $visible_question = Chapter::select('visible_question')->where('id', $chapter_id)->get();
+                $visible_question = $visible_question && $visible_question[0] ? $visible_question[0]->visible_question : 0;
+$questions = DB::select('
+    SELECT
+q.id AS question_id,
+q.question_text AS question,
+CASE
+    WHEN q.question_image != "" THEN CONCAT("storage/uploads/q_image/", q.question_image)
+    ELSE NULL
+END AS question_image,
+q.option_a_text AS optiona,
+CASE
+    WHEN q.option_a_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_a_image)
+    ELSE NULL
+END AS option_a_image,
+q.option_b_text AS optionb,
+CASE
+    WHEN q.option_b_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_b_image)
+    ELSE NULL
+END AS option_b_image,
+q.option_c_text AS optionc,
+CASE
+    WHEN q.option_c_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_c_image)
+    ELSE NULL
+END AS option_c_image,
+q.option_d_text AS optiond,
+CASE
+    WHEN q.option_d_image != "" THEN CONCAT("storage/uploads/q_image/", q.option_d_image)
+    ELSE NULL
+END AS option_d_image,
+q.correct_answer,
+q.references
+FROM
+chapters AS c
+JOIN (
+    SELECT
+        inner_q.*
+    FROM
+        quizes AS inner_q
+    WHERE
+        inner_q.chapter_id = ?
+    ORDER BY
+        RAND()
+    LIMIT '.$visible_question.'
+) AS q ON c.id = q.chapter_id;', [$lesson->chapter_id]);
+  
+    if (!empty($questions)) {
+        foreach ($questions as $q) {
+            if ($q->question_id !== null) {
+                $q->references = Content::select('title','type', 'body', 'file_size')->whereIn('id', explode(',', $q->references))->get();
+                $lesson->contents['chapter_quiz_questions'][] = $q;
+            } else {
+                $lesson->contents['chapter_quiz_questions'] = [];
+            }
+        }
+    }
+          
+               $quizAnswers = DB::select('select 
+                                qa.question_id,
+                                qa.answer
+                            from quiz_answers as qa    
+                            join quizes as q
+                                on q.id = qa.question_id
+                            join chapters as c
+                                on c.id = q.chapter_id
+                            where c.id = '.$lesson->chapter_id .'
+                            and qa.created_by = '.$user_id.'');
+                            $lesson->contents['answers'] = $quizAnswers;
+
+
+}
+
+                             
 $chapters['textbook'] = DB::select('select
     ldc.title as document_title,
     ldc.body as document_content_path,
@@ -501,8 +869,6 @@ $chapters['textbook'] = DB::select('select
 }
 
     }
-
-
 
     public function studentChapterContentList(Request $request){
         $chapter_id = $request->chapter_id;
@@ -592,7 +958,6 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                         GROUP BY c.id, c.total_quiz_time, s.name, cs.state, qr.state', [$chapter_id]);
 
 
-
                         $quizResult = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
                         ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
                        CASE
@@ -610,13 +975,21 @@ $content['lesson_count'] = $ContentCount[0]->content_count;
                     WHERE c.id = ' . $chapter_id
                     .' AND qr.student_id = '.$user_id);
                     
-
                     $content['subject'] = $startQuiz[0]->subject;
                     $content['total_question'] = $startQuiz[0]->total_question;
                     $content['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
-                    $content['quiz_status'] = $quizResult[0]->student_result && $quizResult[0]->student_result == 'pass' ?
-                    '1' : '0';
+                     $content['quiz_status'] = NULL;
                     $content['chapter_quiz_questions'] = [];
+                    if(isset($quizResult[0])){
+                       
+                            if($quizResult[0]->student_result === 'passed'){
+                                $content['quiz_status'] = '1';
+                            }elseif($quizResult[0]->student_result === 'failed'){
+                                $content['quiz_status'] = '0';
+                            }else{
+                                $content['quiz_status'] = NULL;
+                            }
+                    }
 
 $questions = DB::select('
         SELECT
@@ -781,7 +1154,30 @@ FROM
     }
 
    
-    public function getStudentList(Request $request){
+    // public function getStudentList(Request $request){
+    //     $district_id = $request->district_id;
+    //  $grades = [];
+    //     $grades = DB::table('users as u')
+    // ->leftJoin('students as st', 'u.id', '=', 'st.user_id')
+    // ->select(DB::raw('st.id as student_id'), DB::raw('concat(u.name, "-(", u.identity_number, ")") as student_name'))
+    // ->where('u.identity_number', $district_id)
+    // ->get();
+    //     return response()->json($grades, 200);
+
+    // }
+    
+    public function searchStudent(Request $request){
+        $identity_no = $request->identity_no;
+     $grades = [];
+        $grades = DB::table('users as u')
+    ->leftJoin('students as st', 'u.id', '=', 'st.user_id')
+    ->select(DB::raw('st.id as student_id'), DB::raw('concat(u.name, "-(", u.identity_number, ")") as student_name'))
+    ->where('u.identity_number', $identity_no)
+    ->get();
+        return response()->json($grades, 200);
+
+    } 
+   public function getStudentList(Request $request){
         $district_id = $request->district_id;
      $grades = [];
         $grades = DB::select('
@@ -797,8 +1193,7 @@ FROM
         ');
         return response()->json($grades, 200);
 
-    }     
-
+    } 
     public function studentProfile($id){
         $rec = [];
         try{

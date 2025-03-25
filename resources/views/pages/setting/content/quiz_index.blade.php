@@ -385,7 +385,26 @@
                 var url = site_url + 'api/quiz/save';
                 var formData = new FormData();
                 formData.append('_token', '{{ csrf_token() }}');
-                formData.append('q_text', $('#q_text').val());
+                      var str = $('#q_text').val();
+    var charactersToReplace = ['ټ', 'ځ', 'ا'];
+    var replacements = ['ت', 'خ', '.'];
+    var newStr = str;
+
+    for (var i = 0; i < charactersToReplace.length; i++) {
+    var character = charactersToReplace[i];
+    var replacement = replacements[i];
+    var index = newStr.indexOf(character);
+
+    while (index !== -1) {
+        newStr = newStr.replace(character, replacement);
+        index = newStr.indexOf(character, index + 1);
+    }
+    }
+
+
+
+                // formData.append('q_text', $('#q_text').val());
+                formData.append('q_text', newStr);
                 formData.append('q_image', $('#q_image')[0].files[0]);
 
                 formData.append('option_a_text', $('#option_a_text').val());

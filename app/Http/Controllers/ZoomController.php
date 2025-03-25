@@ -124,10 +124,24 @@ class ZoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy($id)
+{
+    $zoom_meeting = ZoomMeeting::find($id);
+
+    if (!$zoom_meeting) {
+        return response()->json(['message' => 'Meeting not found'], 404);
     }
+
+    $user_meeting_lists = DB::table('user_meeting_lists')->where('meeting_password', $zoom_meeting->password)->get();
+    
+    foreach ($user_meeting_lists as $user_meeting_list) {
+        DB::table('user_meeting_lists')->where('id', $user_meeting_list->id)->delete();
+    }
+
+    $zoom_meeting->delete();
+
+    return response()->json(['message' => 'Meeting deleted successfully']);
+}
     
     
      public function shareMeeting(Request $request)
@@ -184,11 +198,13 @@ public function ListOfAvailableMeetings(Request $request){
 public function ListOfCreateMeetingUsers(Request $request){
     $user_id = auth()->user()->id;
 
-    $listOfMeetings = DB::select('select 
+    $listOfMeetings = DB::select('select
+                    zm.id as meeting_id,
                     zm.topic,                
                     zm.start_at,
                     zm.duration,
                     zm.join_url as meeting_url,
+                     zm.start_url,
                     zm.password as meeting_password
                 from zoom_meetings as zm
                 where zm.user_id  = '.$user_id.'');

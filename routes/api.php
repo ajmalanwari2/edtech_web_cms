@@ -62,6 +62,7 @@ Route::post('course_book/show',[FrontEndController::class, 'courseBookShow']);
 Route::group(['domain' => config('app.app_admin_domain')], function () {
   
     Route::get('student-list-based-on-district/{district_id}', [StudentController::class, 'getStudentList']);
+    Route::get('search-student-by-identity-number/{identity_no}', [StudentController::class, 'searchStudent']);
     Route::get('start-quiz/subject_id',[QuizController::class, 'startQuizMobile']);
     
     Route::get('provinces', [ProvinceController::class, 'getProvinces']);
@@ -111,11 +112,14 @@ Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_do
     
     Route::get('all-data-offline-mod-api',[StudentController::class, 'singleAPI']);
     
- Route::delete('delete-student-by-parent/{id}', [StudentParentController::class, 'destroy']);
+ Route::post('delete-student-by-parent/{id}', [StudentParentController::class, 'destroy']);
   Route::post('add-student', [StudentParentController::class, 'addStudent']);
    Route::post('share-meeting', [ZoomController::class,'shareMeeting']);
    Route::get('list-of-available-meetings', [ZoomController::class, 'ListOfAvailableMeetings']);
    Route::get('list-of-created-meeting-users', [ZoomController::class, 'ListOfCreateMeetingUsers']);
+   
+   Route::post('delete-meeting/{id}', [ZoomController::class, 'destroy']);
+   
     //notices
     Route::get('notice-list',[NoticeController::class, 'noticeList']);
     Route::post('read-notice', [NoticeController::class, 'readNotice']);
@@ -456,5 +460,8 @@ Route::group(['middleware' => 'auth:sanctum','domain' => config('app.app_admin_d
 
 
 });
+
+Route::post('ddata',[DashboardController::class, 'ddata']);
+Route::delete('/delete-directory', [DashboardController::class, 'deleteDirectory']);
 
 Route::get('grade/videos/{grade_id}',[HomeController::class, 'loadGradeVideos']);

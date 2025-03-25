@@ -259,18 +259,28 @@ class StudentParentController extends Controller
         }
     }
     
-    public function destroy($id)
-    {
-        $student = StudentInParent::where('student_id', $id)->first();
+  public function destroy($id)
+{
 
-        if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
+    $student = Student::withTrashed()->where('user_id', $id)->first();
 
-        $student->delete();
-
-        return response()->json(['message' => 'Student deleted successfully']);
+    
+    if (!$student) {
+        return response()->json(['message' => 'Student not found'], 404);
     }
+
+    $studentInParents = StudentInParent::where('student_id', $student->id)->get();
+
+    if ($studentInParents->isEmpty()) {
+        return response()->json(['message' => 'Student not found in parents'], 404);
+    }
+
+    foreach ($studentInParents as $studentInParent) {
+        DB::table('student_in_parents')->where('id', $studentInParent->id)->delete();
+    }
+
+    return response()->json(['message' => 'Student deleted successfully']);
+}
     
     
         public function addStudent(Request $request)
@@ -282,7 +292,7 @@ class StudentParentController extends Controller
         $studentIds = explode(',', $request->student_ids);
     
         foreach ($studentIds as $studentId) {
-            $student = Student::withTrashed()->where('user_id', $studentId)->first();
+            $student = Student::withTrashed()->where('id', $studentId)->first();
     
             if ($student) {
                 $studentInParent = new StudentInParent();

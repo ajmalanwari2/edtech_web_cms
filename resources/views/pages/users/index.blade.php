@@ -1,30 +1,31 @@
 @extends('layouts.master')
 @section('title')
-    <title>users</title>
+<title>users</title>
 @endsection
 @section('content')
-    <div class="page__heading">
-        <div class="container-fluid page__container">
-            <h1 class="mb-0">Registerd Users</h1>
-        </div>
-    </div>
+<div class="page__heading">
     <div class="container-fluid page__container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-large bg-light d-flex align-items-center">
-                        <div class="flex">
-                            <div class="card-subtitle text-muted">List of Registered Users</div>
-                        </div>
-                        <a class="btn btn-danger" href="{{ route('dashboard.index') }}" style="margin-right: 5px;">Back</a>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-form">Add New User</button>
+        <h1 class="mb-0">Registerd Users</h1>
+    </div>
+</div>
+<div class="container-fluid page__container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-large bg-light d-flex align-items-center">
+                    <div class="flex">
+                        <div class="card-subtitle text-muted">List of Registered Users</div>
+                    </div>
+                    <a class="btn btn-danger" href="{{ route('dashboard.index') }}" style="margin-right: 5px;">Back</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-form">Add New
+                        User</button>
                     <button type="button" class="btn btn-info" onclick="table.ajax.reload()"
                         style="margin-left: 5px;">Reload</button>
-                    </div>
-                    <div class="card-body">
-                        <table id="user" class="display" style="width:100%">
-                            <thead> 
-                                <tr>
+                </div>
+                <div class="card-body">
+                    <table id="user" class="display" style="width:100%">
+                        <thead>
+                            <tr>
                                 <th>No</th>
                                 <th>Full Name</th>
                                 <th>Username</th>
@@ -37,17 +38,17 @@
                                 <th>Role</th>
                                 <th>Status</th>
                                 <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 @section('modals')
-    <!-- ADD/EDIT FORM START-->
+<!-- ADD/EDIT FORM START-->
 <div id="modal-form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-form-title"
     style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -63,101 +64,125 @@
                     @csrf
                     <div class="was-validated">
                         <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
-                        <label class="text-label" for="name">Full Name:</label>
-                        <div class="input-group input-group-merge">
-                            <input id="name"  name="name" type="text" required="" class="form-control form-control-prepended"
-                             placeholder="Full Name" value="{{ old('name') }}">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <span class="far fa-user"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="name">Full Name:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="name" name="name" type="text" required=""
+                                        class="form-control form-control-prepended" placeholder="Full Name"
+                                        value="{{ old('name') }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-user"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label class="text-label" for="email">Email:</label>
-                        <div class="input-group input-group-merge">
-                            <input id="email"  name="email" type="text" required="" 
-                            class="form-control form-control-prepended"
-                             placeholder="Email" value="{{ old('email') }}">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                <span class="far fa-envelope"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="email">Email:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="email" name="email" type="text" required=""
+                                        class="form-control form-control-prepended" placeholder="Email"
+                                        value="{{ old('email') }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-envelope"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                         </div>
                         <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
-                    <label class="text-label" for="identity_number">Identity Number:</label>
-                        <div class="input-group input-group-merge">
-                            <input id="identity_number" name="identity_number" type="text" required="" class="form-control form-control-prepended" placeholder="Identity Number">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                <span class="far fa-user-circle"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="identity_number">Identity Number:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="identity_number" name="identity_number" type="text" required=""
+                                        class="form-control form-control-prepended" placeholder="Identity Number">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-user-circle"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                        <div class="col-12 col-md-6 mb-3">
-                        <label class="text-label" for="father_name">DOB:</label>
-                        <div class="input-group input-group-merge">
-                            <input id="dob"  name="dob" type="text" required="" class="form-control form-control-prepended" placeholder="DOB">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                <span class="far fa-user-circle"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="father_name">DOB:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="dob" name="dob" type="text" required=""
+                                        class="form-control form-control-prepended" placeholder="DOB">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-user-circle"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                    <label class="text-label" for="email">Gender:</label>
-                        <div class="input-group input-group-merge">
-                            <select id="gender" data-toggle="select" name="gender" class="form-control" required="">
-                                            <option value="" >Select</option>
-                                            <option value="male" >male</option>
-                                            <option value="female" >female</option>
-                                        </select>
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <span class="far fa-user"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="role">Role:</label>
+                                <div class="input-group input-group-merge">
+                                    <select id="role" data-toggle="select" name="role" class="form-control" required="">
+                                        <option value="">Select</option>
+                                        <option value="student">student</option>
+                                        <option value="parent">parent</option>
+                                        <option value="teacher">teacher</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-eye-slash"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                    <label class="text-label" for="email">Language:</label>
-                        <div class="input-group input-group-merge">
-                            <select id="language" data-toggle="select" name="language" class="form-control" required="">
-                                            <option value="" >Select</option>
-                                            <option value="en" >English</option>
-                                            <option value="da" >Dari</option>
-                                            <option value="pa" >Pashto</option>
-                                        </select>
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <span class="far fa-user"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="email">Gender:</label>
+                                <div class="input-group input-group-merge">
+                                    <select id="gender" data-toggle="select" name="gender" class="form-control"
+                                        required="">
+                                        <option value="">Select</option>
+                                        <option value="male">male</option>
+                                        <option value="female">female</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-user"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                         </div>
                         <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
-                        <label class="text-label" for="email">Phone:</label>
-                        <div class="input-group input-group-merge">
-                            <input id="phone_no"  name="phone_no" type="text" required="" class="form-control form-control-prepended"
-                             placeholder="Phone" value="{{ old('phone_no') }}">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                <span class="fas fa-mobile-alt"></span>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="email">Language:</label>
+                                <div class="input-group input-group-merge">
+                                    <select id="language" data-toggle="select" name="language" class="form-control"
+                                        required="">
+                                        <option value="">Select</option>
+                                        <option value="en">English</option>
+                                        <option value="da">Dari</option>
+                                        <option value="pa">Pashto</option>
+                                    </select>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="far fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label class="text-label" for="email">Phone:</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="phone_no" name="phone_no" type="text" required=""
+                                        class="form-control form-control-prepended" placeholder="Phone"
+                                        value="{{ old('phone_no') }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-mobile-alt"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
+                        <div class="form-row">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="text-label" for="province_id">Province Name:</label>
                                 <div class="input-group input-group-merge">
                                     <select id="province_id" data-toggle="select" name="province_id"
@@ -171,13 +196,11 @@
                                     </select>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
-                                        <span class="fas fa-home"></span>
+                                            <span class="fas fa-home"></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="col-12 col-md-6 mb-3">
                                 <label class="text-label" for="district_id">District:</label>
                                 <div class="input-group input-group-merge">
@@ -197,6 +220,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="form-row">
                             <div class="col-12 col-md-6 mb-3">
                                 <label class="text-label" for="school_id">School Name:</label>
                                 <div class="input-group input-group-merge">
@@ -216,9 +242,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3" id="show_grade">
                                 <label class="text-label" for="grade_id">Grade Name:</label>
                                 <div class="input-group input-group-merge">
                                     <select id="grade_id" data-toggle="select" name="grade_id" class="form-control"
@@ -237,6 +261,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="form-row">
                             <div class="col-12 col-md-6 mb-3">
                                 <label class="text-label" for="email">Status:</label>
                                 <div class="input-group input-group-merge">
@@ -248,26 +275,7 @@
                                     </select>
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
-                                        <span class="fas fa-eye-slash"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
-                                <label class="text-label" for="role">Role:</label>
-                                <div class="input-group input-group-merge">
-                                    <select id="role" data-toggle="select" name="role" class="form-control"
-                                        required="">
-                                        <option value="" >Select</option>
-                                            <option value="student" >student</option>
-                                            <option value="parent" >parent</option>
-                                            <option value="teacher" >teacher</option>
-                                    </select>
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                        <span class="fas fa-eye-slash"></span>
+                                            <span class="fas fa-eye-slash"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -370,13 +378,13 @@
                         <div id="user_status" class="text-muted"></div>
                     </div>
                 </div>
-        </div> <!-- // END .modal-body -->
-        <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-            <!-- <button type="button" class="btn btn-primary" onclick="approveduserView()">Approve</button> -->
-        </div> <!-- // END .modal-footer -->
-    </div> <!-- // END .modal-content -->
-</div> <!-- // END .modal-dialog -->
+            </div> <!-- // END .modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary" onclick="approveduserView()">Approve</button> -->
+            </div> <!-- // END .modal-footer -->
+        </div> <!-- // END .modal-content -->
+    </div> <!-- // END .modal-dialog -->
 </div>
 <!-- VIEW FORM END-->
 
@@ -406,65 +414,65 @@
 
 
 <script type="text/javascript">
-    var table = $('#user').DataTable({
-        serverSide: true,
-        ajax: {
-            url: site_url + 'api/user/list',
-            type: 'POST',
-            data: {
+var table = $('#user').DataTable({
+    serverSide: true,
+    ajax: {
+        url: site_url + 'api/user/list',
+        type: 'POST',
+        data: {
 
-                '_token': '{{ csrf_token() }}'
-            }
+            '_token': '{{ csrf_token() }}'
+        }
+    },
+    columns: [{
+            data: 'id'
         },
-        columns: [{
-                data: 'id'
-            },
-            {
-                data: 'name'
-            },
-            {
-                data: 'identity_number'
-            },
-            {
-                data: 'email'
-            },
-            {
-                data: 'phone_no'
-            },
-            {
-                data: 'province'
-            },
-            {
-                data: 'district'
-            },
-            {
-                data: 'school'
-            },
-            {
-                data: 'grade'
-            },
-            {
-                data: 'role'
-            },
-            {
-                data: 'status'
-            },
-            {
-                data: 'actions'
-            }
-        ],
-        processing: true,
-        serverSide: true
-    });
+        {
+            data: 'name'
+        },
+        {
+            data: 'identity_number'
+        },
+        {
+            data: 'email'
+        },
+        {
+            data: 'phone_no'
+        },
+        {
+            data: 'province'
+        },
+        {
+            data: 'district'
+        },
+        {
+            data: 'school'
+        },
+        {
+            data: 'grade'
+        },
+        {
+            data: 'role'
+        },
+        {
+            data: 'status'
+        },
+        {
+            data: 'actions'
+        }
+    ],
+    processing: true,
+    serverSide: true
+});
 
-    function saveForm(id) {
-        if (!$('#entry_edit_form')[0].checkValidity())
+function saveForm(id) {
+    if (!$('#entry_edit_form')[0].checkValidity())
         $.toaster({
             priority: 'danger',
             title: 'Info',
             message: 'Some required fields missing data.'
         });
-    var url =site_url+'api/user/save';
+    var url = site_url + 'api/user/save';
     var data = {
         '_token': '{{ csrf_token() }}',
         name: $('#name').val(),
@@ -483,21 +491,21 @@
         password: $('#password').val(),
     };
     if (!(id === undefined)) {
-        url =site_url+'api/user/update';
+        url = site_url + 'api/user/update';
         data.id = id;
     }
     $.ajax({
         type: "POST",
         url: url,
         data: data,
-        error: function(xhr, textStatus, errorThrown){
+        error: function(xhr, textStatus, errorThrown) {
             console.log(xhr, textStatus, errorThrown);
             $.toaster({
                 priority: 'danger',
                 title: 'Info',
                 message: xhr.responseJSON.message
             });
-    },
+        },
         success: (function(data) {
 
             if ((id === undefined)) {
@@ -521,32 +529,32 @@
         dataType: 'json'
     });
 }
- 
 
-    function closeModal(){
+
+function closeModal() {
     $('#modal-confirm').removeClass('show');
     $('.modal-backdrop').remove();
 }
 
-    function loadRecord(id) {
-        if (!(id === undefined)) {
+function loadRecord(id) {
+    if (!(id === undefined)) {
         $('#language').prop('disabled', true);
-        }
-        $.ajax({
-            type: "POST",
-            url: site_url + 'api/user/show',
-            data: {
-                id: id,
-                '_token': '{{ csrf_token() }}'
-            },
-            fail: (function() {
-                $.toaster({
-                    priority: 'danger',
-                    title: 'Info',
-                    message: 'There was error loading record.'
-                });
-            }),
-            success: (function(data) {
+    }
+    $.ajax({
+        type: "POST",
+        url: site_url + 'api/user/show',
+        data: {
+            id: id,
+            '_token': '{{ csrf_token() }}'
+        },
+        fail: (function() {
+            $.toaster({
+                priority: 'danger',
+                title: 'Info',
+                message: 'There was error loading record.'
+            });
+        }),
+        success: (function(data) {
             $('#user_id').text(data.id);
             $('#user_username').text(data.name);
             $('#user_email').text(data.email);
@@ -579,70 +587,82 @@
             $("#saveBTN").html("Update");
             $("#modal-form-title").html("User Update Form");
 
-            }),
-            dataType: 'json'
-        });
-    }
-
-    var deleteRecordID = 0;
-
-    function deleteRecord() {
-
-        if (deleteRecordID == 0)
-            return;
-
-        $.ajax({
-            type: "POST",
-            url: site_url + 'api/user/delete',
-            data: {
-                id: deleteRecordID,
-                '_token': '{{ csrf_token() }}'
-            },
-            fail: (function() {
-                $.toaster({
-                    priority: 'danger',
-                    title: 'Info',
-                    message: 'Failed when deleting record.'
-                });
-            }),
-            success: (function(data) {
-                
-                $.toaster({
-                    priority: 'success',
-                    title: 'Info',
-                    message: 'Record has been removed.'
-                });
-                $('#modal-confirm').modal('toggle');
-                table.ajax.reload();
-            }),
-            dataType: 'json'
-        });
-    }
-    $(document).on('hide.bs.modal', '#modal-form', function() {
-        $('#entry_edit_form').trigger("reset");
-        $("#saveBTN").attr("onclick", "saveForm()");
-        $("#saveBTN").html("Save");
-        $("#modal-form-title").html("Add New User Form");
+        }),
+        dataType: 'json'
     });
+}
 
-    $(document).ready(function(){
-    $('#province_id').change(function(){
-       let pro_id = $(this).val();
-       let data = {
-        'pro_id': $(this).val(),
-        '_token': '{{ csrf_token() }}',
-       };
-       $.ajax({
+var deleteRecordID = 0;
+
+function deleteRecord() {
+
+    if (deleteRecordID == 0)
+        return;
+
+    $.ajax({
+        type: "POST",
+        url: site_url + 'api/user/delete',
+        data: {
+            id: deleteRecordID,
+            '_token': '{{ csrf_token() }}'
+        },
+        fail: (function() {
+            $.toaster({
+                priority: 'danger',
+                title: 'Info',
+                message: 'Failed when deleting record.'
+            });
+        }),
+        success: (function(data) {
+
+            $.toaster({
+                priority: 'success',
+                title: 'Info',
+                message: 'Record has been removed.'
+            });
+            $('#modal-confirm').modal('toggle');
+            table.ajax.reload();
+        }),
+        dataType: 'json'
+    });
+}
+$(document).on('hide.bs.modal', '#modal-form', function() {
+    $('#entry_edit_form').trigger("reset");
+    $("#saveBTN").attr("onclick", "saveForm()");
+    $("#saveBTN").html("Save");
+    $("#modal-form-title").html("Add New User Form");
+});
+
+$(document).ready(function() {
+    $('#province_id').change(function() {
+        let pro_id = $(this).val();
+        let data = {
+            'pro_id': $(this).val(),
+            '_token': '{{ csrf_token() }}',
+        };
+        $.ajax({
             url: '/get_districts',
             type: 'post',
-            data : data,
-            success: function(res){
+            data: data,
+            success: function(res) {
                 $('#district_id').html(res);
             }
-       });
+        });
     });
 });
 
+$(document).ready(function() {
+    $('#show_grade').show();
+$('#role').change(function(){
+    if($('#role').val() != 'student') {
+        $('#show_grade').hide();
+   
+    }else{
+        $('#show_grade').show();
+   
+    }
+});
+});
 </script>
 
 @stop

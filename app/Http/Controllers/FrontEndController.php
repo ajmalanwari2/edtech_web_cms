@@ -171,6 +171,24 @@ class FrontEndController extends Controller
        }
     }
 
+
+
+
+    public function getGradedThroughLanguage(Request $request){
+        $lang_id = $request->post('lang_id');
+        if($lang_id == 'en'){
+            $lang_id = 'pa';
+        }else{
+            $lang_id = $request->post('lang_id');
+        } 
+        $grades = DB::table('grades')->where('language', $lang_id)->get();
+        $html = '<option value="">Select</option>';
+        foreach($grades as $grade){
+            $html.='<option value="'.$grade->id.'">' .$grade->name.'</option>';
+        }
+        return $html;
+    }
+
     public function request_form()
     {
        
@@ -463,6 +481,20 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         }
     
  
+    }
+    
+    
+     public function term_and_policy()
+    {
+    
+        // dd(\App::getLocale());
+        $lang = $this->getLang();
+
+        if ($this->lang == 'en') {
+            return view('pages.frontend.term_and_policy', compact('lang'));
+        } else {
+            return view('pages.frontend.term_and_policy_rtl', compact('lang'));
+        }
     }
 
     public function showBook(Request $request)

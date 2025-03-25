@@ -210,7 +210,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row card-hh">
+                        <div class="row card-hh" id="main_div">
                             @foreach($library_documents as $library_document)
                             <div class="listg" id="library_documents_div">
                             <a style="text-decoration:none; color: inherit;" href="{{ route('dashboard.library_document_index', $library_document->document_id) }}">
@@ -472,124 +472,102 @@ function getSubjectStatics() {
 }
 
 
-function getLibraryStatics() {
 
+
+function getLibraryStatics() {
+    var selectedValue = $('#library_statistics').val();
     $.ajax({
         type: "POST",
         url: site_url + 'api/dashboard/library',
         data: {
             '_token': '{{ csrf_token() }}',
-            library_statistics: $('#library_statistics').val(),
-
+            library_statistics: selectedValue,
         },
-        fail: (function() {
+        fail: function() {
             $.toaster({
                 priority: 'danger',
                 title: 'Info',
-                message: 'There was error loading record.'
+                message: 'There was an error loading records.'
             });
-        }),
-        success: (function(data) {
-            var html_document = '';
-            var html_video = '';
-            var html_audio = '';
-            var html_kit = '';
-            $('#library_documents_div').html('');
-            $('#library_videos_div').html('');
-            $('#library_audios_div').html('');
-            $('#library_kits_div').html('');
-            console.log(data);
-            if (data && data.library_documents) {
-                $.each(data.library_documents, function(i) {
-                    html_document += `<div class="list-text">
-                                        <i class="bx bx-book"></i>
-                                        <h4 class="ms-2">${data.library_documents[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_documents[i].library_document_count}</span>
-                                    </div>`;
-                });
-                $('#library_documents_div').html(html_document);
-            } else if (data && data.library_videos) {
-                $.each(data.library_videos, function(i) {
-                    html_video += `<div class="list-text">
-<i class="bx bx-video-recording"></i>
-                                        <h4 class="ms-2">${data.library_videos[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_videos[i].library_video_count}</span>
-                                    </div>`;
-                });
-
-
-                $('#library_videos_div').html(html_video);
-            } else if (data && data.library_audios) {
-                $.each(data.library_audios, function(i) {
-                    html_audio += `<div class="list-text">
-<i class="bx bx-volume-full"></i>
-                                        <h4 class="ms-2">${data.library_audios[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_audios[i].library_audio_count}</span>
+        },
+        success: function(data) {
+            $('.listg').remove(); // Empty all elements with the class 'listg'
+            if (data) {
+                if (data.library_documents) {
+                    console.log('Iam here inside document', data);
+                    var html_document = '';
+                    $.each(data.library_documents, function(i) {
+                        
+                        html_document += `<div class="listg" id="library_documents_div">
+                                            <div class="list-text">
+                                            <i class="bx bx-book"></i>
+                                            <h4 class="ms-2">${data.library_documents[i].description}</h4>
+                                        </div>
+                                        <div class="num-text">
+                                            <span>${data.library_documents[i].library_document_count}</span>
+                                        </div>
                                         </div>`;
-                });
-                $('#library_audios_div').html(html_audio);
-            } else if (data && data.library_kits) {
-                $.each(data.library_kits, function(i) {
-                    html_kit += `<div class="list-text">
-<i class="bx bx-folder"></i>
-                                        <h4 class="ms-2">${data.library_kits[i].name}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_kits[i].library_kit_count}</span>`;
-                });
-                $('#library_kits_div').html(html_kit);
+                    });
+                    $('#main_div').html(html_document);
+                }
+
+                if (data.library_videos) {
+                    console.log('Iam here inside video', data);
+                    var html_video = '';
+                    $.each(data.library_videos, function(i) {
+                        console.log('Iam here inside video', data.library_videos[i].description);
+                        html_video += `<div class="listg" id="library_videos_div"> 
+                                        <div class="list-text">
+                                            <i class="bx bx-video-recording"></i>
+                                            <h4 class="ms-2">${data.library_videos[i].description}</h4>
+                                        </div>
+                                        <div class="num-text">
+                                            <span>${data.library_videos[i].library_video_count}</span>
+                                        </div>
+                                        </div>`;
+                    });
+                    $('#main_div').html(html_video);
+                }
+
+                if (data.library_audios) {
+                    var html_audio = '';
+                    $.each(data.library_audios, function(i) {
+                        html_audio += `<div class="listg" id="library_audios_div">
+                                        <div class="list-text">
+                                            <i class="bx bx-volume-full"></i>
+                                            <h4 class="ms-2">${data.library_audios[i].description}</h4>
+                                        </div>
+                                        <div class="num-text">
+                                            <span>${data.library_audios[i].library_audio_count}</span>
+                                        </div></div>`;
+                    });
+                    $('#main_div').html(html_audio);
+                }
+
+                if (data.library_kits) {
+                    var html_kit = '';
+                    $.each(data.library_kits, function(i) {
+                        html_kit += `<div class="listg" id="library_kits_div"><div class="list-text">
+                                            <i class="bx bx-folder"></i>
+                                            <h4 class="ms-2">${data.library_kits[i].name}</h4>
+                                        </div>
+                                        <div class="num-text">
+                                            <span>${data.library_kits[i].library_kit_count}</span>
+                                        </div></div>`;
+                    });
+                    $('#main_div').html(html_kit);
+                }
             } else {
-
-
-
-                $.each(data.library_documents, function(i) {
-                    html_document += `<div class="list-text">
-                                        <i class="bx bx-book"></i>
-                                        <h4 class="ms-2">${data.library_documents[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_documents[i].library_document_count}</span>
-                                    </div>`;
-                });
-                $.each(data.library_videos, function(i) {
-                    html_video += `<div class="list-text">
-<i class="bx bx-video-recording"></i>
-                                        <h4 class="ms-2">${data.library_videos[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_videos[i].library_video_count}</span>
-                                    </div>`;
-                });
-                $.each(data.library_audios, function(i) {
-                    html_audio += `<div class="list-text">
-<i class="bx bx-volume-full"></i>
-                                        <h4 class="ms-2">${data.library_audios[i].description}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_audios[i].library_audio_count}</span>
-                                        </div>`;
-                });
-                $.each(data.library_kits, function(i) {
-                    html_kit += `<div class="list-text">
-<i class="bx bx-folder"></i>
-                                        <h4 class="ms-2">${data.library_kits[i].name}</h4>
-                                    </div>
-                                    <div class="num-text">
-                                        <span>${data.library_kits[i].library_kit_count}</span>`;
-                });
-                $('#library_documents_div').html(html_document);
-                $('#library_videos_div').html(html_video);
-                $('#library_audios_div').html(html_audio);
-                $('#library_kits_div').html(html_kit);
-
+                // Display a message when no data is returned
+                $('#library_documents_div').html('<p>No data available for this selection.</p>');
+                $('#library_videos_div').html('<p>No data available for this selection.</p>');
+                $('#library_audios_div').html('<p>No data available for this selection.</p>');
+                $('#library_kits_div').html('<p>No data available for this selection.</p>');
             }
-        }),
+        },
+        error: function(err) {
+            console.error('Error fetching data:', err);
+        },
         dataType: 'json'
     });
 }

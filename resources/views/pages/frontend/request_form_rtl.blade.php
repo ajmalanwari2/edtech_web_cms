@@ -70,7 +70,7 @@
                                     @foreach($provinces as $province)
                                         <option {{old('province_id') == $province->id ? 'selected' : ''}}
                                             value="{{$province->id}}">
-                                            {{$province->name}}</option>
+                                             {{$province->number}} - {{$province->name}}</option>
                                         @endforeach
                                 </select>
                                 
@@ -135,6 +135,24 @@ $(document).ready(function() {
                 data: data,
                 success: function(res) {
                     $('#district_id').html(res);
+                }
+            });
+        });
+    });
+    
+       $(document).ready(function() {
+        $('#language').change(function() {
+            let lan_id = $(this).val();
+            let data = {
+                'lang_id': $(this).val(),
+                '_token': '{{ csrf_token() }}',
+            };
+            $.ajax({
+                url: '/get_grades',
+                type: 'post',
+                data: data,
+                success: function(res) {
+                    $('#grade_id').html(res);
                 }
             });
         });

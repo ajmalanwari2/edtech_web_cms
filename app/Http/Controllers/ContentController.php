@@ -171,6 +171,8 @@ class ContentController extends Controller
             if (strpos($newString, '.') !== false) {
                 $newString = str_replace('.', '-', $newString);
             }
+            
+            
         $chapterContent->title = $newString;
         $chapterContent->type = $request->type;
         if ($request->type == "file" && isset($request->file) && $request->file !== 'undefined') {

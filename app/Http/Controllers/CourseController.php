@@ -349,7 +349,6 @@ $courseCount = DB::select('select
                         c.id,
                        c.name,
                        c.description,
-                       c.state as course_state,
                        cb.state as bookmark_state,
                        CASE
                        WHEN c.icon != "" THEN CONCAT("storage/uploads/course_icon/", c.icon)
@@ -367,6 +366,40 @@ $courseCount = DB::select('select
                     from courses as c
                     LEFT JOIN course_bookmarks AS cb ON c.id = cb.course_id AND cb.user_id = '.$user_id.'    
                     where c.language = \''.$grade_language.'\'');
+
+
+ foreach ($courses['courses'] as &$course) {
+                        $quizResult = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                        ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+                       CASE
+            WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+                THEN \'passed\'
+            ELSE
+                CASE
+                    WHEN COUNT(qr.id) = 0 THEN NULL
+                    ELSE \'failed\'
+                END
+        END AS student_result
+                    FROM course_quiz_results AS qr
+                    JOIN courses AS c ON c.id = qr.course_id
+                    WHERE c.id = ' . $course->id
+                    .' AND qr.student_id = '.$user_id);
+                    
+                        if (!empty($quizResult)) {
+                            $courseState = $quizResult[0]->student_result;
+                    
+                            if ($courseState === 'passed') {
+                                $course->course_state = '1';
+                            } elseif ($courseState === 'failed') {
+                                $course->course_state = '0';
+                            } else {
+                                $course->course_state = NULL;
+                            }
+                        } else {
+                            // Handle the case where $attemptedQuizzes is empty
+                            $course->course_state = NULL;
+                        }
+                    }
 
                 if($courses == []){
                     return response(['message' => 'No course is available'], 422)
@@ -421,11 +454,40 @@ $courseCount = DB::select('select
                     LEFT JOIN course_states AS cs ON c.id = cs.course_id and cs.user_id = '.$user_id.'                      
                         WHERE c.id = ?
                         GROUP BY c.id, cqr.state', [$course_id]);
+                        
+                        
+                        $quizResult = DB::select('SELECT COUNT(qr.id) as number_attempted_quizzes,
+                        ROUND(((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)), 2) as percentage_mark,
+                       CASE
+            WHEN ((SUM(qr.total_correct_answers) * 100)/SUM(qr.total_questions)) >= 70
+                THEN \'passed\'
+            ELSE
+                CASE
+                    WHEN COUNT(qr.id) = 0 THEN NULL
+                    ELSE \'failed\'
+                END
+        END AS student_result
+                    FROM course_quiz_results AS qr
+                    JOIN courses AS c ON c.id = qr.course_id
+                    WHERE c.id = ' . $course_id
+                    .' AND qr.student_id = '.$user_id);
+
+
 
                     $content['course_title'] = $startQuiz[0]->course_name;
                     $content['total_quiz_time'] = $startQuiz[0]->total_quiz_time;
                     $content['total_question'] = $startQuiz[0]->total_question;
-                    $content['quiz_status'] = $startQuiz[0]->quiz_status;
+                     $content['quiz_status'] = NULL;
+                    if(isset($quizResult[0])){
+                       
+                        if($quizResult[0]->student_result === 'passed'){
+                            $content['quiz_status'] = '1';
+                        }elseif($quizResult[0]->student_result === 'failed'){
+                            $content['quiz_status'] = '0';
+                        }else{
+                            $content['quiz_status'] = NULL;
+                        }
+                }
 
         $questions = DB::select('
         select

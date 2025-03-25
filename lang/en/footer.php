@@ -16,5 +16,6 @@ return [
     'request_access' => 'Request Access',
     'courses' => 'Courses',
     'android' => 'Android',
-    'apple' => 'Apple',
+    'apple' => 'Apple',  
+    'terms_and_policy' => 'Privacy Policy',
 ];

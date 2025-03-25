@@ -73,7 +73,7 @@
                                     @foreach($provinces as $province)
                                         <option {{old('province_id') == $province->id ? 'selected' : ''}}
                                             value="{{$province->id}}">
-                                            {{$province->name}}</option>
+                                              {{$province->number}} - {{$province->name}}</option>
                                         @endforeach
                                 </select>
                                 <select name="language" class="form-control form-control-lg" required id="language">
@@ -114,16 +114,13 @@
 @section('scripts')
 
 <script>
-    $(document).ready(function() {
+       $(document).ready(function() {
     $('#grade_id').show();
-    $('#language').show();
 $('#role').change(function(){
-    if($('#role').val() == 'parent') {
+    if($('#role').val() != 'student') {
         $('#grade_id').hide();
-        $('#language').hide();
     }else{
         $('#grade_id').show();
-        $('#language').show();
     }
 });
 });
@@ -140,6 +137,24 @@ $(document).ready(function() {
                 data: data,
                 success: function(res) {
                     $('#district_id').html(res);
+                }
+            });
+        });
+    });
+    
+       $(document).ready(function() {
+        $('#language').change(function() {
+            let lan_id = $(this).val();
+            let data = {
+                'lang_id': $(this).val(),
+                '_token': '{{ csrf_token() }}',
+            };
+            $.ajax({
+                url: '/get_grades',
+                type: 'post',
+                data: data,
+                success: function(res) {
+                    $('#grade_id').html(res);
                 }
             });
         });
