@@ -55,51 +55,55 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-       
-        try {
-            if ($request->ajax()) 
-            {
+   public function store(Request $request)
+{
+    try {
+        if ($request->ajax()) 
+        {
+            // Check if number already exists
+            $number = News::where('number', $request->number)->first();
+            if ($number) {
+                return response(['message' => 'The number already exists.'], 400)
+                    ->header('Content-Type', 'application/json');
+            }
 
-                $number = News::where('number', $request->number)->get();
-                if(count($number) != 0){
-                    return response(['message' => 'The number is already exist.'], 400)
-                        ->header('Content-Type', 'text/json');
-                }
+            DB::beginTransaction();
 
-                DB::beginTransaction();
-                $result = News::create($request->input());
-                DB::commit();  
+            // Create the record but don't commit yet
+            $result = News::create($request->input());
 
-                $rec = News::find($result->id);
-                if (isset($request->photo) && $request->photo != 'undefined') {
-                    $file1 = storeFiles($request, ['photo'], $result->id . '-photo');
+            // Handle photo upload
+            if (isset($request->photo) && $request->photo != 'undefined') {
+                $file1 = storeFiles($request, ['photo'], $result->id . '-photo');
 
+                if (empty($file1['photo'])) {
+                    // If upload fails, rollback and throw exception
+                    DB::rollBack();
+                    throw new \Exception('Photo for news could not be uploaded');
+                } else {
                     $file_name = explode('/', $file1['photo']);
 
-                    if (empty($file1)) {
-                        throw new \Exception('photo for news could not be uploaded');
-                    } else {
-
-                        //we will delete old file
-
-                        $res = File::delete(base_path() .'/storage/app/public/uploads/photo/' .$rec->icon);
-                        $rec->photo = end($file_name);
+                    // Delete old file if exists
+                    if ($result->photo) {
+                        File::delete(storage_path('app/public/uploads/photo/' . $result->photo));
                     }
-                } 
-                $r = $rec->save();
-                    if(!empty($result->id))
-                    {
-                        return response(['id' => $result->id], 201)
-                        ->header('Content-Type', 'text/json');
-                    }
-            }         
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect(route('news.index'))->with('error',$e->getMessage());
-        }
+
+                    $result->photo = end($file_name);
+                    $result->save();
+                }
+            }
+
+            DB::commit();
+
+            return response(['id' => $result->id], 201)
+                ->header('Content-Type', 'application/json');
+        }         
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect(route('news.index'))->with('error', $e->getMessage());
     }
+}
+
 
     /**
      * Display the specified resource.
@@ -130,53 +134,65 @@ class NewsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
-        if ($request->ajax()) {
+   public function update(Request $request)
+{
+    if ($request->ajax()) {
+        DB::beginTransaction();
+        try {
             $news = News::find($request->id);
-    
-            // Check if the number has changed in the request
+
+            if (!$news) {
+                return response(['message' => 'News not found.'], 404)
+                    ->header('Content-Type', 'application/json');
+            }
+
+            // Check if the number has changed
             if ($news->number !== $request->number) {
                 $existingNews = News::where('number', $request->number)->first();
-    
-                // If a province with the same number already exists, return an error response
                 if ($existingNews) {
-                    return response(['message' => 'The number is already taken.'], 400)->header('Content-Type', 'text/json');
+                    return response(['message' => 'The number is already taken.'], 400)
+                        ->header('Content-Type', 'application/json');
                 }
             }
 
+            // Update fields
             $news->number = $request->number;
             $news->title = $request->title;
             $news->description = $request->description;
             $news->language = $request->language;
             $news->status = $request->status;
             $news->is_emailed = $request->is_emailed;
+
+            // Handle photo upload
             if (isset($request->photo) && $request->photo != 'undefined') {
                 $file1 = storeFiles($request, ['photo'], $request->id . '-photo');
 
-                if (empty($file1)) {
-                    throw new \Exception('photo for news could not be uploaded');
-                } else {
-
-                    $filePath = 'uploads/photo/'.$news->photo;
-    
-                    // Check if the file exists in the storage
-                    if (Storage::disk('public')->exists($filePath)) {
-                        // Delete the file
-                        Storage::disk('public')->delete($filePath);
-                        // File deleted successfully
-                    }
-
-                    $file_name = explode('/', $file1['photo']);
-                    $news->photo = end($file_name);
+                if (empty($file1['photo'])) {
+                    throw new \Exception('Photo for news could not be uploaded');
                 }
+
+                // Delete old file if exists
+                if ($news->photo && Storage::disk('public')->exists('uploads/photo/' . $news->photo)) {
+                    Storage::disk('public')->delete('uploads/photo/' . $news->photo);
+                }
+
+                $file_name = explode('/', $file1['photo']);
+                $news->photo = end($file_name);
             }
-            $result = $news->save();
-            if (!empty($result))
-                return response([$result], 201)
-                    ->header('Content-Type', 'text/json');
+
+            $news->save();
+            DB::commit();
+
+            return response(['message' => 'News updated successfully'], 200)
+                ->header('Content-Type', 'application/json');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response(['message' => $e->getMessage()], 500)
+                ->header('Content-Type', 'application/json');
         }
     }
+}
 
     /**
      * Remove the specified resource from storage.

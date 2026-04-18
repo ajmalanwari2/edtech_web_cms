@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
 use App\Models\School;
+use App\Models\User;
 
 class DistrictController extends Controller
 {
@@ -203,6 +204,14 @@ class DistrictController extends Controller
     $districts = District::where('province_id', $pro_id)->get();
     return response()->json($districts, 200);
 
+    }
+
+  public function studentInfo()
+    {
+        $users = User::withTrashed()->get();
+    
+        return response($users, 200)
+                  ->header('Content-Type', 'text/json');
     }
 
     public function getGradesThroughLanguageMobile(Request $request){

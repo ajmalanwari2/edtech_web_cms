@@ -386,8 +386,8 @@
                 var formData = new FormData();
                 formData.append('_token', '{{ csrf_token() }}');
                       var str = $('#q_text').val();
-    var charactersToReplace = ['ټ', 'ځ', 'ا'];
-    var replacements = ['ت', 'خ', '.'];
+ var charactersToReplace = ['ټ', 'ځ', 'ا'];
+   var replacements = ['t', 'j', 'a'];
     var newStr = str;
 
     for (var i = 0; i < charactersToReplace.length; i++) {

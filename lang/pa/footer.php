@@ -4,7 +4,7 @@ return [
 
     'about_us' => 'زمونږ په اړه ',
     'description' => 'توضیحات ',
-    'home' => 'کور ',
+    'home' => 'کور پاڼه ',
     'download' => 'ډونلوډ',
     'contact_us' => 'زمونږ سره اړیکه ',
     'address' => 'آدرس ',

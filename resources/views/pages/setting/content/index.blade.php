@@ -488,7 +488,6 @@ var table = $('#chapter').DataTable({
     order: [
         [0, 'desc']
     ], // Apply descending order to the first column
-    serverSide: true
 });
 
 var csrfToken = '{{ csrf_token() }}'; // Assign CSRF token value to a JavaScript variable

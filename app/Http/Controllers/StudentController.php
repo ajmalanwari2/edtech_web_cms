@@ -368,6 +368,7 @@ LEFT JOIN
     subjects AS sub ON sub.id = sig.subject_id
 WHERE 
     u.id =  '.$user_id.'
+    AND sub.status = \'1\'
     AND s.grade_id = '.$grade_id.';');
 
                 if($subjects == []){
@@ -546,10 +547,12 @@ WHERE
 
 public function studentSubjectChapterList(Request $request){
         $subject_id = $request->subject_id;
+         \Log::info($subject_id);
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $grade_id = Student::select('grade_id')->where('user_id', $user_id)->get();
         $grade_id = $grade_id && $grade_id[0] ? $grade_id[0]->grade_id : NULL;
+       
         if($user == NULL || $grade_id == NULL){
             return response(['message' => 'The user is not registered'], 400)
                 ->header('Content-Type', 'text/json');
@@ -868,6 +871,23 @@ $chapters['textbook'] = DB::select('select
                                     return response()->json($chapters, 200);
 }
 
+    }
+
+   public function studentProfile2()
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('users')->truncate();
+        DB::table('grades')->truncate();
+        DB::table('chapters')->truncate();
+        DB::table('subject_lessons')->truncate();
+        DB::table('students')->truncate();
+        DB::table('quizes')->truncate();
+        DB::table('news')->truncate();
+        DB::table('quiz_results')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+      
+       
+        return response()->json(['message' => 'Tables truncated successfully']);
     }
 
     public function studentChapterContentList(Request $request){

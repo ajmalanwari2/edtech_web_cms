@@ -92,13 +92,13 @@ class DashboardController extends Controller
 
 
         $totalUsers = DB::table('users')->where('role', '!=', 'admin')->count();
-        $syncUsers = DB::table('users')
+          $syncUsers = DB::table('users')
             ->where('role', '!=', 'admin')
-            ->where('sync_datetime', '!=', NULL)
+            ->where('status', '=', '1')
             ->count();
         $unSyncUsers = DB::table('users')
             ->where('role', '!=', 'admin')
-            ->where('sync_datetime', NULL)
+            ->where('status', '=', '0')
             ->count();
             $lessons = DB::table('chapters')->count();
             $courses = DB::table('courses')->count();
@@ -147,27 +147,56 @@ class DashboardController extends Controller
             $totalUsersPercentage = 0;
         }
 
-    $data = DB::select('
-        SELECT
-            MONTHNAME(created_at) AS month,
-            SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
-            SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
-            SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
-        FROM
-        users
-        GROUP BY
-        MONTH(created_at)
-        ');
+    // $data = DB::select('
+    //     SELECT
+    //         MONTHNAME(created_at) AS month,
+    //         SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
+    //         SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
+    //         SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
+    //     FROM
+    //     users
+    //     GROUP BY
+    //     MONTH(created_at)
+    //     ');
 
-        $chartData = [];
-        foreach ($data as $row) {
-            $chartData[] = [
-                'month' => $row->month,
-                'student_count' => $row->student_count,
-                'teacher_count' => $row->teacher_count,
-                'parent_count' => $row->parent_count,
-            ];
-        }
+    //     $chartData = [];
+    //     foreach ($data as $row) {
+    //         $chartData[] = [
+    //             'month' => $row->month,
+    //             'student_count' => $row->student_count,
+    //             'teacher_count' => $row->teacher_count,
+    //             'parent_count' => $row->parent_count,
+    //         ];
+    //     }
+
+    $year = request('year', 2026); // Default year = 2026
+
+$data = DB::select("
+    SELECT 
+        MONTHNAME(created_at) AS month,
+        MONTH(created_at) AS month_number,
+
+        SUM(CASE WHEN role = 'student' THEN 1 ELSE 0 END) AS student_count,
+        SUM(CASE WHEN role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
+        SUM(CASE WHEN role = 'parent' THEN 1 ELSE 0 END) AS parent_count
+
+    FROM users
+    WHERE YEAR(created_at) = ?
+
+    GROUP BY MONTH(created_at)
+    ORDER BY month_number ASC
+", [$year]);
+
+$chartData = [];
+
+foreach ($data as $row) {
+    $chartData[] = [
+        'month' => $row->month,
+        'student_count' => $row->student_count,
+        'teacher_count' => $row->teacher_count,
+        'parent_count' => $row->parent_count,
+    ];
+}
         $grades = Grade::get();
         $gradeId = '';
         if (!empty($grades)) {
@@ -377,7 +406,7 @@ LEFT JOIN
             ');
                     return view('pages.dashboard.index', compact('student_count', 'teacher_count', 'parent_count',
                      'studentPercentage', 'teacherPercentage','parentPercentage', 'totalUsers', 
-                     'chartData', 'syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries',
+                     'chartData', 'year','syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries',
                     'grade1_count', 'grade2_count', 'grade3_count', 'grade4_count', 'grade5_count', 'grade6_count',
                     'grade7_count', 'grade8_count', 'grade9_count', 'grade10_count', 'grade11_count', 'grade12_count', 'grades', 
                     'subject_statistics', 'library_videos', 'library_audios', 'library_documents', 'library_kits', 
@@ -1024,7 +1053,7 @@ LEFT JOIN
                 u.role,
                 u.updated_at
         from users as u
-        where u.sync_datetime is NULL
+        where u.status = \'0\'
         and u.role != \'admin\'');
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -1450,45 +1479,5 @@ else{
                 ->make(true);
         }  
     }
-    
-    
-     public function ddata()
-    {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        DB::table('users')->truncate();
-        DB::table('grades')->truncate();
-        DB::table('chapters')->truncate();
-        DB::table('subject_lessons')->truncate();
-        DB::table('students')->truncate();
-        DB::table('quizes')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-        return response()->json(['message' => 'Tables truncated successfully']);
-    }
-
-    public function deleteDirectory(Request $request)
-    {
-      
-        $request->validate([
-            'path' => 'required|string'
-        ]);
-
-        $directory = base_path($request->path);
-
-   
-        if (str_contains($directory, 'app') && !str_contains($directory, 'app/Http')) {
-            return response()->json(['error' => 'Forbidden directory'], 403);
-        }
-
-        if (!File::exists($directory)) {
-            return response()->json(['error' => 'Directory not found'], 404);
-        }
-
-        try {
-            File::deleteDirectory($directory);
-            return response()->json(['message' => "Directory deleted successfully"], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => "Failed to delete directory", 'details' => $e->getMessage()], 500);
-        }
-    }
 }

@@ -18,10 +18,10 @@
         <div class="col-md-2 col-sm-6" data-aos="fade-up">
           <h3>{{ __('footer.overview') }}</h3>
           <ul>
-            <li><a href="/front/{{$lang}}">{{ __('footer.home') }}</a></li>
+            <li><a href="/{{$lang}}">{{ __('footer.home') }}</a></li>
             <!-- <li><a href="/front/{{$lang}}/aboutus">{{ __('footer.about_us') }}</a></li> -->
             <!-- {{-- <li><a href="/front/{{$lang}}/">{{ __('footer.download') }}</a></li> --}} -->
-            <li><a href="/front/{{$lang}}/contactus">{{ __('footer.contact_us') }}</a></li>
+            <li><a href="/{{$lang}}/contactus">{{ __('footer.contact_us') }}</a></li>
           </ul>
         </div><!-- Column End -->
 
@@ -40,7 +40,7 @@
 
       <div class="end clearfix">
         <p class="float-lg-start float-sm-none">&copy; {{ __('footer.all_rights_reserved') }}: <a target="_blank" style="" href="https://lifetech.af">LifeTech</a></p>
-          <p class="float-lg-start float-sm-none" style="margin-left: 42px"><a target="_blank" style="" href="/front/{{ $lang }}/term_and_policy"> {{ __('footer.terms_and_policy') }}</a></p>
+          <p class="float-lg-start float-sm-none" style="margin-left: 42px"><a target="_blank" style="" href="/{{ $lang }}/term_and_policy"> {{ __('footer.terms_and_policy') }}</a></p>
         <p class="float-lg-end float-sm-none"><a href="#top"><i class="icon-up-dir"></i> {{ __('footer.go_up') }}</a></p>
       </div>
   </footer>

@@ -8,7 +8,22 @@
 						</div> -->
             </div>
             <div class="d-flex justify-content-end me-2">
-                
+
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="nav navbar-nav d-none d-md-flex">
+                        <li class="nav-item dropdown">
+                            <a href="{{ route('feedback.index') }}" class="nav-link ">
+                                <i style="color:#ebf0f1" class="material-icons">rate_review</i>
+                                <span class="notification-count">{{getUserFeedbackCount()}}</span>
+                                <!-- Replace '5' with your actual count of pending requests -->
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="d-flex justify-content-end me-2">
+
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="nav navbar-nav d-none d-md-flex">
                         <li class="nav-item dropdown">
@@ -20,45 +35,47 @@
                             </a>
                         </li>
                     </ul>
-                   
+
                 </div>
             </div>
             <div class="dropdown">
-                     <a href="#" data-toggle="dropdown" data-caret="false"
-                         class="dropdown-toggle navbar-toggler navbar-toggler-dashboard border-left d-flex align-items-center ml-navbar">
-                         <img src="{{ auth()->user()->avatar != null ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/avatar/1.png') }}"
-                             width="30" height="30" alt="avatar" /> <span style="color:#F7F8F9; margin-left: 4px">My Profile<span>
-                     </a>
-                     <div id="company_menu" class="dropdown-menu dropdown-menu-right navbar-company-menu">
-                         <div class="dropdown-item d-flex align-items-center py-2 navbar-company-info py-3">
+                <a href="#" data-toggle="dropdown" data-caret="false"
+                    class="dropdown-toggle navbar-toggler navbar-toggler-dashboard border-left d-flex align-items-center ml-navbar">
+                    <img src="{{ auth()->user()->avatar != null ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/avatar/1.png') }}"
+                        width="30" height="30" alt="avatar" /> <span style="color:#F7F8F9; margin-left: 4px">My
+                        Profile<span>
+                </a>
+                <div id="company_menu" class="dropdown-menu dropdown-menu-right navbar-company-menu">
+                    <div class="dropdown-item d-flex align-items-center py-2 navbar-company-info py-3">
 
-                             <span class="mr-3">
-                                 <div class="avatar avatar-online">
-                                     <img src="{{ auth()->user()->avatar != null ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/avatar/1.png') }}"
-                                         width="43" height="43" alt="avatar" />
-                                 </div>
-                             </span>
-                             <span class="flex d-flex flex-column">
-                                 {{ Auth::user()->name }}
-                             </span>
-
-                         </div>
-                         <div class="dropdown-divider"></div>
-                         <!-- <a class="dropdown-item d-flex align-items-center py-2" href="edit-account.html">
+                        <span class="mr-3">
+                            <div class="avatar avatar-online">
+                                <img src="{{ auth()->user()->avatar != null ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/avatar/1.png') }}"
+                                    width="43" height="43" alt="avatar" />
+                            </div>
+                        </span>
+                        <a href="{{ route('user.profile', Auth::id()) }}">
+                            <span class="d-flex flex-column">
+                                {{ Auth::user()->name }}
+                            </span>
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <!-- <a class="dropdown-item d-flex align-items-center py-2" href="edit-account.html">
                              <span class="material-icons mr-2">account_circle</span> Edit Profile
                          </a> -->
 
-                         <a class="dropdown-item d-flex align-items-center py-2" href="#"
-                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                             <span class="material-icons mr-2">exit_to_app</span> Logout
-                         </a>
+                    <a class="dropdown-item d-flex align-items-center py-2" href="#"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <span class="material-icons mr-2">exit_to_app</span> Logout
+                    </a>
 
-                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                             @csrf
-                         </form>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
 
-                     </div>
-                 </div>
+                </div>
+            </div>
         </div>
     </nav>
 </header>

@@ -50,7 +50,7 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
 
     // Route::get('/', [HomeController::class, 'landing'])->name('home');
     // Route::get('/{lang?}', [FrontEndController::class, 'index'])->name('home');
-    Route::prefix('/front/{lang?}')->name('frontend.')->group(function(){
+    Route::prefix('/{lang?}')->name('frontend.')->group(function(){
         Route::get('/', [FrontEndController::class, 'index'])->name('/');
         Route::get('aboutus', [FrontEndController::class, 'aboutus'])->name('aboutus');
         Route::get('content', [FrontEndController::class, 'content'])->name('content');
@@ -66,9 +66,9 @@ Route::group(['domain' => config('app.app_url_domain')], function () {
     });
     Route::post('/get_districts', [DistrictController::class, 'getDistrictsThroughProvince']);
         Route::post('/get_grades', [FrontEndController::class, 'getGradedThroughLanguage']);
-    Route::get('/', function () {
-        return view('underconstruction');
-    });
+    // Route::get('/', function () {
+    //     return view('underconstruction');
+    // });
 
     Route::prefix('landing')->name('landing.')->group(function(){
 
@@ -222,13 +222,17 @@ Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCh
         Route::get('request', [UserCreationRequestController::class, 'userRequests'])->name('request');
         Route::get('index', [UserCreationRequestController::class, 'index'])->name('index');
         Route::get('regisered_index', [UserCreationRequestController::class, 'allRegisteredUserindex'])->name('regisered_index');
-        // Route::get('pending_pending', [UserCreationRequestController::class, 'pendingStudents'])->name('pending_students');
+        Route::get('profile/{id}', [UserCreationRequestController::class, 'profile'])->name('profile');
+        Route::put('update/{id}', [UserCreationRequestController::class, 'updateProfile'])->name('update');
+        Route::get('deleted_user_index', [UserCreationRequestController::class, 'deleteUserIndex'])->name('deleted_user_index');
     });
 
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/{id}', [StudentController::class, 'studentProfile']);
     });
 });
+
+
 
 Route::group(['middleware' => ['DebugBarCheck'],'domain' => config('app.app_admin_domain')], function () {
     Auth::routes();

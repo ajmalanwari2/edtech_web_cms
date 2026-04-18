@@ -5,7 +5,7 @@
 @section('content')
 <div class="page__heading">
     <div class="container-fluid page__container">
-        <h1 class="mb-0">Un Sync Users</h1>
+        <h1 class="mb-0">List of Inactive Users</h1>
     </div>
 </div>
 <div class="container-fluid page__container">
@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header card-header-large bg-light d-flex align-items-center">
                     <div class="flex">
-                        <div class="card-subtitle text-muted">List of Un Sync Users</div>
+                        <div class="card-subtitle text-muted">List of Inactive Users</div>
                     </div>
                     <a class="btn btn-danger" href="{{ route('dashboard.index') }}" style="margin-right: 5px;">Back</a>
                     <button type="button" class="btn btn-info" onclick="table.ajax.reload()"
@@ -69,6 +69,18 @@
 
 <script type="text/javascript">
 var table = $('#course').DataTable({
+    dom: 'Bfrtip',
+        lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+        ],
+        buttons: ['pageLength', {
+            extend: 'excelHtml5',
+
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6]
+            }
+        }, ],
     serverSide: true,
     ajax: {
         url: site_url + 'api/dashboard/unsync-users-list',

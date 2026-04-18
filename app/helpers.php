@@ -214,6 +214,16 @@ if (!function_exists('getUserCreationRequestCount')) {
     }
 }
 
+if (!function_exists('getUserFeedbackCount')) {
+    function getUserFeedbackCount()
+    {
+        $count = DB::select("select count(*) as count from feedbacks where type ='feedback'");
+        
+        return $count[0]->count;
+    }
+}
+
+
 if (!function_exists('getProvinceName')) {
     function getProvinceName($id)
     {

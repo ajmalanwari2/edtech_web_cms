@@ -134,6 +134,18 @@
 
 <script type="text/javascript">
 var table = $('#course').DataTable({
+    dom: 'Bfrtip',
+        lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+        ],
+        buttons: ['pageLength', {
+            extend: 'excelHtml5',
+
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+        }, ],
     serverSide: true,
     ajax: {
         url: site_url + 'api/dashboard/teacher-list',

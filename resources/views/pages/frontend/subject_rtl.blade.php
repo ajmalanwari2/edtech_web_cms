@@ -26,7 +26,7 @@
                 <div class="title main-vid-title">
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->grade_name : '' }} ,
                     {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->subject_name : '' }} ,
-                    {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->chapter_name : '' }}
+                    <!-- {{ $subjectContents && $subjectContents[0] ? $subjectContents[0]->chapter_name : '' }} -->
                 </div>
                 <br><br>
                 <div id="video-not-available" style="display:none"><p>ویدیوی آموزشی درس متذکره موجود نمیباشد</p></div>
@@ -49,9 +49,10 @@
                     </div>
                    
                     <div class="p-2">
-                        <a id="book" onclick="book(event, '{{$item->chapter_id}}', '{{$item->grade_name}}', '{{$item->subject_name}}')">
-                            <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
-                        </a>
+                         <a href="javascript:void(0)"
+                                onclick="book(event, '{{ $item->chapter_id }}', '{{ $item->grade_name }}', '{{ $item->subject_name }}')">
+                                <img src="{{ asset('storage/uploads/icon/107-icon-1711815526.png') }}">
+                            </a>
                        
                     </div>
                    
@@ -102,39 +103,43 @@ function video(id, grade_name, subject_name) {
             id: id,
             '_token': '{{ csrf_token() }}'
         },
-        fail: (function() {
-            $.toaster({
-                priority: 'danger',
-                title: 'Info',
-                message: 'There was an error loading the record.'
-            });
-        }),
-        success: (function(data) {
-            var videoNotAvailabe = document.getElementById('video-not-available');
+        dataType: 'json',
+        success: function(data) {
+            var videoNotAvailable = document.getElementById('video-not-available');
             var videoYoutube = document.getElementById('youtube-video');
-            if(data != 'video-not-available'){
-                videoNotAvailabe.style.display = 'none';
+
+            if (data !== 'video-not-available') {
+                videoNotAvailable.style.display = 'none';
                 videoYoutube.style.display = 'block';
-           // Example usage
-           var videoUrl = data.body;
-var videoId = getYouTubeVideoId(videoUrl);
-            // Set chapter details
-            const mainVideo = document.getElementById('main-video');
-    const mainVideoTitle = document.querySelector('.main-vid-title');
-    mainVideo.src = 'https://www.youtube.com/embed/' + videoId;
-    mainVideoTitle.innerText = grade_name + ' ،' + subject_name + ' ،' + data.title;
-}else{
-    
-    videoNotAvailabe.style.display = 'block';
-    videoYoutube.style.display = 'none';
-}       
-        }),
-        dataType: 'json'
+
+                var videoId = getYouTubeVideoId(data.body);
+
+                if (!videoId) {
+                    alert('Invalid YouTube URL');
+                    return;
+                }
+
+                document.getElementById('main-video').src =
+                    'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+
+                document.querySelector('.main-vid-title').innerText =
+                    grade_name + ' ، ' + subject_name + ' ، ' + data.title;
+
+            } else {
+                videoNotAvailable.style.display = 'block';
+                videoYoutube.style.display = 'none';
+            }
+        },
+        error: function() {
+            alert('Error loading video');
+        }
     });
 }
 
+
 function book(event, id, grade_name, subject_name) {
-    var element = event.currentTarget; // Get the target element that triggered the event
+    event.preventDefault(); // stop default anchor behavior
+
     $.ajax({
         type: "POST",
         url: site_url + 'api/book/show',
@@ -142,29 +147,27 @@ function book(event, id, grade_name, subject_name) {
             id: id,
             '_token': '{{ csrf_token() }}'
         },
-        fail: function() {
-            $.toaster({
-                priority: 'danger',
-                title: 'Info',
-                message: 'There was an error loading the record.'
-            });
-        },
-        success: function(data) {
-            if (data !== 'book-not-available') {
-                element.href = 'https://edtecheqra.com/' + data.body;
-                element.target = "_blank"; // Open link in a new tab
+        dataType: 'json',
 
-                // Open the link in a new tab
-                var newTab = window.open(element.href, '_blank');
-                newTab.focus();
-            } else {
-                // Show popup message for unavailable book
+        success: function(data) {
+            if (data === 'book-not-available' || !data.body) {
                 alert('Sorry, the book is currently not available.');
+                return;
             }
+
+            // Build full book URL
+            var bookUrl = 'https://edtecheqra.com/' + data.body;
+
+            // Open book in new tab
+            window.open(bookUrl, '_blank');
         },
-        dataType: 'json'
+
+        error: function() {
+            alert('There was an error loading the book.');
+        }
     });
 }
+
 
 function getYouTubeVideoId(url) {
   // Regular expression pattern to match YouTube video IDs

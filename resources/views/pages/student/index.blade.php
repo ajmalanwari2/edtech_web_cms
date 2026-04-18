@@ -161,7 +161,19 @@
 
 <script type="text/javascript">
     var table = $('#student').DataTable({
-        serverSide: true,
+        dom: 'Bfrtip',
+        lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+        ],
+        buttons: ['pageLength', {
+            extend: 'excelHtml5',
+
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6, 7]
+            }
+        }, ],
+    serverSide: true,
         ajax: {
             url: site_url + 'api/student/list',
             type: 'POST',

@@ -209,9 +209,16 @@
 
     <div class="container">
         <div class="row list">
-            @foreach($newsDari as $n)
+
+            @php
+            $data = ($lang == 'da') ? $newsDari : $newsPashto;
+            $pic = '1';
+            @endphp
+            @foreach($data as $n)
             <div class="col-md-3 item" data-aos="fade-right">
-                <div class="image"><a href="#"><img src="{{ asset('assets/frontend/images/pic1.jpg') }}" /></a></div>
+                <div class="image"><a href="#"><img
+                            src="{{ asset('storage/app/public/uploads/photo/' . $n->photo) }}"></a></div>
+                <!-- <img src="{{ asset('assets/frontend/images/pic1.jpg') }}" /></a></div> -->
                 <div class="content">
                     <h4><a href="#">{{$n->title}}</a></h4>
                     <div class="posted">
@@ -219,7 +226,11 @@
                             توسطه: ادی تیک</span>
                     </div>
                     <p>{{$n->description}}</p>
-                    <a href="#" class="btn btn-primary">{{ __('home.read_more') }}&raquo;</a>
+                    <a href="javascript:void(0)" class="btn btn-primary read-more-btn" data-title="{{ $n->title }}"
+                        data-description="{{ $n->description }}"
+                        data-image="{{ asset('storage/uploads/photo/' . $n->photo) }}">
+                        {{ __('home.read_more') }}
+                    </a>
                 </div>
             </div>
             @endforeach
@@ -232,10 +243,109 @@
 
 
 
+
+<!-- News Modal -->
+<div id="newsDialog" class="custom-dialog-overlay">
+    <div class="custom-dialog">
+        <button class="custom-dialog-close" id="closeDialog">&times;</button>
+
+        <h3 id="dialogTitle"></h3>
+        <img id="dialogImage" src="" alt="" />
+        <p id="dialogDescription"></p>
+    </div>
+</div>
+
+
 @endsection
 @section('styles')
+<style>
+/* Overlay */
+.custom-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Dialog box */
+.custom-dialog {
+    background: #fff;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    direction: rtl;
+    animation: dialogFadeIn 0.3s ease;
+}
+
+/* Image */
+.custom-dialog img {
+    width: 100%;
+    height: auto;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+/* Close button */
+.custom-dialog-close {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    /* RTL */
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Animation */
+@keyframes dialogFadeIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
 
 @stop
 @section('scripts')
+<script>
+document.querySelectorAll('.read-more-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('dialogTitle').innerText = this.dataset.title;
+        document.getElementById('dialogDescription').innerText = this.dataset.description;
+        document.getElementById('dialogImage').src = this.dataset.image;
+
+        document.getElementById('newsDialog').style.display = 'flex';
+    });
+});
+
+// Close button
+document.getElementById('closeDialog').addEventListener('click', function() {
+    document.getElementById('newsDialog').style.display = 'none';
+});
+
+// Close when clicking outside
+document.getElementById('newsDialog').addEventListener('click', function(e) {
+    if (e.target === this) {
+        this.style.display = 'none';
+    }
+});
+</script>
+
 
 @stop

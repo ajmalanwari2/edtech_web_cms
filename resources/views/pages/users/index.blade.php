@@ -406,15 +406,27 @@
 @endsection
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}" />
+<!-- <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}" /> -->
 
 @stop
 @section('scripts')
-<script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+<!-- <script src="{{ asset('assets/js/jquery.dataTa/bles.min.js') }}"></script> -->
 
 
 <script type="text/javascript">
 var table = $('#user').DataTable({
+    dom: 'Bfrtip',
+        lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+        ],
+        buttons: ['pageLength', {
+            extend: 'excelHtml5',
+
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            }
+        }, ],
     serverSide: true,
     ajax: {
         url: site_url + 'api/user/list',
@@ -424,7 +436,8 @@ var table = $('#user').DataTable({
             '_token': '{{ csrf_token() }}'
         }
     },
-    columns: [{
+    columns: [
+        {
             data: 'id'
         },
         {
@@ -462,7 +475,6 @@ var table = $('#user').DataTable({
         }
     ],
     processing: true,
-    serverSide: true
 });
 
 function saveForm(id) {

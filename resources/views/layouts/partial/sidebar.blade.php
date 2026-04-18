@@ -82,6 +82,13 @@
                         </a>
                         <span class="tooltip">Manage Users</span>
                     </li>
+                     <li class="accordion-body no-padding">
+                        <a href="{{ route('user.deleted_user_index') }}">
+                            <i class='bx bx-user-check'></i>
+                            <span class="links_name">Delete Requests</span>
+                        </a>
+                        <span class="tooltip">Delete Requests</span>
+                    </li>
                 </ul>
             </li>
             <li>

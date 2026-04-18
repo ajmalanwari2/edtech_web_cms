@@ -18,7 +18,7 @@
     @endphp
     @foreach($data as $g)
     <div class="vid-item"><!-- Video Item Started -->
-    <a href="/front/{{$lang}}/grade/{{$g->grade_id}}">
+    <a href="/{{$lang}}/grade/{{$g->grade_id}}">
         <div class="row">
             <div class="col-md-4 video-wrap">
                     <div class="video_no_youtube vid_album">

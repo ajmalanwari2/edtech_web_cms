@@ -20,6 +20,43 @@ class ChapterController extends Controller
         //
     }
 
+// public function list(Request $request)
+// {
+//     if ($request->ajax()) {
+
+//         $query = DB::table('chapters as c')
+//             ->select(
+//                 'c.id',
+//                 'c.number',
+//                 'c.updated_at',
+//                 'c.name',
+//                 'c.status',
+//                 DB::raw('MAX(q.id) as quiz_included'),
+//                 DB::raw('GROUP_CONCAT(DISTINCT sl.type SEPARATOR ", ") as lesson_types'),
+//                 'g.name as grade_name',
+//                 's.name as subject_name'
+//             )
+//             ->join('grades as g', 'g.id', '=', 'c.grade_id')
+//             ->join('subjects as s', 's.id', '=', 'c.subject_id')
+//             ->leftJoin('subject_lessons as sl', 'c.id', '=', 'sl.chapter_id')
+//             ->leftJoin('quizes as q', 'c.id', '=', 'q.chapter_id')
+//             ->groupBy('c.id')
+//             ->orderByDesc('c.updated_at');
+
+//         return DataTables::of($query)
+//             ->addIndexColumn()
+//             ->addColumn('chapter_status', fn($row) => $row->status ? 'Active' : 'Inactive')
+//             ->addColumn('lesson_types', fn($row) => $row->lesson_types ?? 'N/A')
+//             ->addColumn('quiz_included', fn($row) => $row->quiz_included ? 'Yes' : 'No')
+//             ->addColumn('actions', fn($row) =>
+//                 '<a class="dropdown-item" onclick="loadRecord('.$row->id.')" href="javascript:void(0)" data-toggle="modal" data-target="#modal-view">
+//                 <i class="material-icons" style="color:SlateBlue">visibility</i></a>'
+//             )
+//             ->rawColumns(['actions'])
+//             ->make(true);
+//     }
+// }
+
 
     public function list(Request $request){
         if ($request->ajax()) {

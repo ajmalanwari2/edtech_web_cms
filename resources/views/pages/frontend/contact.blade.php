@@ -14,7 +14,7 @@
                     session(['msg'=>'']);
                     @endphp
                     <div class="form-group subscribe_popup contactform">
-                    <form action="/front/{{ $lang }}/contact_submit" method="POST">
+                    <form action="/{{ $lang }}/contact_submit" method="POST">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                             <input name="name" type="text" class="form-control form-control-lg" 
                                 placeholder="{{ __('contact.full_name') }}" >

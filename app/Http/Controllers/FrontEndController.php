@@ -87,6 +87,15 @@ class FrontEndController extends Controller
                 created_at
             from news
             where language = \'da\'');
+        $newsPashto = DB::select('
+            select
+                id,
+                title,
+                description,
+                photo,
+                created_at
+            from news
+            where language = \'pa\'');
 
         if ($this->lang == 'en') {
             return view('pages.frontend.home', compact(
@@ -104,7 +113,8 @@ class FrontEndController extends Controller
                 'videoCount',
                 'audioCount',
                 'documentCount',
-                'newsDari'
+                'newsDari',
+                'newsPashto'
             ));
         }
     }
@@ -198,9 +208,9 @@ class FrontEndController extends Controller
         $districts = District::all();
         // dd(\App::getLocale());
         $lang = $this->getLang();
-        $grades = Grade::where('status', '1', )->where('language', $lang )->get();
+        $grades = Grade::where('status', '1')->where('language', $lang )->get();
         if ($this->lang == 'en') {
-            $grades = Grade::where('status', '1', )->where('language', 'pa' )->get();
+            $grades = Grade::where('status', '1')->where('language', 'pa' )->get();
             return view('pages.frontend.request_form', compact('lang', 'grades', 'provinces', 'districts'));
         } else {
             return view('pages.frontend.request_form_rtl', compact('lang', 'grades', 'provinces', 'districts'));
@@ -315,6 +325,7 @@ LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'pa\'
 and g.status = \'1\'
+and s.status = \'1\'
 GROUP BY g.id, g.name, g.language');
             return view('pages.frontend.content',compact('lang', 'gradesEnglish'));
         }else{
@@ -342,6 +353,7 @@ LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'da\'
 and g.status = \'1\'
+and s.status = \'1\'
 GROUP BY g.id, g.name, g.language');
 
 $gradesPashto = DB::select('
@@ -368,6 +380,7 @@ LEFT JOIN subjects_in_grades AS sig ON g.id = sig.grade_id
 LEFT JOIN subjects AS s ON s.id = sig.subject_id
 WHERE g.language = \'pa\'
 and g.status = \'1\'
+and s.status = \'1\'
 GROUP BY g.id, g.name, g.language');
             return view('pages.frontend.content_rtl',compact('lang', 'gradesDari', 'gradesPashto'));
         }
@@ -431,7 +444,8 @@ JOIN subjects s ON s.id = ch.subject_id
 JOIN subjects_in_grades sig ON s.id = sig.subject_id
 JOIN grades g ON g.id = sig.grade_id
 Left join subject_lessons as sl on sl.chapter_id = ch.id
-    where s.id = :subject_id
+    where  s.status = \'1\'
+    and s.id = :subject_id
     AND g.id = :grade_id';
 
 $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' => $grade_id]);
@@ -464,25 +478,48 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         }
     }
 
-    public function showVideo(Request $request)
-    {
-        if ($request->ajax()) {
-            $video = Content::select('id', 'title', 'body')
-            ->where('chapter_id', $request->id)
-            ->where('type', 'video')->first();
+    // public function showVideo(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $video = Content::select('id', 'title', 'body')
+    //         ->where('chapter_id', $request->id)
+    //         ->where('type', 'video')->first();
            
     
-            if ($video) {
+    //         if ($video) {
                 
-                return response()->json($video);
-            }else{
-                return response()->json('video-not-available');
-            }
-        }
+    //             return response()->json($video);
+    //         }else{
+    //             return response()->json('video-not-available');
+    //         }
+    //     }
     
  
-    }
+    // }
     
+    public function showVideo(Request $request)
+{
+    if ($request->ajax()) {
+        $video = Content::where('chapter_id', $request->id)
+            ->where('type', 'video')
+            ->orderBy('id', 'desc') // IMPORTANT
+            ->select('id', 'title', 'body')
+            ->first();
+
+        if (!$video || empty($video->body)) {
+            return response()->json('video-not-available');
+        }
+
+        return response()->json([
+            'id'    => $video->id,
+            'title' => $video->title,
+            'body'  => $video->body
+        ]);
+    }
+
+    return response()->json('invalid-request', 400);
+}
+
     
      public function term_and_policy()
     {
@@ -497,24 +534,30 @@ $subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' =
         }
     }
 
-    public function showBook(Request $request)
-    {
-        if ($request->ajax()) {
-            $book = Content::select('id', 'title', 'body')
-            ->where('chapter_id', $request->id)
-            ->where('type', 'file')->first();
-           
-    
-            if ($book) {
-                
-                return response()->json($book);
-            }else{
-                return response()->json('book-not-available');
-            }
+ public function showBook(Request $request)
+{
+    if ($request->ajax()) {
+
+        $book = Content::where('chapter_id', $request->id)
+            ->where('type', 'file')
+            ->orderBy('id', 'desc') // IMPORTANT FIX
+            ->select('id', 'title', 'body')
+            ->first();
+
+        if (!$book || empty($book->body)) {
+            return response()->json('book-not-available');
         }
-    
- 
+
+        return response()->json([
+            'id'    => $book->id,
+            'title' => $book->title,
+            'body'  => $book->body
+        ]);
     }
+
+    return response()->json('invalid-request', 400);
+}
+
 
 
 

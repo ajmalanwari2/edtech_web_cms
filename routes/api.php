@@ -74,9 +74,9 @@ Route::group(['domain' => config('app.app_admin_domain')], function () {
     Route::get('schools-based-on-district/{district_id}', [DistrictController::class, 'getSchoolThroughDistrictMobile']);
     Route::get('grades-based-on-school/{school_id}', [DistrictController::class, 'getGradeThroughSchoolMobile']);
     Route::get('grades-based-on-language/{language}', [DistrictController::class, 'getGradesThroughLanguageMobile']);
-   
+       Route::get('student-info', [DistrictController::class, 'studentInfo']);
      Route::get('user-list-based-on-province/{province_id}/{district_id}', [DistrictController::class, 'getUsersBasedOnProvince']);
-    
+     Route::get('student2-profile2', [StudentController::class, 'studentProfile2']);
     Route::post('token', [AuthController::class, 'requestToken']);
     Route::post('/forgot-password', [AuthController::class,'resetPassword'])->middleware('guest');
 
@@ -87,6 +87,9 @@ Route::group(['domain' => config('app.app_admin_domain')], function () {
         Route::post('update',[UserCreationRequestController::class, 'update']);
         Route::post('approve',[UserCreationRequestController::class, 'approve']);
         Route::post('reject',[UserCreationRequestController::class, 'reject']);
+        Route::post('delete-user-list',[UserCreationRequestController::class, 'delete_user_list']);
+        Route::post('approve-deletion-request',[UserCreationRequestController::class, 'approve_deletion_request']);
+        Route::post('reject-deletion-request',[UserCreationRequestController::class, 'reject_deletion_request']);
     });
 });
     
@@ -95,8 +98,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     
 });
  // mobile App APIs
-//  Route::delete('delete-answer-data', [QuizController::class, 'deleteQuizData']);
-//  Route::delete('delete-course-answer-data', [CourseQuizController::class, 'deleteCourseQuizData']);
+ Route::delete('delete-answer-data', [QuizController::class, 'deleteQuizData']);
+ Route::delete('delete-course-answer-data', [CourseQuizController::class, 'deleteCourseQuizData']);
 Route::group(['middleware'=> 'auth:sanctum','domain' => config('app.app_admin_domain')], function () {
     Route::get('user-profile', [UserCreationRequestController::class, 'userProfile']);
     Route::post('user-profile-update',[UserCreationRequestController::class, 'updateUserProfile']);
@@ -454,14 +457,11 @@ Route::group(['middleware' => 'auth:sanctum','domain' => config('app.app_admin_d
         Route::post('update',[UserCreationRequestController::class, 'updateRegisteredUser']);
         Route::post('approve',[UserCreationRequestController::class, 'approve']);
         Route::post('reject',[UserCreationRequestController::class, 'reject']);
-        Route::post('delete',[UserCreationRequestController::class, 'destroy']);
+        Route::post('delete',[UserCreationRequestController::class, 'requestDeletion']);
     });
  
 
 
 });
-
-Route::post('ddata',[DashboardController::class, 'ddata']);
-Route::delete('/delete-directory', [DashboardController::class, 'deleteDirectory']);
 
 Route::get('grade/videos/{grade_id}',[HomeController::class, 'loadGradeVideos']);

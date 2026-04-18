@@ -283,10 +283,16 @@
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title cardTitle">Enrollment Progress</h5>
                         <div class="col-md-3">
-                            <select class="form-select border-0 bg-light" id="inputCollection">
-                                <option><span class="filter">Filter by:</span>Year</option>
-                                <option value="1">2024</option>
-                            </select>
+                            <select class="form-select border-0 bg-light" id="yearFilter">
+                                 <option value="2023" {{ $year == 2023 ? 'selected' : '' }}>2023</option>
+    <option value="2024" {{ $year == 2024 ? 'selected' : '' }}>2024</option>
+    <option value="2025" {{ $year == 2025 ? 'selected' : '' }}>2025</option>
+    <option value="2026" {{ $year == 2026 ? 'selected' : '' }}>2026</option>
+     <option value="2027" {{ $year == 2027 ? 'selected' : '' }}>2027</option>
+      <option value="2028" {{ $year == 2028 ? 'selected' : '' }}>2028</option>
+       <option value="2029" {{ $year == 2029 ? 'selected' : '' }}>2029</option>
+        <option value="2030" {{ $year == 2030 ? 'selected' : '' }}>2030</option>
+</select>
                         </div>
                     </div>
                     <hr>
@@ -615,51 +621,55 @@ google.charts.load('current', {
 //     var chart = new google.charts.Bar(document.getElementById('columnchart_material1'));
 //     chart.draw(data, google.charts.Bar.convertOptions(options));
 // }
+document.addEventListener("DOMContentLoaded", function () {
 
-google.charts.setOnLoadCallback(drawChart);
-
-function drawChart() {
-    var chartData = {!!json_encode($chartData) !!};
-
-    // Convert string values to numbers
-    chartData.forEach(function (item) {
-        item.student_count = parseInt(item.student_count);
-        item.teacher_count = parseInt(item.teacher_count);
-        item.parent_count = parseInt(item.parent_count);
+    // ✅ Year Filter Change Event
+    document.getElementById("yearFilter").addEventListener("change", function () {
+        let selectedYear = this.value;
+        window.location.href = "?year=" + selectedYear;
     });
 
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Month');
-    data.addColumn('number', 'Student');
-    data.addColumn('number', 'Teacher');
-    data.addColumn('number', 'Parent');
+    // ✅ Load Google Chart
+    google.charts.setOnLoadCallback(drawChart);
 
-    chartData.forEach(function (item) {
-        data.addRow([item.month, item.student_count, item.teacher_count, item.parent_count]);
-    });
+    function drawChart() {
 
-    var options = {
-        legend: {
-            position: 'none'
-        },
-        chart: {},
-        axes: {
-            x: {
-                0: {
-                    side: 'top',
-                    label: '.'
-                }
-            } // Top x-axis.
-        },
-        bar: {
-            groupWidth: "20%"
-        },
-        colors: ['#1c6ac6', '#b3e49c'],
-        is3D: true
-    };
+        var chartData = {!! json_encode($chartData) !!};
 
-    var chart = new google.charts.Bar(document.getElementById('columnchart_material1'));
-    chart.draw(data, google.charts.Bar.convertOptions(options));
-}
+        chartData.forEach(function (item) {
+            item.student_count = parseInt(item.student_count);
+            item.teacher_count = parseInt(item.teacher_count);
+            item.parent_count = parseInt(item.parent_count);
+        });
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Month');
+        data.addColumn('number', 'Student');
+        data.addColumn('number', 'Teacher');
+        data.addColumn('number', 'Parent');
+
+        chartData.forEach(function (item) {
+            data.addRow([
+                item.month,
+                item.student_count,
+                item.teacher_count,
+                item.parent_count
+            ]);
+        });
+
+        var options = {
+            legend: { position: 'none' },
+            bar: { groupWidth: "20%" },
+            is3D: true
+        };
+
+        var chart = new google.charts.Bar(
+            document.getElementById('columnchart_material1')
+        );
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+});
 </script>
 @stop

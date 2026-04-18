@@ -98,13 +98,13 @@ class HomeController extends Controller
 
 
         $totalUsers = DB::table('users')->where('role', '!=', 'admin')->count();
-        $syncUsers = DB::table('users')
+               $syncUsers = DB::table('users')
             ->where('role', '!=', 'admin')
-            ->where('sync_datetime', '!=', NULL)
+            ->where('status', '=', '1')
             ->count();
         $unSyncUsers = DB::table('users')
             ->where('role', '!=', 'admin')
-            ->where('sync_datetime', NULL)
+            ->where('status', '=', '0')
             ->count();
             $lessons = DB::table('chapters')->count();
             $courses = DB::table('courses')->count();
@@ -153,28 +153,55 @@ class HomeController extends Controller
             $totalUsersPercentage = 0;
         }
 
-    $data = DB::select('
-        SELECT
-            MONTHNAME(created_at) AS month,
-            SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
-            SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
-            SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
-        FROM
-        users
-        GROUP BY
-        MONTH(created_at)
-        ');
+    // $data = DB::select('
+    //     SELECT
+    //         MONTHNAME(created_at) AS month,
+    //         SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
+    //         SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
+    //         SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
+    //     FROM
+    //     users
+    //     GROUP BY
+    //     MONTH(created_at)
+    //     ');
 
-        $chartData = [];
-        foreach ($data as $row) {
-            $chartData[] = [
-                'month' => $row->month,
-                'student_count' => $row->student_count,
-                'teacher_count' => $row->teacher_count,
-                'parent_count' => $row->parent_count,
-            ];
-        }
+    //     $chartData = [];
+    //     foreach ($data as $row) {
+    //         $chartData[] = [
+    //             'month' => $row->month,
+    //             'student_count' => $row->student_count,
+    //             'teacher_count' => $row->teacher_count,
+    //             'parent_count' => $row->parent_count,
+    //         ];
+    //     }
+ $year = request('year', 2026); // Default year = 2026
 
+$data = DB::select("
+    SELECT 
+        MONTHNAME(created_at) AS month,
+        MONTH(created_at) AS month_number,
+
+        SUM(CASE WHEN role = 'student' THEN 1 ELSE 0 END) AS student_count,
+        SUM(CASE WHEN role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
+        SUM(CASE WHEN role = 'parent' THEN 1 ELSE 0 END) AS parent_count
+
+    FROM users
+    WHERE YEAR(created_at) = ?
+
+    GROUP BY MONTH(created_at)
+    ORDER BY month_number ASC
+", [$year]);
+
+$chartData = [];
+
+foreach ($data as $row) {
+    $chartData[] = [
+        'month' => $row->month,
+        'student_count' => $row->student_count,
+        'teacher_count' => $row->teacher_count,
+        'parent_count' => $row->parent_count,
+    ];
+}
         $grades = Grade::get();
         $gradeId = '';
         if (!empty($grades)) {
@@ -386,7 +413,7 @@ LEFT JOIN
             ');
                     return view('pages.dashboard.index', compact('student_count', 'teacher_count', 'parent_count',
                      'studentPercentage', 'teacherPercentage','parentPercentage', 'totalUsers', 
-                     'chartData', 'syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries',
+                     'chartData', 'year', 'syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries',
                     'grade1_count', 'grade2_count', 'grade3_count', 'grade4_count', 'grade5_count', 'grade6_count',
                     'grade7_count', 'grade8_count', 'grade9_count', 'grade10_count', 'grade11_count', 'grade12_count', 'grades', 
                     'subject_statistics', 'library_videos', 'library_audios', 'library_documents', 'library_kits', 

@@ -16,8 +16,8 @@
                 <div class="carousel-caption text-start">
                     <h1 class="slide-title">  {{ __('home.slide_show_title') }} </h1>
                     <p> {{ __('home.slide_show_description') }} </p>
-                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learmore') }} <i
-                            class="fa-solid fa-arrow-right"></i></a>
+                    <!-- <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learmore') }} <i
+                            class="fa-solid fa-arrow-right"></i></a> -->
                 </div>
             </div>
         </div>

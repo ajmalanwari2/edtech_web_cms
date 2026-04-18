@@ -9,6 +9,8 @@ use App\Models\School;
 use App\Models\Grade;
 use App\Models\StudentInParent;
 use App\Models\Feedback;
+use App\Models\UserDeletionRequest;
+use App\Models\DeletedUser;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use Illuminate\Http\Request;
@@ -42,9 +44,10 @@ class UserCreationRequestController extends Controller
      */
     public function allRegisteredUserList(Request $request){
         if ($request->ajax()) {
-            $data = User::with('student', 'teacher', 'parent')
+            $data = User::with(['student', 'teacher', 'parent'])
             ->where('role', '!=', 'admin')
             ->latest()
+            ->limit(2350)
             ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -659,15 +662,24 @@ class UserCreationRequestController extends Controller
 
     public function destroy(Request $request)
     {
-        \Log::info($request->id);
-        
-       
-            $result = User::where('id', $request->id)->delete();
-            Student::where('user_id', $request->id)->delete();
-            Teacher::where('user_id', $request->id)->delete();
-            StudentParent::where('user_id', $request->id)->delete();
-            if (!empty($result))
-                return response()->json(['message' => 'Meeting deleted successfully']);
+            // $result = User::where('id', $request->id)->delete();
+            // Student::where('user_id', $request->id)->delete();
+            // Teacher::where('user_id', $request->id)->delete();
+            // StudentParent::where('user_id', $request->id)->delete();
+            // if (!empty($result))
+            //     return response()->json(['message' => 'User deleted successfully']);
+    $user = User::withTrashed()->find($request->id);
+
+    if ($user) {
+        $user->forceDelete(); // Hard delete
+        Student::where('user_id', $request->id)->forceDelete();
+        Teacher::where('user_id', $request->id)->forceDelete();
+        StudentParent::where('user_id', $request->id)->forceDelete();
+
+        return response()->json(['message' => 'User deleted successfully']);
+    }
+
+    return response()->json(['message' => 'User not found'], 404);
            
     }
 
@@ -1055,4 +1067,230 @@ class UserCreationRequestController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+
+ 
+
+public function profile($id)
+{
+    $user = User::findOrFail($id);
+
+    return view('pages.users.user_profile.index', [
+        'rec' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'identity_number' => $user->identity_number,
+        ]
+    ]);
+}
+
+
+public function updateProfile(Request $request, $id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return redirect()->back()->with('error', 'User not found.');
+    }
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'identity_number' => 'nullable|string|max:50',
+        'password' => 'nullable|string|min:6|confirmed',
+    ]);
+
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->identity_number = $request->identity_number;
+
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+
+    $user->save();
+
+    return redirect()->back()->with('success', 'Profile updated successfully.');
+}
+
+
+public function approve_deletion_request(Request $request)
+{
+    try {
+        DB::beginTransaction();
+
+        // Find the user
+        $user = User::findOrFail($request->id);
+        // Update the deletion request status
+        $deletionRequest = UserDeletionRequest::where('user_id', $request->id)->firstOrFail();
+        $deletionRequest->update(['status' => 'approved']);
+
+        // Prepare data to save in DeletedUser
+        $userData = [
+            'first_name' => $user->name,
+            'identity_number' => $user->identity_number,
+            'email' => $user->email,
+            'password' => Hash::make($user->password),
+            'role' => $user->role,
+        ];
+
+        // Add student-specific info if user is a student
+        if ($user->role === 'student') {
+            $student = Student::where('user_id', $request->id)->first();
+            if ($student) {
+                $userData['province_id'] = $student->province_id;
+                $userData['district_id'] = $student->district_id;
+                $userData['gender'] = $student->gender;
+                $userData['dob'] = $student->dob;
+            }
+        }
+
+         if ($user->role === 'teacher') {
+            $teacher = Teacher::where('user_id', $request->id)->first();
+            if ($teacher) {
+                $userData['province_id'] = $teacher->province_id;
+                $userData['district_id'] = $teacher->district_id;
+                $userData['gender'] = $teacher->gender;
+                $userData['dob'] = $teacher->dob;
+            }
+        }
+
+         if ($user->role === 'parent') {
+            $student_parent = StudentParent::where('user_id', $request->id)->first();
+            if ($student_parent) {
+                $userData['province_id'] = $student_parent->province_id;
+                $userData['district_id'] = $student_parent->district_id;
+                $userData['gender'] = $student_parent->gender;
+                $userData['dob'] = $student_parent->dob;
+            }
+        }
+        // Save to DeletedUser
+        $deletedUser = DeletedUser::create($userData);
+
+        // Delete the user
+
+  if ($user) {
+        $user->forceDelete(); // Hard delete
+        Student::where('user_id', $request->id)->forceDelete();
+        Teacher::where('user_id', $request->id)->forceDelete();
+        StudentParent::where('user_id', $request->id)->forceDelete();
+
+       
+    }
+        DB::commit();
+
+
+        return response()->json(['message' => 'User deletion approved and account deleted', 'data' => $deletedUser], 200);
+
+    } catch (\Exception $e) {
+        \Log::info($e);
+        DB::rollBack();
+        return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+    }
+}
+
+
+public function reject_deletion_request(Request $request)
+{
+    try {
+        DB::beginTransaction();
+
+        // Find the user
+        $user = User::findOrFail($request->id);
+        // Update the deletion request status
+        $deletionRequest = UserDeletionRequest::where('user_id', $request->id)->firstOrFail();
+        $deletionRequest->update(['status' => 'rejected']);
+
+        DB::commit();
+
+
+        return response()->json(['message' => 'User deletion rejected and account not deleted', 'data' => $deletionRequest], 200);
+
+    } catch (\Exception $e) {
+       \Log::info($e);
+        DB::rollBack();
+        return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+    }
+}
+
+public function requestDeletion(Request $request)
+    {
+
+        $existingRequest = UserDeletionRequest::where('user_id', $request->id)->first();
+        if ($existingRequest) {
+            return response()->json(['message' => 'Request already submitted'], 400);
+        }
+
+        $request = UserDeletionRequest::create([
+            'user_id' => $user->id,
+            'status' => 'pending',
+        ]);
+
+        return response()->json(['message' => 'Deletion request submitted', 200]);
+    }
+
+
+    public function deleteUserIndex()
+    {
+        $provinces = Province::all();
+        $districts = District::all();
+        $schools = School::all();
+        $grades = Grade::all();
+        return view('pages.setting.requests.delete_users_index', compact('provinces', 'districts', 'schools', 'grades' ));
+    }
+
+
+    public function delete_user_list(Request $request)
+{
+    if ($request->ajax()) {
+
+        $data = UserDeletionRequest::with('user')
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+        return Datatables::of($data)
+            ->addIndexColumn()
+
+            ->addColumn('name', function ($row) {
+                return $row->user ? $row->user->name : '';
+            })
+
+            ->addColumn('identity_number', function ($row) {
+                return $row->user ? $row->user->identity_number : '';
+            })
+
+            ->addColumn('email', function ($row) {
+                return $row->user ? $row->user->email : '';
+            })
+
+            ->addColumn('role', function ($row) {
+                return $row->user ? $row->user->role : '';
+            })
+
+            ->addColumn('requested_date', function ($row) {
+                return $row->created_at
+                    ? $row->created_at->format('Y-m-d')
+                    : '';
+            })
+            ->addColumn('actions', function ($row) {
+                return '
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-confirm"
+                        onclick="approveRecordID=' . $row->user_id . ';">
+                        <i class="material-icons" style="color:darkgreen">check</i>
+                    </a>
+
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-reject"
+                        onclick="rejectRecordID=' . $row->user_id . ';">
+                        <i class="material-icons" style="color:red">cancel</i>
+                    </a>
+                ';
+            })
+
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+}
+
+
 }

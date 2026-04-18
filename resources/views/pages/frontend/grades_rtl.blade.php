@@ -22,7 +22,7 @@
                 <!-- Video Item Started -->
                 <div class="vid-item vid-grade">
                     <div class="video-wrap">
-                        <a href="/front/{{$lang}}/grade/{{$s->grade_id}}/subject/{{$s->subject_id}}">
+                        <a href="/{{$lang}}/grade/{{$s->grade_id}}/subject/{{$s->subject_id}}">
                             <div class="video_no_youtube vid_album">
                                 <img src="{{ asset('storage/uploads/icon/' . $s->subject_icon) }}">
                             </div>

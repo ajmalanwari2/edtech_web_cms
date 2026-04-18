@@ -176,11 +176,13 @@ class AuthController extends Controller
                 }
 
                 // Find the user by identity number
-                $user = User::where('identity_number', $request->identity_number)->first();
+                $user = User::where('identity_number', $request->identity_number)
+            ->where('email', $request->email)
+            ->first();
 
                 if (!$user) {
                     return response()->json([
-                        'message' => 'Identification Number does not exist'
+                        'message' => 'The Email is not associated with any account'
                     ], 400);
                 }
 

@@ -9,9 +9,9 @@
             <!--<a href="/front/da/{{ str_replace('frontend.', '', request()->route()->getName()) }}">دری</a>-->
             <!--<a href="/front/pa/{{ str_replace('frontend.', '', request()->route()->getName()) }}">پښتو</a>-->
             <!--<a href="/front/en/{{ str_replace('frontend.', '', request()->route()->getName()) }}">EN</a>-->
-            <a href="/front/da">دری</a>
-            <a href="/front/pa">پښتو</a>
-            <a href="/front/en">EN</a>
+            <a href="/da">دری</a>
+            <a href="/pa">پښتو</a>
+            <a href="/en">EN</a>
             <!-- <a class="login" href="{{ route('admin_home') }}">Login</a> -->
         </div>
 
@@ -27,23 +27,23 @@
 
                     <!-- Menu List Names Start -->
                     <ul class="sm sm-clean" id="main-menu">
-                        <li><a href="/front/{{ $lang }}">{{ __('footer.home') }}</a></li>
+                        <li><a href="/{{ $lang }}">{{ __('footer.home') }}</a></li>
                         <!-- <li><a href="/front/{{ $lang }}/aboutus">در باره ما</a></li> -->
-                        <li><a href="/front/{{ $lang }}/content">{{ __('footer.contents') }}</a>
+                        <li><a href="/{{ $lang }}/content">{{ __('footer.contents') }}</a>
                                       {{-- <ul>
                           <li><a href="contents_rtl.html">فهرست اول</a></li>
                           <li><a href="contents_rtl.html">فهرست دوم</a></li>
                         </ul> --}}
                         </li>
-                        <li><a href="/front/{{ $lang }}/course">{{ __('footer.courses') }}</a></i>
+                        <li><a href="/{{ $lang }}/course">{{ __('footer.courses') }}</a></i>
                         <li><a href="#">{{ __('footer.download') }}</a>
                             <ul>
                                 <li><a href="#">{{ __('footer.android') }}</a></li>
                                 <li><a href="#">{{ __('footer.apple') }}</a></li>
                             </ul>
                         </li>
-                        <li><a href="/front/{{ $lang }}/contact">{{ __('footer.contact') }}</a></li>
-                        <li><a href="/front/{{ $lang }}/request_form">{{ __('footer.request_access') }}</a></li>
+                        <li><a href="/{{ $lang }}/contact">{{ __('footer.contact') }}</a></li>
+                        <li><a href="/{{ $lang }}/request_form">{{ __('footer.request_access') }}</a></li>
                     </ul>
                     <!-- Menu List Names Start -->
 

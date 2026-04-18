@@ -164,16 +164,17 @@ public function quizAnswer(Request $request){
                 DB::beginTransaction();
                  $newString = $request->q_text;
 
-                if (strpos($newString, 'ت') !== false) {
-                    $newString = str_replace('ت', 'ت', $newString);
+                if (strpos($newString, 't') !== false) {
+                    $newString = str_replace('t', 'ټ', $newString);
                 }
                 
-                if (strpos($newString, 'خ') !== false) {
-                    $newString = str_replace('خ', 'خ', $newString);
+                if (strpos($newString, 'j') !== false) {
+                        $newString = str_replace('j', 'ځ', $newString);
                 }
                 
-                if (strpos($newString, '.') !== false) {
-                    $newString = str_replace('.', '.', $newString);
+                
+                  if (strpos($newString, 'a') !== false) {
+                    $newString = str_replace('a', 'ا', $newString);
                 }
                 $data = [
                     'question_text' => $newString,
@@ -304,16 +305,17 @@ public function quizAnswer(Request $request){
 
                 $newString = $request->q_text;
 
-                if (strpos($newString, 'ت') !== false) {
-                    $newString = str_replace('ت', 'ت', $newString);
+                   if (strpos($newString, 't') !== false) {
+                    $newString = str_replace('t', 'ټ', $newString);
                 }
                 
-                if (strpos($newString, 'خ') !== false) {
-                    $newString = str_replace('خ', 'خ', $newString);
+                if (strpos($newString, 'j') !== false) {
+                        $newString = str_replace('j', 'ځ', $newString);
                 }
                 
-                if (strpos($newString, '.') !== false) {
-                    $newString = str_replace('.', '.', $newString);
+                
+                  if (strpos($newString, 'a') !== false) {
+                    $newString = str_replace('a', 'ا', $newString);
                 }
                 $rec->question_text =  $newString;
                 $rec->difficulty_level = $request->difficulty_level;

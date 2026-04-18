@@ -72,12 +72,12 @@ class CourseContentController extends Controller
                 DB::beginTransaction();
                  $newString = $request->title;
 
-                if (strpos($newString, 'ت') !== false) {
-                    $newString = str_replace('ت', 'ټ', $newString);
+               if (strpos($newString, 't') !== false) {
+                    $newString = str_replace('t', 'ټ', $newString);
                 }
                 
-                if (strpos($newString, 'خ') !== false) {
-                    $newString = str_replace('خ', 'ځ', $newString);
+                if (strpos($newString, 'j') !== false) {
+                    $newString = str_replace('j', 'ځ', $newString);
                 }
                 
                 if (strpos($newString, '.') !== false) {
@@ -131,17 +131,17 @@ class CourseContentController extends Controller
             $courseContent = CourseContent::find($request->id);
             $newString = $request->title;
 
-            if (strpos($newString, 'ت') !== false) {
-                $newString = str_replace('ت', 'ټ', $newString);
-            }
-            
-            if (strpos($newString, 'خ') !== false) {
-                $newString = str_replace('خ', 'ځ', $newString);
-            }
-            
-            if (strpos($newString, '.') !== false) {
-                $newString = str_replace('.', '-', $newString);
-            }
+           if (strpos($newString, 't') !== false) {
+                    $newString = str_replace('t', 'ټ', $newString);
+                }
+                
+                if (strpos($newString, 'j') !== false) {
+                    $newString = str_replace('j', 'ځ', $newString);
+                }
+                
+                if (strpos($newString, '.') !== false) {
+                    $newString = str_replace('.', '-', $newString);
+                }
 
             $courseContent->title  = $newString;
             $courseContent->type = $request->type;

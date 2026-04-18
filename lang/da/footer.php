@@ -3,7 +3,7 @@
 return [
     'about_us' => 'در باره ما ',
     'description' => 'توضیحات ',
-    'home' => 'خانه  ',
+    'home' => 'صفحه اول',
     'download' => 'دونلود',
     'contact_us' => 'ارتباط با ما ',
     'address' => 'آدرس ',

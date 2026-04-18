@@ -305,8 +305,8 @@ function saveForm(id) {
     var formData = new FormData();
     formData.append('_token', '{{ csrf_token() }}');
     var str = $('#title').val();
-    var charactersToReplace = ['ټ', 'ځ', '-'];
-    var replacements = ['ت', 'خ', '.'];
+   var charactersToReplace = ['ټ', 'ځ', '-'];
+    var replacements = ['t', 'j', '.'];
     var newStr = str;
 
     for (var i = 0; i < charactersToReplace.length; i++) {
