@@ -77,7 +77,8 @@ class FrontEndController extends Controller
                 photo,
                 created_at
             from news
-            where language = \'en\'');
+            where status = \'1\'
+            and language = \'en\'');
         $newsDari = DB::select('
             select
                 id,
@@ -86,7 +87,8 @@ class FrontEndController extends Controller
                 photo,
                 created_at
             from news
-            where language = \'da\'');
+             where status = \'1\'
+            and language = \'da\'');
         $newsPashto = DB::select('
             select
                 id,
@@ -95,7 +97,8 @@ class FrontEndController extends Controller
                 photo,
                 created_at
             from news
-            where language = \'pa\'');
+             where status = \'1\'
+            and language = \'pa\'');
 
         if ($this->lang == 'en') {
             return view('pages.frontend.home', compact(
