@@ -407,7 +407,7 @@ function loadRecord(id) {
             $.each(data.contents, function(key, value) {
                 contentsHtml += '<tr>';
                 contentsHtml += '<td>' + value.title + '</td>';
-                contentsHtml += '<td><a href="' + value.body + '" target="_blank">Download Content</a></td>'; 
+                contentsHtml += '<td><a href="/' + value.body + '" target="_blank">Download Content</a></td>'; 
               
                 contentsHtml += '</tr>';
             });
