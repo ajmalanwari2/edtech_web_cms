@@ -87,8 +87,8 @@ Route::group(['domain' => config('app.app_admin_domain')], function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCheck'],'domain' => config('app.app_admin_domain')], function () {
-    Route::get('/', [HomeController::class, 'index'])->name('admin_home');
-    Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('admin_home');
+    Route::get('/home', [DashboardController::class, 'index']);
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('create', [HomeController::class, 'create'])->name('create');
         Route::post('store', [HomeController::class, 'store'])->name('store');
@@ -237,7 +237,6 @@ Route::group(['middleware' => ['auth:sanctum', 'EnsureUserIsActive', 'DebugBarCh
 Route::group(['middleware' => ['DebugBarCheck'],'domain' => config('app.app_admin_domain')], function () {
     Auth::routes();
 });
-
 
 
 

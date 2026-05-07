@@ -27,6 +27,13 @@ class DashboardController extends Controller
         $teacher_count = $teacher && isset($teacher[0]->teacher_count) ? $teacher[0]->teacher_count : 0;
         $parent_count = $parent && isset($parent[0]->parent_count) ? $parent[0]->parent_count : 0;
 
+        $student_male_count = DB::table('students')->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $student_female_count = DB::table('students')->whereRaw('LOWER(gender) = ?', ['female'])->count();
+        $teacher_male_count = DB::table('teachers')->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $teacher_female_count = DB::table('teachers')->whereRaw('LOWER(gender) = ?', ['female'])->count();
+        $parent_male_count = DB::table('student_parents')->whereRaw('LOWER(gender) = ?', ['male'])->count();
+        $parent_female_count = DB::table('student_parents')->whereRaw('LOWER(gender) = ?', ['female'])->count();
+
 
         $grade1 = DB::select('select count(s.id) as grade1_count from students as s
             join grades as g
@@ -406,9 +413,8 @@ LEFT JOIN
             ');
                     return view('pages.dashboard.index', compact('student_count', 'teacher_count', 'parent_count',
                      'studentPercentage', 'teacherPercentage','parentPercentage', 'totalUsers', 
-                     'chartData', 'year','syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries',
-                    'grade1_count', 'grade2_count', 'grade3_count', 'grade4_count', 'grade5_count', 'grade6_count',
-                    'grade7_count', 'grade8_count', 'grade9_count', 'grade10_count', 'grade11_count', 'grade12_count', 'grades', 
+                     'student_male_count', 'student_female_count', 'teacher_male_count', 'teacher_female_count', 'parent_male_count', 'parent_female_count',
+                     'chartData', 'year','syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries', 'grades', 
                     'subject_statistics', 'library_videos', 'library_audios', 'library_documents', 'library_kits', 
                     'courses_statistics', 'grade_statisticts', 'provincial_user_statistics', 'syncUserPercentage',
                 'unSyncUserPercentage', 'totalUsersPercentage'));
