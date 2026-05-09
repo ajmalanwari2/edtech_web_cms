@@ -188,17 +188,27 @@ class HomeController extends Controller
         $data = DB::select(
             "
     SELECT
-        MONTHNAME(created_at) AS month,
-        MONTH(created_at) AS month_number,
-
-        SUM(CASE WHEN role = 'student' THEN 1 ELSE 0 END) AS student_count,
-        SUM(CASE WHEN role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
-        SUM(CASE WHEN role = 'parent' THEN 1 ELSE 0 END) AS parent_count
-
-    FROM users
-    WHERE YEAR(created_at) = ?
-
-    GROUP BY MONTH(created_at)
+        MONTHNAME(u.created_at) AS month,
+        MONTH(u.created_at) AS month_number,
+        SUM(CASE WHEN u.role = 'student' THEN 1 ELSE 0 END) AS student_count,
+        SUM(CASE WHEN u.role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
+        SUM(CASE WHEN u.role = 'parent' THEN 1 ELSE 0 END) AS parent_count,
+        SUM(CASE WHEN u.role = 'student' AND LOWER(s.gender) = 'male' THEN 1 ELSE 0 END) AS student_male_count,
+        SUM(CASE WHEN u.role = 'student' AND LOWER(s.gender) = 'female' THEN 1 ELSE 0 END) AS student_female_count,
+        SUM(CASE WHEN u.role = 'teacher' AND LOWER(t.gender) = 'male' THEN 1 ELSE 0 END) AS teacher_male_count,
+        SUM(CASE WHEN u.role = 'teacher' AND LOWER(t.gender) = 'female' THEN 1 ELSE 0 END) AS teacher_female_count,
+        SUM(CASE WHEN u.role = 'parent' AND LOWER(sp.gender) = 'male' THEN 1 ELSE 0 END) AS parent_male_count,
+        SUM(CASE WHEN u.role = 'parent' AND LOWER(sp.gender) = 'female' THEN 1 ELSE 0 END) AS parent_female_count
+    FROM users u
+    LEFT JOIN students s
+        ON u.id = s.user_id AND u.role = 'student'
+    LEFT JOIN teachers t
+        ON u.id = t.user_id AND u.role = 'teacher'
+    LEFT JOIN student_parents sp
+        ON u.id = sp.user_id AND u.role = 'parent'
+    WHERE YEAR(u.created_at) = ?
+        AND u.role IN ('student', 'teacher', 'parent')
+    GROUP BY MONTH(u.created_at), MONTHNAME(u.created_at)
     ORDER BY month_number ASC
 ",
             [$year],
@@ -212,6 +222,12 @@ class HomeController extends Controller
                 'student_count' => $row->student_count,
                 'teacher_count' => $row->teacher_count,
                 'parent_count' => $row->parent_count,
+                'student_male_count' => $row->student_male_count,
+                'student_female_count' => $row->student_female_count,
+                'teacher_male_count' => $row->teacher_male_count,
+                'teacher_female_count' => $row->teacher_female_count,
+                'parent_male_count' => $row->parent_male_count,
+                'parent_female_count' => $row->parent_female_count,
             ];
         }
         $grades = Grade::get();

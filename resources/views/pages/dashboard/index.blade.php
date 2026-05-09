@@ -383,19 +383,30 @@
             <div class="col-md-12 mb-1">
                 <div class="card border-0 card-h mt-3">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
                             <h5 class="card-title cardTitle">Enrollment Progress</h5>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 bg-light" id="yearFilter">
-                                    <option value="2023" {{ $year == 2023 ? 'selected' : '' }}>2023</option>
-                                    <option value="2024" {{ $year == 2024 ? 'selected' : '' }}>2024</option>
-                                    <option value="2025" {{ $year == 2025 ? 'selected' : '' }}>2025</option>
-                                    <option value="2026" {{ $year == 2026 ? 'selected' : '' }}>2026</option>
-                                    <option value="2027" {{ $year == 2027 ? 'selected' : '' }}>2027</option>
-                                    <option value="2028" {{ $year == 2028 ? 'selected' : '' }}>2028</option>
-                                    <option value="2029" {{ $year == 2029 ? 'selected' : '' }}>2029</option>
-                                    <option value="2030" {{ $year == 2030 ? 'selected' : '' }}>2030</option>
-                                </select>
+                            <div class="enrollment-filter-group d-flex gap-2 flex-wrap justify-content-md-end">
+                                <div class="enrollment-filter-item">
+                                    <select class="form-select border-0 bg-light enrollment-filter-select"
+                                        id="enrollmentGenderFilter">
+                                        <option value="all">All</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="enrollment-filter-item">
+                                    <select class="form-select border-0 bg-light enrollment-filter-select"
+                                        id="yearFilter">
+                                        <option value="2023" {{ $year == 2023 ? 'selected' : '' }}>2023</option>
+                                        <option value="2024" {{ $year == 2024 ? 'selected' : '' }}>2024</option>
+                                        <option value="2025" {{ $year == 2025 ? 'selected' : '' }}>2025</option>
+                                        <option value="2026" {{ $year == 2026 ? 'selected' : '' }}>2026</option>
+                                        <option value="2027" {{ $year == 2027 ? 'selected' : '' }}>2027</option>
+                                        <option value="2028" {{ $year == 2028 ? 'selected' : '' }}>2028</option>
+                                        <option value="2029" {{ $year == 2029 ? 'selected' : '' }}>2029</option>
+                                        <option value="2030" {{ $year == 2030 ? 'selected' : '' }}>2030</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -528,6 +539,33 @@
 
         .card-hhh {
             max-height: 29rem !important;
+        }
+
+        .enrollment-filter-group {
+            width: 100%;
+            max-width: 540px;
+        }
+
+        .enrollment-filter-item {
+            flex: 1 1 240px;
+            min-width: 200px;
+        }
+
+        .enrollment-filter-select {
+            min-height: 46px;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        @media (max-width: 767.98px) {
+            .enrollment-filter-group {
+                max-width: 100%;
+            }
+
+            .enrollment-filter-item {
+                flex-basis: 100%;
+                min-width: 100%;
+            }
         }
     </style>
 @stop
@@ -764,8 +802,15 @@
                     height: isMobileView() ? 240 : 300,
                     pieHole: 0.4,
                     colors: ['#4e79a7', '#f28e2b'],
+                    pieSliceText: 'value',
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        textStyle: {
+                            fontSize: isMobileView() ? 11 : 12
+                        }
+                    },
+                    tooltip: {
+                        text: 'value'
                     },
                     chartArea: {
                         width: isMobileView() ? '90%' : '85%',
@@ -868,6 +913,11 @@
                 }
             });
 
+            var enrollmentGenderFilter = document.getElementById('enrollmentGenderFilter');
+            if (enrollmentGenderFilter) {
+                enrollmentGenderFilter.addEventListener('change', drawChart);
+            }
+
             function drawChart() {
 
                 var chartData = {!! json_encode($chartData) !!};
@@ -876,30 +926,72 @@
                     item.student_count = parseInt(item.student_count);
                     item.teacher_count = parseInt(item.teacher_count);
                     item.parent_count = parseInt(item.parent_count);
+                    item.student_male_count = parseInt(item.student_male_count);
+                    item.student_female_count = parseInt(item.student_female_count);
+                    item.teacher_male_count = parseInt(item.teacher_male_count);
+                    item.teacher_female_count = parseInt(item.teacher_female_count);
+                    item.parent_male_count = parseInt(item.parent_male_count);
+                    item.parent_female_count = parseInt(item.parent_female_count);
                 });
 
+                var selectedGender = enrollmentGenderFilter ? enrollmentGenderFilter.value : 'all';
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Month');
-                data.addColumn('number', 'Student');
-                data.addColumn('number', 'Teacher');
-                data.addColumn('number', 'Parent');
+
+                if (selectedGender === 'male') {
+                    data.addColumn('number', 'Student Male');
+                    data.addColumn('number', 'Teacher Male');
+                    data.addColumn('number', 'Parent Male');
+                } else if (selectedGender === 'female') {
+                    data.addColumn('number', 'Student Female');
+                    data.addColumn('number', 'Teacher Female');
+                    data.addColumn('number', 'Parent Female');
+                } else {
+                    data.addColumn('number', 'Student');
+                    data.addColumn('number', 'Teacher');
+                    data.addColumn('number', 'Parent');
+                }
 
                 chartData.forEach(function(item) {
-                    data.addRow([
-                        item.month,
-                        item.student_count,
-                        item.teacher_count,
-                        item.parent_count
-                    ]);
+                    if (selectedGender === 'male') {
+                        data.addRow([
+                            item.month,
+                            item.student_male_count,
+                            item.teacher_male_count,
+                            item.parent_male_count
+                        ]);
+                    } else if (selectedGender === 'female') {
+                        data.addRow([
+                            item.month,
+                            item.student_female_count,
+                            item.teacher_female_count,
+                            item.parent_female_count
+                        ]);
+                    } else {
+                        data.addRow([
+                            item.month,
+                            item.student_count,
+                            item.teacher_count,
+                            item.parent_count
+                        ]);
+                    }
                 });
 
                 var options = {
                     legend: {
-                        position: isMobileView() ? 'top' : 'none'
+                        position: isMobileView() ? 'top' : 'bottom'
                     },
                     bar: {
-                        groupWidth: isMobileView() ? '45%' : '20%'
+                        groupWidth: selectedGender === 'all' ?
+                            (isMobileView() ? '70%' : '55%') :
+                            (isMobileView() ? '70%' : '55%')
                     },
+                    colors: selectedGender === 'male' ? ['#4e79a7', '#59a14f', '#9c755f'] :
+                        selectedGender === 'female' ? ['#f28e2b', '#e15759', '#edc948'] : [
+                            '#59a14f',
+                            '#e15759',
+                            '#76b7b2'
+                        ],
                     height: isMobileView() ? 280 : 350
                 };
 
