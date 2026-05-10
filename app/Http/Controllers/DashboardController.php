@@ -22,18 +22,29 @@ class DashboardController extends Controller
         $student = DB::select('select count(id) as student_count from students');
         $teacher = DB::select('select count(id) as teacher_count from teachers');
         $parent = DB::select('select count(id) as parent_count from student_parents');
-        
+
         $student_count = $student && isset($student[0]->student_count) ? $student[0]->student_count : 0;
         $teacher_count = $teacher && isset($teacher[0]->teacher_count) ? $teacher[0]->teacher_count : 0;
         $parent_count = $parent && isset($parent[0]->parent_count) ? $parent[0]->parent_count : 0;
 
-        $student_male_count = DB::table('students')->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $student_female_count = DB::table('students')->whereRaw('LOWER(gender) = ?', ['female'])->count();
-        $teacher_male_count = DB::table('teachers')->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $teacher_female_count = DB::table('teachers')->whereRaw('LOWER(gender) = ?', ['female'])->count();
-        $parent_male_count = DB::table('student_parents')->whereRaw('LOWER(gender) = ?', ['male'])->count();
-        $parent_female_count = DB::table('student_parents')->whereRaw('LOWER(gender) = ?', ['female'])->count();
-
+        $student_male_count = DB::table('students')
+            ->whereRaw('LOWER(gender) = ?', ['male'])
+            ->count();
+        $student_female_count = DB::table('students')
+            ->whereRaw('LOWER(gender) = ?', ['female'])
+            ->count();
+        $teacher_male_count = DB::table('teachers')
+            ->whereRaw('LOWER(gender) = ?', ['male'])
+            ->count();
+        $teacher_female_count = DB::table('teachers')
+            ->whereRaw('LOWER(gender) = ?', ['female'])
+            ->count();
+        $parent_male_count = DB::table('student_parents')
+            ->whereRaw('LOWER(gender) = ?', ['male'])
+            ->count();
+        $parent_female_count = DB::table('student_parents')
+            ->whereRaw('LOWER(gender) = ?', ['female'])
+            ->count();
 
         $grade1 = DB::select('select count(s.id) as grade1_count from students as s
             join grades as g
@@ -51,7 +62,7 @@ class DashboardController extends Controller
         join grades as g
             on g.id = s.grade_id
         where g.name like \'%Grade 4%\' or g.name like \'%Grade4%\'');
-        
+
         $grade5 = DB::select('select count(s.id) as grade5_count from students as s
         join grades as g
             on g.id = s.grade_id
@@ -97,26 +108,17 @@ class DashboardController extends Controller
         $grade11_count = $grade11 && isset($grade11[0]->grade11_count) ? $grade11[0]->grade11_count : 0;
         $grade12_count = $grade12 && isset($grade12[0]->grade12_count) ? $grade12[0]->grade12_count : 0;
 
-
         $totalUsers = DB::table('users')->where('role', '!=', 'admin')->count();
-          $syncUsers = DB::table('users')
-            ->where('role', '!=', 'admin')
-            ->where('status', '=', '1')
-            ->count();
-        $unSyncUsers = DB::table('users')
-            ->where('role', '!=', 'admin')
-            ->where('status', '=', '0')
-            ->count();
-            $lessons = DB::table('chapters')->count();
-            $courses = DB::table('courses')->count();
-            $libraryDocumentContents = DB::table('library_document_contents')->count();
-            $libraryAudioContents = DB::table('library_audio_contents')->count();
-            $libraryVideoContents = DB::table('library_video_contents')->count();
-            $libraryKitContents = DB::table('library_kit_contents')->count();
+        $syncUsers = DB::table('users')->where('role', '!=', 'admin')->where('status', '=', '1')->count();
+        $unSyncUsers = DB::table('users')->where('role', '!=', 'admin')->where('status', '=', '0')->count();
+        $lessons = DB::table('chapters')->count();
+        $courses = DB::table('courses')->count();
+        $libraryDocumentContents = DB::table('library_document_contents')->count();
+        $libraryAudioContents = DB::table('library_audio_contents')->count();
+        $libraryVideoContents = DB::table('library_video_contents')->count();
+        $libraryKitContents = DB::table('library_kit_contents')->count();
 
-            $libraries = $libraryDocumentContents + $libraryAudioContents +  $libraryVideoContents +  $libraryKitContents;
-
-
+        $libraries = $libraryDocumentContents + $libraryAudioContents + $libraryVideoContents + $libraryKitContents;
 
         if ($totalUsers > 0) {
             $studentPercentage = intval(($student_count / $totalUsers) * 100);
@@ -154,56 +156,74 @@ class DashboardController extends Controller
             $totalUsersPercentage = 0;
         }
 
-    // $data = DB::select('
-    //     SELECT
-    //         MONTHNAME(created_at) AS month,
-    //         SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
-    //         SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
-    //         SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
-    //     FROM
-    //     users
-    //     GROUP BY
-    //     MONTH(created_at)
-    //     ');
+        // $data = DB::select('
+        //     SELECT
+        //         MONTHNAME(created_at) AS month,
+        //         SUM(CASE WHEN role = \'student\' THEN 1 ELSE 0 END) AS student_count,
+        //         SUM(CASE WHEN role = \'teacher\' THEN 1 ELSE 0 END) AS teacher_count,
+        //         SUM(CASE WHEN role = \'parent\' THEN 1 ELSE 0 END) AS parent_count
+        //     FROM
+        //     users
+        //     GROUP BY
+        //     MONTH(created_at)
+        //     ');
 
-    //     $chartData = [];
-    //     foreach ($data as $row) {
-    //         $chartData[] = [
-    //             'month' => $row->month,
-    //             'student_count' => $row->student_count,
-    //             'teacher_count' => $row->teacher_count,
-    //             'parent_count' => $row->parent_count,
-    //         ];
-    //     }
+        //     $chartData = [];
+        //     foreach ($data as $row) {
+        //         $chartData[] = [
+        //             'month' => $row->month,
+        //             'student_count' => $row->student_count,
+        //             'teacher_count' => $row->teacher_count,
+        //             'parent_count' => $row->parent_count,
+        //         ];
+        //     }
+        $year = request('year', 2026); // Default year = 2026
 
-    $year = request('year', 2026); // Default year = 2026
-
-$data = DB::select("
-    SELECT 
-        MONTHNAME(created_at) AS month,
-        MONTH(created_at) AS month_number,
-
-        SUM(CASE WHEN role = 'student' THEN 1 ELSE 0 END) AS student_count,
-        SUM(CASE WHEN role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
-        SUM(CASE WHEN role = 'parent' THEN 1 ELSE 0 END) AS parent_count
-
-    FROM users
-    WHERE YEAR(created_at) = ?
-
-    GROUP BY MONTH(created_at)
+        $data = DB::select(
+            "
+    SELECT
+        MONTHNAME(u.created_at) AS month,
+        MONTH(u.created_at) AS month_number,
+        SUM(CASE WHEN u.role = 'student' THEN 1 ELSE 0 END) AS student_count,
+        SUM(CASE WHEN u.role = 'teacher' THEN 1 ELSE 0 END) AS teacher_count,
+        SUM(CASE WHEN u.role = 'parent' THEN 1 ELSE 0 END) AS parent_count,
+        SUM(CASE WHEN u.role = 'student' AND LOWER(s.gender) = 'male' THEN 1 ELSE 0 END) AS student_male_count,
+        SUM(CASE WHEN u.role = 'student' AND LOWER(s.gender) = 'female' THEN 1 ELSE 0 END) AS student_female_count,
+        SUM(CASE WHEN u.role = 'teacher' AND LOWER(t.gender) = 'male' THEN 1 ELSE 0 END) AS teacher_male_count,
+        SUM(CASE WHEN u.role = 'teacher' AND LOWER(t.gender) = 'female' THEN 1 ELSE 0 END) AS teacher_female_count,
+        SUM(CASE WHEN u.role = 'parent' AND LOWER(sp.gender) = 'male' THEN 1 ELSE 0 END) AS parent_male_count,
+        SUM(CASE WHEN u.role = 'parent' AND LOWER(sp.gender) = 'female' THEN 1 ELSE 0 END) AS parent_female_count
+    FROM users u
+    LEFT JOIN students s
+        ON u.id = s.user_id AND u.role = 'student'
+    LEFT JOIN teachers t
+        ON u.id = t.user_id AND u.role = 'teacher'
+    LEFT JOIN student_parents sp
+        ON u.id = sp.user_id AND u.role = 'parent'
+    WHERE YEAR(u.created_at) = ?
+        AND u.role IN ('student', 'teacher', 'parent')
+    GROUP BY MONTH(u.created_at), MONTHNAME(u.created_at)
     ORDER BY month_number ASC
-", [$year]);
+",
+            [$year],
+        );
 
-$chartData = [];
+        $chartData = [];
 
-foreach ($data as $row) {
-    $chartData[] = [
-        'month' => $row->month,
-        'student_count' => $row->student_count,
-        'teacher_count' => $row->teacher_count,
-        'parent_count' => $row->parent_count,
-    ];
-}
+        foreach ($data as $row) {
+            $chartData[] = [
+                'month' => $row->month,
+                'student_count' => $row->student_count,
+                'teacher_count' => $row->teacher_count,
+                'parent_count' => $row->parent_count,
+                'student_male_count' => $row->student_male_count,
+                'student_female_count' => $row->student_female_count,
+                'teacher_male_count' => $row->teacher_male_count,
+                'teacher_female_count' => $row->teacher_female_count,
+                'parent_male_count' => $row->parent_male_count,
+                'parent_female_count' => $row->parent_female_count,
+            ];
+        }
         $grades = Grade::get();
         $gradeId = '';
         if (!empty($grades)) {
@@ -211,8 +231,10 @@ foreach ($data as $row) {
         } else {
             $gradeId = 0;
         }
-        $subject_statistics = DB::select('
-        select 
+
+        $subject_statistics = DB::select(
+            '
+        select
     (select count(sl.id) from subject_lessons as sl
     join chapters as ch
     on ch.id = sl.chapter_id
@@ -236,9 +258,11 @@ foreach ($data as $row) {
     on s.id = sig.subject_id
     join grades as g
     on g.id = sig.grade_id
-    where g.id = '.$gradeId);
-    $courses_statistics = DB::select('
-    select 
+    where g.id = ' . $gradeId,
+        );
+
+        $courses_statistics = DB::select('
+    select
 (select count(cc.id) from course_contents as cc
 where cc.course_id = c.id
 and cc.type = \'video\') as video_count,
@@ -253,51 +277,40 @@ c.id as course_id,
 c.icon as course_icon
 from courses as c');
 
-    $library_videos = DB::select('
-    select 
+        $library_videos = DB::select('
+    select
                 lv.description,
                 lv.id as video_id,
             (select count(lvc.id) from library_video_contents as lvc
             where lvc.library_video_id  = lv.id) as library_video_count
-            from library_videos as lv 
+            from library_videos as lv
     ');
-    $library_audios = DB::select('
-    select 
+        $library_audios = DB::select('
+    select
                 la.description,
                 la.id as audio_id,
             (select count(lac.id) from library_audio_contents as lac
             where lac.library_audio_id  = la.id) as library_audio_count
-            from library_audios as la 
+            from library_audios as la
     ');
-    $library_documents = DB::select('
-    select 
+        $library_documents = DB::select('
+    select
                 ld.description,
                 ld.id as document_id,
             (select count(ldc.id) from library_document_contents as ldc
             where ldc.library_document_id  = ld.id) as library_document_count
-            from library_documents as ld 
+            from library_documents as ld
     ');
-    $library_kits = DB::select('
-    select 
+        $library_kits = DB::select('
+    select
                 lk.name,
                 lk.id as kit_id,
             (select count(lkc.id) from library_kit_contents as lkc
             where lkc.library_kit_id  = lk.id) as library_kit_count
-            from library_kits as lk 
+            from library_kits as lk
     ');
-    
-            // $library_statistics = DB::select('
-            // SELECT description AS lv_des, NULL AS la_des, NULL AS ld_des
-            // FROM library_videos
-            // UNION ALL
-            // SELECT NULL AS lv_des, description AS la_des, NULL AS ld_des
-            // FROM library_audios
-            // UNION ALL
-            // SELECT NULL AS lv_des, NULL AS la_des, description AS ld_des
-            // FROM library_documents;
-            // ');
-        
-            $grade_statisticts = DB::select('select 
+
+        $grade_statisticts = DB::select('select
             distinct g.name as grade_name, g.id as grade_id,
              (select count(stu.id) from students as stu
                     where stu.grade_id = g.id
@@ -326,7 +339,7 @@ from courses as c');
                     left join subjects as s
                     on s.id = sig.subject_id
             ');
-            $provincial_user_statistics = DB::select('
+        $provincial_user_statistics = DB::select('
             SELECT
             COALESCE(male_students.male_student_count, 0) AS male_student_count,
             COALESCE(female_students.female_student_count, 0) AS female_student_count,
@@ -411,14 +424,8 @@ LEFT JOIN
             sp.province_id
     ) AS parent_female_students ON parent_female_students.province_id = p.id;
             ');
-                    return view('pages.dashboard.index', compact('student_count', 'teacher_count', 'parent_count',
-                     'studentPercentage', 'teacherPercentage','parentPercentage', 'totalUsers', 
-                     'student_male_count', 'student_female_count', 'teacher_male_count', 'teacher_female_count', 'parent_male_count', 'parent_female_count',
-                     'chartData', 'year','syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries', 'grades', 
-                    'subject_statistics', 'library_videos', 'library_audios', 'library_documents', 'library_kits', 
-                    'courses_statistics', 'grade_statisticts', 'provincial_user_statistics', 'syncUserPercentage',
-                'unSyncUserPercentage', 'totalUsersPercentage'));
-                }
+        return view('pages.dashboard.index', compact('student_count', 'teacher_count', 'parent_count', 'studentPercentage', 'teacherPercentage', 'parentPercentage', 'totalUsers', 'student_male_count', 'student_female_count', 'teacher_male_count', 'teacher_female_count', 'parent_male_count', 'parent_female_count', 'chartData', 'year', 'syncUsers', 'unSyncUsers', 'lessons', 'courses', 'libraries', 'grades', 'subject_statistics', 'library_videos', 'library_audios', 'library_documents', 'library_kits', 'courses_statistics', 'grade_statisticts', 'provincial_user_statistics', 'syncUserPercentage', 'unSyncUserPercentage', 'totalUsersPercentage'));
+    }
 
 
 
