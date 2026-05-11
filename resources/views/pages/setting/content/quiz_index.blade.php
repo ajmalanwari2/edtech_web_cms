@@ -26,7 +26,7 @@
 
                     </div>
                     <div class="card-body">
-                        <table id="content_view" class="display  table-bordered" style="width:100%">
+                        <table id="content_view" class="display table-bordered quiz-rtl-table" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Question</th>
@@ -68,7 +68,7 @@
                                         picture:</label>
                                     <div class="input-group input-group-merge">
 
-                                        <textarea class="form-control" id="q_text" name="q_text" value="" required="" width="400px"></textarea>
+                                        <textarea class="form-control rtl-input" id="q_text" name="q_text" value="" required="" width="400px" dir="auto"></textarea>
                                         <br>
                                         {{-- <input type="file" id="q_image" name="q_image"> --}}
                                         <label for="q_image" class="file_uploads">
@@ -128,8 +128,8 @@
                                     <label class="text-label" for="option_a_text">Option A:</label>
                                     <div class="input-group input-group-merge">
 
-                                        <textarea class="form-control" id="option_a_text" name="option_a_text" value="{{ old('option_a_text') }}"
-                                            required="" width="400px"></textarea>
+                                        <textarea class="form-control rtl-input" id="option_a_text" name="option_a_text" value="{{ old('option_a_text') }}"
+                                            required="" width="400px" dir="auto"></textarea>
                                         <br>
                                         {{-- <input type="file" id="option_a_image" name="option_a_image"> --}}
                                         <label for="option_a_image" class="file_uploads">
@@ -148,8 +148,8 @@
                                     <label class="text-label" for="option_b_text">Option B:</label>
                                     <div class="input-group input-group-merge">
 
-                                        <textarea class="form-control" id="option_b_text" name="option_b_text" value="{{ old('option_b_text') }}"
-                                            required="" width="400px"></textarea>
+                                        <textarea class="form-control rtl-input" id="option_b_text" name="option_b_text" value="{{ old('option_b_text') }}"
+                                            required="" width="400px" dir="auto"></textarea>
                                         <br>
                                         {{-- <input type="file" id="option_b_image" name="option_b_image"> --}}
                                         <label for="option_b_image" class="file_uploads">
@@ -168,8 +168,8 @@
                                     <label class="text-label" for="option_c_text">Option C:</label>
                                     <div class="input-group input-group-merge">
 
-                                        <textarea class="form-control" id="option_c_text" name="option_c_text" value="{{ old('option_c_text') }}"
-                                            required="" width="400px"></textarea>
+                                        <textarea class="form-control rtl-input" id="option_c_text" name="option_c_text" value="{{ old('option_c_text') }}"
+                                            required="" width="400px" dir="auto"></textarea>
                                         <br>
                                         {{-- <input type="file" id="option_c_image" name="option_c_image"> --}}
                                         <label for="option_c_image" class="file_uploads">
@@ -186,8 +186,8 @@
                                     <label class="text-label" for="option_d_text">Option D:</label>
                                     <div class="input-group input-group-merge">
 
-                                        <textarea class="form-control" id="option_d_text" name="option_d_text" value="{{ old('option_d_text') }}"
-                                            required="" width="400px"></textarea>
+                                        <textarea class="form-control rtl-input" id="option_d_text" name="option_d_text" value="{{ old('option_d_text') }}"
+                                            required="" width="400px" dir="auto"></textarea>
                                         <br>
                                         {{-- <input type="file" id="option_d_image" name="option_d_image"> --}}
                                         <label for="option_d_image" class="file_uploads">
@@ -249,7 +249,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="me-1">Question:</div>
-                            <div id ="d_question_text" class="text-muted"></div>
+                            <div id ="d_question_text" class="text-muted rtl-display-text" dir="auto"></div>
                             <a id="d_question_image" href="#" target="_blank"> <i class="material-icons"
                                     style="color:primary"><img src="{{ asset('assets/images/icons/pdf.png') }}"
                                         width="30" height="30" alt="avatar">
@@ -259,7 +259,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="me-1">Option A:</div>
-                            <div id ="d_option_a_text" class="text-muted"></div>
+                            <div id ="d_option_a_text" class="text-muted rtl-display-text" dir="auto"></div>
                             <a id="d_option_a_image" href="#" target="_blank"> <i class="material-icons"
                                     style="color:primary"><img src="{{ asset('assets/images/icons/pdf.png') }}"
                                         width="30" height="30" alt="avatar">
@@ -267,7 +267,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="me-1">Option B:</div>
-                            <div id ="d_option_b_text" class="text-muted"></div>
+                            <div id ="d_option_b_text" class="text-muted rtl-display-text" dir="auto"></div>
                             <a id="d_option_b_image" href="#" target="_blank"> <i class="material-icons"
                                     style="color:primary"><img src="{{ asset('assets/images/icons/pdf.png') }}"
                                         width="30" height="30" alt="avatar">
@@ -275,7 +275,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="me-1">Option C:</div>
-                            <div id ="d_option_c_text" class="text-muted"></div>
+                            <div id ="d_option_c_text" class="text-muted rtl-display-text" dir="auto"></div>
                             <a id="d_option_c_image" href="#" target="_blank"> <i class="material-icons"
                                     style="color:primary"><img src="{{ asset('assets/images/icons/pdf.png') }}"
                                         width="30" height="30" alt="avatar">
@@ -283,7 +283,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="me-1">Option D:</div>
-                            <div id ="d_option_d_text" class="text-muted"></div>
+                            <div id ="d_option_d_text" class="text-muted rtl-display-text" dir="auto"></div>
                             <a id="d_option_d_image" href="#" target="_blank"> <i class="material-icons"
                                     style="color:primary"><img src="{{ asset('assets/images/icons/pdf.png') }}"
                                         width="30" height="30" alt="avatar">
@@ -352,6 +352,21 @@
         .file_uploads i {
             margin-right: 5px;
         }
+
+        .rtl-input,
+        .rtl-display-text,
+        .quiz-rtl-table tbody td {
+            direction: rtl;
+            text-align: right;
+            unicode-bidi: plaintext;
+            font-family: "Noto Naskh Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        .quiz-rtl-table tbody td:last-child {
+            direction: ltr;
+            text-align: center;
+            unicode-bidi: isolate;
+        }
     </style>
 
 
@@ -385,26 +400,7 @@
                 var url = site_url + 'api/quiz/save';
                 var formData = new FormData();
                 formData.append('_token', '{{ csrf_token() }}');
-                      var str = $('#q_text').val();
- var charactersToReplace = ['ټ', 'ځ', 'ا'];
-   var replacements = ['t', 'j', 'a'];
-    var newStr = str;
-
-    for (var i = 0; i < charactersToReplace.length; i++) {
-    var character = charactersToReplace[i];
-    var replacement = replacements[i];
-    var index = newStr.indexOf(character);
-
-    while (index !== -1) {
-        newStr = newStr.replace(character, replacement);
-        index = newStr.indexOf(character, index + 1);
-    }
-    }
-
-
-
-                // formData.append('q_text', $('#q_text').val());
-                formData.append('q_text', newStr);
+                formData.append('q_text', $('#q_text').val());
                 formData.append('q_image', $('#q_image')[0].files[0]);
 
                 formData.append('option_a_text', $('#option_a_text').val());
@@ -642,6 +638,19 @@
                 },
                 {
                     data: 'actions'
+                }
+            ],
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5],
+                    createdCell: function(td) {
+                        $(td).attr('dir', 'auto').addClass('rtl-display-text');
+                    }
+                },
+                {
+                    targets: 6,
+                    createdCell: function(td) {
+                        $(td).attr('dir', 'ltr').css('text-align', 'center');
+                    }
                 }
             ],
             processing: true,

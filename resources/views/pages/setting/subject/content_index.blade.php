@@ -24,7 +24,7 @@
 
                 </div>
                 <div class="card-body">
-                    <table id="chapter" class="display  table-bordered" style="width:100%">
+                    <table id="chapter" class="display table-bordered setting-lesson-table" style="width:100%">
                         <thead>
                             <tr>
                                 <th style="display:none">Updated at</th>
@@ -74,6 +74,7 @@
                                 <label class="text-label" for="title_add">Title:</label>
                                 <div class="input-group input-group-merge">
                                     <input id="name_add" type="text" required="" class="form-control form-control-prepended name-field"
+                                        dir="auto"
                                         placeholder="Title" value="{{ old('name_add') }}">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -195,6 +196,7 @@
                                 <label class="text-label" for="title">Title:</label>
                                 <div class="input-group input-group-merge">
                                     <input id="name" type="text" required="" class="form-control form-control-prepended"
+                                        dir="auto"
                                         placeholder="Title" value="{{ old('name') }}">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -277,17 +279,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="me-1">Title:</div>
-                        <div id="chapter_name" class="text-muted"></div>
+                        <div id="chapter_name" class="text-muted lesson-rtl-text" dir="auto"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-md-6">
                         <div class="me-1">Grade Name:</div>
-                        <div id="grade_name" class="text-muted"></div>
+                        <div id="grade_name" class="text-muted lesson-rtl-text" dir="auto"></div>
                     </div>
                     <div class="col-md-6">
                         <div class="me-1">Subject Name:</div>
-                        <div id="subject_name" class="text-muted"></div>
+                        <div id="subject_name" class="text-muted lesson-rtl-text" dir="auto"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
@@ -306,7 +308,7 @@
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-md-12 table-responsive">
-                        <table id="contentTable" class="table table-bordered">
+                        <table id="contentTable" class="table table-bordered lesson-content-table">
                             <thead>
                                 <tr>
                                     <th colspan="3" class="title">Lesson Contents</th>
@@ -371,6 +373,22 @@
 
 #contentTable tbody tr {
     height: 30px;
+}
+
+.setting-lesson-table tbody td,
+.lesson-content-table tbody td,
+.lesson-rtl-text {
+    direction: rtl;
+    text-align: right;
+    unicode-bidi: plaintext;
+    font-family: "Noto Naskh Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.setting-lesson-table tbody td:last-child,
+.lesson-content-table tbody td:last-child {
+    direction: ltr;
+    text-align: center;
+    unicode-bidi: isolate;
 }
 </style>
 
@@ -458,6 +476,19 @@ var table = $('#chapter').DataTable({
         },
         {
             data: 'actions'
+        }
+    ],
+    columnDefs: [{
+            targets: [1, 2, 3, 4, 5, 6],
+            createdCell: function(td) {
+                $(td).attr('dir', 'auto').addClass('lesson-rtl-text');
+            }
+        },
+        {
+            targets: 7,
+            createdCell: function(td) {
+                $(td).attr('dir', 'ltr').css('text-align', 'center');
+            }
         }
     ],
     processing: true,
@@ -621,7 +652,7 @@ $(document).ready(function() {
             '<label class="text-label" for="' + formId + '_name">Title:</label>' +
             '<div class="input-group input-group-merge">' +
             '<input id="' + formId +
-            '_name" type="text" required="" class="form-control form-control-prepended name-field" placeholder="Title" value="">' +
+            '_name" type="text" required="" class="form-control form-control-prepended name-field" dir="auto" placeholder="Title" value="">' +
             '<div class="input-group-prepend">' +
             '<div class="input-group-text">' +
             '<span class="fas fa-home"></span>' +
@@ -732,12 +763,12 @@ function loadRecord(id) {
             var contentsHtml = '';
             $.each(data.contents, function(key, value) {
                 contentsHtml += '<tr>';
-                contentsHtml += '<td>' + value.title + '</td>';
-                contentsHtml += '<td>' + value.type + '</td>';
+                contentsHtml += '<td dir="auto" class="lesson-rtl-text">' + value.title + '</td>';
+                contentsHtml += '<td dir="auto" class="lesson-rtl-text">' + value.type + '</td>';
                 if (value.type === 'video') {
-                    contentsHtml += '<td><a href="' + value.body + '" target="_blank">Download Content</a></td>'; 
+                    contentsHtml += '<td dir="ltr" class="text-center"><a href="' + value.body + '" target="_blank">Download Content</a></td>'; 
                 } else {
-                    contentsHtml += '<td>' + value.body + '</td>';
+                    contentsHtml += '<td dir="auto" class="lesson-rtl-text">' + value.body + '</td>';
                 }
                 
                 contentsHtml += '</tr>';
