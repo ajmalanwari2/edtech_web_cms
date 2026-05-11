@@ -547,7 +547,6 @@ WHERE
 
 public function studentSubjectChapterList(Request $request){
         $subject_id = $request->subject_id;
-         \Log::info($subject_id);
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $grade_id = Student::select('grade_id')->where('user_id', $user_id)->get();
