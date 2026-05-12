@@ -25,9 +25,19 @@ class Teacher extends Model
         return $this->hasOne('App\Models\Province', 'id', 'province_id');
     }
 
+    public function district()
+    {
+        return $this->hasOne('App\Models\District', 'id', 'district_id');
+    }
+
     public function school()
     {
         return $this->hasOne('App\Models\School', 'id', 'school_id');
+    }
+
+    public function grade()
+    {
+        return $this->hasOne('App\Models\Grade', 'id', 'grade_id');
     }
 
     public function user()

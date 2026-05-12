@@ -44,72 +44,50 @@ class UserCreationRequestController extends Controller
      */
     public function allRegisteredUserList(Request $request){
         if ($request->ajax()) {
-            $data = User::with(['student', 'teacher', 'parent'])
-            ->where('role', '!=', 'admin')
-            ->latest()
-            ->limit(2350)
-            ->get();
+            if ((int) $request->input('length') === -1) {
+                @ini_set('memory_limit', '512M');
+                @set_time_limit(120);
+            }
+
+            $data = DB::table('users as u')
+                ->leftJoin('students as s', function ($join) {
+                    $join->on('s.user_id', '=', 'u.id')
+                        ->whereNull('s.deleted_at');
+                })
+                ->leftJoin('teachers as t', 't.user_id', '=', 'u.id')
+                ->leftJoin('student_parents as sp', 'sp.user_id', '=', 'u.id')
+                ->leftJoin('provinces as ps', 'ps.id', '=', 's.province_id')
+                ->leftJoin('provinces as pt', 'pt.id', '=', 't.province_id')
+                ->leftJoin('provinces as pp', 'pp.id', '=', 'sp.province_id')
+                ->leftJoin('districts as ds', 'ds.id', '=', 's.district_id')
+                ->leftJoin('districts as dt', 'dt.id', '=', 't.district_id')
+                ->leftJoin('districts as dp', 'dp.id', '=', 'sp.district_id')
+                ->leftJoin('schools as ss', 'ss.id', '=', 's.school_id')
+                ->leftJoin('schools as st', 'st.id', '=', 't.school_id')
+                ->leftJoin('schools as spc', 'spc.id', '=', 'sp.school_id')
+                ->leftJoin('grades as gs', 'gs.id', '=', 's.grade_id')
+                ->leftJoin('grades as gt', 'gt.id', '=', 't.grade_id')
+                ->leftJoin('grades as gp', 'gp.id', '=', 'sp.grade_id')
+                ->whereNull('u.deleted_at')
+                ->where('u.role', '!=', 'admin')
+                ->select([
+                    'u.id',
+                    'u.name',
+                    'u.identity_number',
+                    'u.email',
+                    'u.role',
+                    'u.status',
+                    DB::raw("COALESCE(s.phone_no, t.phone_no, sp.phone_no, '') as phone_no"),
+                    DB::raw("COALESCE(ps.name, pt.name, pp.name, '') as province"),
+                    DB::raw("COALESCE(ds.name, dt.name, dp.name, '') as district"),
+                    DB::raw("COALESCE(ss.name, st.name, spc.name, '') as school"),
+                    DB::raw("COALESCE(gs.name, gt.name, gp.name, '') as grade"),
+                ])
+                ->orderByDesc('u.id');
+
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('province', function($row){
-                    return $row->province ? $row->province->name : '';
-                })
-                ->addColumn('school', function($row){
-                    return $row->school ? $row->school->name : '';
-                })
-                ->addColumn('phone_no', function($row){
-                    if($row->student){
-                        return $row->student->phone_no;
-                    }elseif($row->teacher){
-                       return $row->teacher->phone_no;
-                    }else if($row->parent){
-                        return $row->parent->phone_no;
-                    } else{
-                        return '';
-                    }
-                })
-                ->addColumn('province', function($row){
-                    if($row->student){
-                        return Province::find($row->student->province_id)->name;
-                    }elseif($row->teacher){
-                        return Province::find($row->teacher->province_id)->name;
-                    }else if($row->parent){
-                        return Province::find($row->parent->province_id)->name;
-                    } else{
-                        return '';
-                    }
-
-                })
-                ->addColumn('district', function($row){
-                    if($row->student){
-                        return District::find($row->student->district_id)->name;
-                    }elseif($row->teacher){
-                        return District::find($row->teacher->district_id)->name;
-                    }else if($row->parent){
-                        return District::find($row->parent->district_id)->name;
-                    } else{
-                        return '';
-                    }
-                })
-                ->addColumn('school', function($row){
-                    if($row->student){
-                        return School::find($row->student->school_id)->name;
-                    }elseif($row->teacher){
-                        return School::find($row->teacher->school_id)->name;
-                    }else if($row->parent){
-                        return School::find($row->parent->school_id)->name;
-                    } else{
-                        return '';
-                    }
-                })
-                ->addColumn('grade', function($row){
-                    if($row->student){
-                        return Grade::find($row->student->grade_id)->name;
-                    }else{
-                        return '';
-                    }
-                })
-                ->addColumn('status', function ($row) {
+                ->editColumn('status', function ($row) {
                     if($row->status){
                         return 'Active';
                     }else{
@@ -124,6 +102,37 @@ class UserCreationRequestController extends Controller
                     <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-confirm"
                     onclick="deleteRecordID=' . $row->id . ';"> <i class="material-icons"; style="color:darkorange">delete</i></a>';
                     return $actionBtn;
+                })
+                ->filterColumn('phone_no', function ($query, $keyword) {
+                    $query->whereRaw("COALESCE(s.phone_no, t.phone_no, sp.phone_no, '') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->filterColumn('province', function ($query, $keyword) {
+                    $query->whereRaw("COALESCE(ps.name, pt.name, pp.name, '') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->filterColumn('district', function ($query, $keyword) {
+                    $query->whereRaw("COALESCE(ds.name, dt.name, dp.name, '') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->filterColumn('school', function ($query, $keyword) {
+                    $query->whereRaw("COALESCE(ss.name, st.name, spc.name, '') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->filterColumn('grade', function ($query, $keyword) {
+                    $query->whereRaw("COALESCE(gs.name, gt.name, gp.name, '') LIKE ?", ["%{$keyword}%"]);
+                })
+                ->filterColumn('status', function ($query, $keyword) {
+                    $keyword = strtolower($keyword);
+                    $compactKeyword = str_replace(' ', '', $keyword);
+
+                    if (str_contains('inactive', $compactKeyword)) {
+                        $query->where('u.status', 0);
+                        return;
+                    }
+
+                    if (str_contains('active', $keyword)) {
+                        $query->where('u.status', 1);
+                        return;
+                    }
+
+                    $query->whereRaw("CASE WHEN u.status = 1 THEN 'Active' ELSE 'In active' END LIKE ?", ["%{$keyword}%"]);
                 })
                 ->rawColumns(['actions'])
                 ->make(true);

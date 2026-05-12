@@ -438,40 +438,54 @@ var table = $('#user').DataTable({
     },
     columns: [
         {
-            data: 'id'
+            data: 'id',
+            name: 'u.id'
         },
         {
-            data: 'name'
+            data: 'name',
+            name: 'u.name'
         },
         {
-            data: 'identity_number'
+            data: 'identity_number',
+            name: 'u.identity_number'
         },
         {
-            data: 'email'
+            data: 'email',
+            name: 'u.email'
         },
         {
-            data: 'phone_no'
+            data: 'phone_no',
+            name: 'phone_no'
         },
         {
-            data: 'province'
+            data: 'province',
+            name: 'province'
         },
         {
-            data: 'district'
+            data: 'district',
+            name: 'district'
         },
         {
-            data: 'school'
+            data: 'school',
+            name: 'school'
         },
         {
-            data: 'grade'
+            data: 'grade',
+            name: 'grade'
         },
         {
-            data: 'role'
+            data: 'role',
+            name: 'u.role'
         },
         {
-            data: 'status'
+            data: 'status',
+            name: 'status'
         },
         {
-            data: 'actions'
+            data: 'actions',
+            name: 'actions',
+            orderable: false,
+            searchable: false
         }
     ],
     processing: true,
