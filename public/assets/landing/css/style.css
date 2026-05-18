@@ -207,8 +207,8 @@ color: rgb(255, 255, 255);font-size: 12px;display: flex;justify-content: center;
 .grd-f i, .grd-m i{color: #75c1ff;font-size: 30px;}
 .grd-f i{color: #e786c0; font-size: 30px;}
 .grd-f span, .grd-m span, .grd-v span, .grd-ff span{
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   background: #d0eaff;
   text-align: center;
   border-radius: 50%;
