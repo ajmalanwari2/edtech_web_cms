@@ -31,6 +31,8 @@
                                     <th>School Name</th>
                                     <th>Grade Number</th>
                                     <th>Phone Number</th>
+                                    <th>Province Name</th>
+                                    <th>District Name</th>
                                     <th>Last Seen</th>
                                     <th>Actions</th>
                                 </tr>
@@ -79,7 +81,7 @@ var table = $('#dashboard').DataTable({
             extend: 'excelHtml5',
 
             exportOptions: {
-                columns: [1, 2, 3, 4]
+                columns: [1, 2, 3, 4, 5, 6, 7]
             }
         }, ],
     serverSide: true,
@@ -113,6 +115,12 @@ var table = $('#dashboard').DataTable({
         },
         {
             data: 'phone_number'
+        },
+        {
+            data: 'province_name'
+        },
+        {
+            data: 'district_name'
         },
         {
             data: 'last_seen'

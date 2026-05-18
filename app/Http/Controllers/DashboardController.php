@@ -454,6 +454,8 @@ LEFT JOIN
                         sch.name as school_name,
                         g.name as grade_name,
                         s.phone_no as phone_number,
+                        p.name as province_name,
+                        d.name as district_name,
                         u.last_seen,
                         u.updated_at
                 from users as u
@@ -463,6 +465,10 @@ LEFT JOIN
                     on sch.id = s.school_id
                 left join grades as g
                     on g.id = s.grade_id
+                left join provinces as p
+                    on s.province_id = p.id
+                left join districts as d
+                    on s.district_id = d.id        
                 where u.role = \'student\'
             ');
             return Datatables::of($data)
