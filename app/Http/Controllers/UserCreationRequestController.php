@@ -229,7 +229,7 @@ class UserCreationRequestController extends Controller
             $user->name = $request->name;
             $user->identity_number = $request->identity_number;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password);
+            // $user->password = Hash::make($request->password);
             $user->role = $request->role;
             $user->status = $request->status;
             $user_id = $user->save();

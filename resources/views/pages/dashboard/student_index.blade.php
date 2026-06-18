@@ -22,21 +22,23 @@
 
                 </div>
                 <div class="card-body">
-                    <table id="course" class="display  table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                            <th style="display:none">Updated ar</th>
-                                <th>Full Name</th>
-                                <th>Identification Number</th>
-                                <th>School Name</th>
-                                <th>Grade Number</th>
-                                <th>Phone Number</th>
-                                <th>Email Address</th>
-                                <th>Province</th>
-                                <th>Gender</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="student-table-scroll">
+                        <table id="course" class="display table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">Updated ar</th>
+                                    <th>Full Name</th>
+                                    <th>Identification Number</th>
+                                    <th>School Name</th>
+                                    <th>Grade Number</th>
+                                    <th>Phone Number</th>
+                                    <th>Email Address</th>
+                                    <th>Province</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,6 +128,38 @@
 #contentTable tbody tr {
     height: 30px;
 }
+
+.student-table-scroll {
+    max-height: calc(100vh - 260px);
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+}
+
+.student-table-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.student-table-scroll::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 10px;
+}
+
+.student-table-scroll::-webkit-scrollbar-thumb {
+    background: #c1c9d2;
+    border-radius: 10px;
+    border: 2px solid #f1f3f5;
+}
+
+.student-table-scroll::-webkit-scrollbar-thumb:hover {
+    background: #9aa6b2;
+}
+
+.student-table-scroll table.dataTable {
+    margin-bottom: 0 !important;
+}
 </style>
 
 @stop
@@ -147,6 +181,9 @@ var table = $('#course').DataTable({
                 columns: [1, 2, 3, 4, 5, 6, 7, 8]
             }
         }, ],
+    scrollX: true,
+    scrollY: '55vh',
+    scrollCollapse: true,
     serverSide: true,
     ajax: {
         url: site_url + 'api/dashboard/student-list',
