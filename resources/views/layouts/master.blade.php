@@ -41,6 +41,45 @@
     unicode-bidi: isolate;
 }
 @endif
+
+.datatable-scroll-shell {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.datatable-scroll-shell .dataTables_scrollBody {
+    max-height: calc(100vh - 260px);
+    overflow: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c9d2 #f1f3f5;
+}
+
+.datatable-scroll-shell .dataTables_scrollBody::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.datatable-scroll-shell .dataTables_scrollBody::-webkit-scrollbar-track {
+    background: #f1f3f5;
+}
+
+.datatable-scroll-shell .dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background: #c1c9d2;
+    border-radius: 10px;
+    border: 2px solid #f1f3f5;
+}
+
+.datatable-scroll-shell .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+    background: #9aa6b2;
+}
+
+.datatable-scroll-shell .dataTables_scrollHead table,
+.datatable-scroll-shell .dataTables_scrollBody table,
+.datatable-scroll-shell table.dataTable {
+    margin-bottom: 0 !important;
+}
     </style>
   @include('layouts.partial.css')
   @yield('styles')
@@ -112,6 +151,5 @@
  @yield('modals')
 </body>
 </html>
-
 
 

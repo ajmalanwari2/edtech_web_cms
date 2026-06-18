@@ -22,21 +22,23 @@
 
                 </div>
                 <div class="card-body">
-                    <table id="course" class="display  table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                            <th style="display:none">Updated ar</th>
-                                <th>Full Name</th>
-                                <th>Identification Number</th>
-                                <th>School Name</th>
-                                <th>Grade Number</th>
-                                <th>Phone Number</th>
-                                <th>Email Address</th>
-                                <th>Province</th>
-                                <th>Gender</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="datatable-scroll-shell">
+                        <table id="course" class="display table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="display:none">Updated ar</th>
+                                    <th>Full Name</th>
+                                    <th>Identification Number</th>
+                                    <th>School Name</th>
+                                    <th>Grade Number</th>
+                                    <th>Phone Number</th>
+                                    <th>Email Address</th>
+                                    <th>Province</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

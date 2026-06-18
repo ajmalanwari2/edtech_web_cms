@@ -76,10 +76,25 @@
     <script src="{{ asset('assets/landing/js/bootstrap.bundle.min.js') }}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="{{ asset('assets/landing/js/charts.js') }}"></script>
+    <script type="text/javascript">
+        if ($.fn.dataTable) {
+            $.extend(true, $.fn.dataTable.defaults, {
+                scrollX: true,
+                scrollY: '55vh',
+                scrollCollapse: true,
+                autoWidth: false
+            });
+
+            $(document).on('init.dt', function(e, settings) {
+                var api = new $.fn.dataTable.Api(settings);
+                $(api.table().container()).addClass('datatable-scroll-shell');
+            });
+        }
+    </script>
   
 
 
-   
+
 
 
 
