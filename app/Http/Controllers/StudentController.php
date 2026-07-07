@@ -1259,7 +1259,12 @@ FROM
             $students['grades'] = json_decode(json_encode($students['grades']), true);
             $students['grades'][count($students['grades'])]['grade_id'] = $students['current_grade_id'];
 
-
+ $grade_id = Student::select('grade_id')->where('user_id', $user_id)->get();
+        $grade_id = $grade_id && $grade_id[0] ? $grade_id[0]->grade_id : NULL;
+ if($user == NULL || $grade_id == NULL){
+            return response(['message' => 'The user is not registered'], 400)
+                ->header('Content-Type', 'text/json');
+        }
             // dd($students);
             $rec = [
                 'student_name' => $students['student_name'],
@@ -1282,13 +1287,38 @@ FROM
             //add previous grades to the list so that 
             // dd($previous_grades);
             for($i=0;$i<count($students['grades']);$i++) {
-                $rec['grades'][$i]['grade_name'] = DB::select('SELECT name from grades where id='.$students['grades'][$i]['grade_id'])[0]->name;
-                $total_chapters = DB::select('SELECT COUNT(c.id) AS total_chapters
+                $rec['grades'][$i]['grade_name'] = DB::select('SELECT name from grades where id='.$grade_id)[0]->name;
+                $total_chapters = DB::select(
+                'SELECT COUNT(c.id) AS total_chapters
                 FROM chapters AS c
-                WHERE c.grade_id =' . $students['grades'][$i]['grade_id'])[0]->total_chapters;
-                $learned_chapters = DB::select('SELECT COUNT(c.id) AS learned_chapters
-                FROM chapters AS c
-                WHERE c.state = 1 and c.grade_id =' . $students['grades'][$i]['grade_id'])[0]->learned_chapters;
+                JOIN subjects AS s
+                    ON s.id = c.subject_id
+                JOIN subjects_in_grades AS sig
+                    ON s.id = sig.subject_id
+                JOIN grades AS g
+                    ON g.id = sig.grade_id
+                WHERE sig.grade_id = ?',
+                [$grade_id]
+            )[0]->total_chapters;
+                $learned_chapters = DB::select(
+    'SELECT COUNT(c.id) AS learned_chapters
+     FROM chapters AS c
+     JOIN chapter_states AS cs
+        ON c.id = cs.chapter_id
+        AND cs.user_id = ?
+     JOIN subjects AS s
+        ON s.id = c.subject_id
+     JOIN subjects_in_grades AS sig
+        ON s.id = sig.subject_id
+     JOIN grades AS g
+        ON g.id = sig.grade_id
+     WHERE sig.grade_id = ?',
+    [
+        $user_id,
+        $grade_id
+    ]
+)[0]->learned_chapters;
+
 
                 $learned_chapters_per_month = DB::select('
                 SELECT COUNT(chapter_id) AS number_of_learned_chapter_per_month,
@@ -1312,14 +1342,15 @@ FROM
                  FROM subjects as s
                  LEFT JOIN subjects_in_grades as sig ON s.id = sig.subject_id
                  LEFT JOIN grades as g ON g.id = sig.grade_id
-                 WHERE g.id = ' . $students['grades'][$i]['grade_id']);
+                 WHERE g.id = ' . $grade_id);
 
                  
 
                 foreach ($subjects as $subject) {
-                    $chapters = DB::select('select name,state from chapters where grade_id='.$students['grades'][$i]['grade_id'].' and subject_id='.$subject->subject_id.'');
+                    $chapters = DB::select('select name,state from chapters where grade_id='.$grade_id.' and subject_id='.$subject->subject_id.'');
                  $total_chapters = DB::select('select
-                    count(ch.id) as count
+                    count(ch.id) as count,
+                    s.id
                 from chapters as ch
                 join subjects as s
                 on s.id = ch.subject_id
@@ -1327,8 +1358,9 @@ FROM
                 on s.id = sig.subject_id
                 join grades as g
                 on g.id = sig.grade_id
-                where s.id='.$subject->subject_id.' and sig.grade_id = '.$students['grades'][$i]['grade_id'].';
+                where s.id='.$subject->subject_id.' and sig.grade_id = '.$grade_id.';
                 ');
+               
                     $total_completed_chapters = DB::select('select
                     count(ch.id) as count
                 from chapters as ch
@@ -1339,7 +1371,7 @@ FROM
                 on s.id = sig.subject_id
                 join grades as g
                 on g.id = sig.grade_id
-                WHERE s.id='.$subject->subject_id.' and sig.grade_id = '.$students['grades'][$i]['grade_id']);
+                WHERE s.id='.$subject->subject_id.' and sig.grade_id = '.$grade_id);
 //dd($total_completed_chapters[0]->count);
                     // Add subject_name to the subjects array
                     $subjectData = [
