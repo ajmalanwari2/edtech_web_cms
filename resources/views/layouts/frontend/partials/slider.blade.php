@@ -1,70 +1,50 @@
-<!-- Slideshow Started -->
-<div id="slideshow" class="slideshow carousel slide carousel-fade" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#slideshow" data-bs-slide-to="0" class="active" aria-current="true"
-            aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#slideshow" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#slideshow" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
+@php
+    $heroSlides = [
+        ['image' => 'slider33.jpg', 'title' => __('home.slide_show_title'), 'description' => __('home.slide_show_description'), 'button' => __('home.learmore')],
+        ['image' => 'slider2.jpg', 'title' => __('home.slide_show_title1'), 'description' => __('home.slide_show_description1'), 'button' => __('home.learnmore1')],
+        ['image' => 'slider3.jpg', 'title' => __('home.slide_show_title2'), 'description' => __('home.slide_show_description2'), 'button' => __('home.learnmore2')],
+    ];
+@endphp
+
+<section id="slideshow" class="academy-hero carousel slide carousel-fade" data-bs-ride="carousel" aria-label="EdTech Eqra">
     <div class="carousel-inner">
-
-        <!-- Slider 1 Start -->
-        <div class="carousel-item">
-            <img src="{{ asset('assets/frontend/images/slider33.jpg') }}" aria-hidden="true" focusable="false"
-                class="bd-placeholder-img" />
-            <div class="container position-relative">
-                <div class="carousel-caption text-start">
-                    <h1 class="slide-title">  {{ __('home.slide_show_title') }} </h1>
-                    <p> {{ __('home.slide_show_description') }} </p>
-                    <!-- <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learmore') }} <i
-                            class="fa-solid fa-arrow-right"></i></a> -->
+        @foreach ($heroSlides as $slide)
+            <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                <div class="academy-hero__container">
+                    <div class="academy-hero__grid">
+                        <div class="academy-hero__copy">
+                            <span class="academy-hero__eyebrow">EdTech Eqra</span>
+                            <h1>{{ $slide['title'] }}</h1>
+                            <p>{{ $slide['description'] }}</p>
+                            <a class="academy-hero__cta" href="/{{ $lang }}/content">
+                                {{ $slide['button'] }}
+                                <span class="academy-hero__cta-arrow" aria-hidden="true">&#8594;</span>
+                            </a>
+                        </div>
+                        <div class="academy-hero__media">
+                            <img src="{{ asset('assets/frontend/images/' . $slide['image']) }}" alt="" aria-hidden="true">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- Slider 1 End -->
-
-        <!-- Slider 2 Start -->
-        <div class="carousel-item">
-            <img src="{{ asset('assets/frontend/images/slider2.jpg') }}" aria-hidden="true" focusable="false"
-                class="bd-placeholder-img" />
-            <div class="container position-relative">
-                <div class="carousel-caption text-start">
-                    <h1 class="slide-title">{{ __('home.slide_show_title1') }}</h1>
-                    <p>{{ __('home.slide_show_title1') }}</p>
-                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learnmore1') }}<i
-                            class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Slider 2 End -->
-
-        <!-- Slider 3 Start -->
-        <div class="carousel-item">
-            <img src="{{ asset('assets/frontend/images/slider3.jpg') }}" aria-hidden="true" focusable="false"
-                class="bd-placeholder-img" />
-            <div class="container position-relative">
-                <div class="carousel-caption text-start">
-                    <h1 class="slide-title">{{ __('home.slide_show_title2') }}</h1>
-                    <p>{{ __('home.slide_show_description2') }}</p>
-                    <a class="btn btn-lg btn-primary" href="about.html">{{ __('home.learnmore2') }}<i
-                            class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Slider 3 End -->
-
+        @endforeach
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 
-</div>
-<script type="text/javascript">
-    $(".carousel-item:first-child").addClass("active");
-</script>
-<!-- End Slideshow -->
+    <div class="academy-hero__footer">
+        <div class="carousel-indicators academy-hero__indicators">
+            @foreach ($heroSlides as $slide)
+                <button type="button" data-bs-target="#slideshow" data-bs-slide-to="{{ $loop->index }}"
+                    class="{{ $loop->first ? 'active' : '' }}" @if ($loop->first) aria-current="true" @endif
+                    aria-label="Slide {{ $loop->iteration }}"></button>
+            @endforeach
+        </div>
+        <div class="academy-hero__arrows">
+            <button type="button" data-bs-target="#slideshow" data-bs-slide="prev" aria-label="Previous slide">
+                <span aria-hidden="true">&#8592;</span>
+            </button>
+            <button type="button" data-bs-target="#slideshow" data-bs-slide="next" aria-label="Next slide">
+                <span aria-hidden="true">&#8594;</span>
+            </button>
+        </div>
+    </div>
+</section>

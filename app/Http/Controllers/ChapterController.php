@@ -60,29 +60,38 @@ class ChapterController extends Controller
 
     public function list(Request $request){
         if ($request->ajax()) {
-            $data = DB::select('
-            SELECT
-                c.id,
-                c.number,
-                c.updated_at,
-                c.name,
-                c.status,
-                c.total_quiz_time,
-                g.name AS grade_name,
-                g.id AS grade_id,
-                s.name AS subject_name,
-                s.id AS subject_id,
-                MAX(q.id) AS quiz_included,
-                GROUP_CONCAT(DISTINCT sl.type SEPARATOR ", ") AS lesson_types
-            FROM chapters AS c
-            JOIN grades AS g ON g.id = c.grade_id
-            JOIN subjects AS s ON s.id = c.subject_id
-            LEFT JOIN subject_lessons AS sl ON c.id = sl.chapter_id
-            LEFT JOIN quizes AS q ON c.id = q.chapter_id
-            GROUP BY c.id
-            ORDER BY c.updated_at DESC
-            ');
-            return Datatables::of($data)
+            // Keep each DataTables draw bounded, including requests that send length=-1.
+            $request->merge(['length' => max(1, min((int) $request->input('length', 10), 100))]);
+
+            $query = DB::table('chapters as c')
+                ->join('grades as g', 'g.id', '=', 'c.grade_id')
+                ->join('subjects as s', 's.id', '=', 'c.subject_id')
+                ->select(
+                    'c.id',
+                    'c.number',
+                    'c.updated_at',
+                    'c.name',
+                    'c.status',
+                    'c.total_quiz_time',
+                    'g.name as grade_name',
+                    'g.id as grade_id',
+                    's.name as subject_name',
+                    's.id as subject_id'
+                )
+                ->selectSub(function ($lessons) {
+                    $lessons->from('subject_lessons as sl')
+                        ->selectRaw("GROUP_CONCAT(DISTINCT sl.type ORDER BY sl.type SEPARATOR ', ')")
+                        ->whereColumn('sl.chapter_id', 'c.id')
+                        ->whereNull('sl.deleted_at');
+                }, 'lesson_types')
+                ->selectSub(function ($quizzes) {
+                    $quizzes->from('quizes as q')
+                        ->selectRaw('MAX(q.id)')
+                        ->whereColumn('q.chapter_id', 'c.id');
+                }, 'quiz_included');
+
+            return Datatables::of($query)
+                ->ignoreSelectsInCountQuery()
                 ->addIndexColumn()
                 ->addColumn('chapter_status', function ($row) {
                     return $row->status ? 'Active' : 'Inactive';

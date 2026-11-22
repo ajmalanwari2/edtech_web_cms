@@ -6,100 +6,33 @@
 
 @include('layouts.frontend.partials.slider_rtl')
 
-<div class="totals-box">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-6 box">
-                <div class="item">
-                    <div class="icon">
-                        <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                    </div>
-                    <div class="text">
-                        <h4>{{$total_registered_students}}</h4>
-                        <p>{{ __('home.student_registration') }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 box">
-                <div class="item">
-                    <div class="icon">
-                        <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                    </div>
-                    <div class="text">
-                        <h4>{{$videoCount}}</h4>
-                        <p>{{ __('home.video_lossons') }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 box">
-                <div class="item">
-                    <div class="icon">
-                        <img src="{{ asset('assets/frontend/images/icon1.png') }}">
-                    </div>
-                    <div class="text">
-                        <h4>{{$audioCount}}</h4>
-                        <p>{{ __('home.audio_lossons') }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 box">
-                <div class="item">
-                    <div class="icon">
-                        <img src="{{ asset('assets/frontend/images/icon2.png') }}">
-                    </div>
-                    <div class="text">
-                        <h4>{{$documentCount}}</h4>
-                        <p>{{ __('home.document_lessons') }}</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
+@include('layouts.frontend.partials.impact_stats')
 
 <div class="spacer"></div>
 
 
 
 <!-- About Start -->
-<div class="about-top">
+<section class="about-top academy-intro">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-5 col-md-5">
-                <div class="img" data-aos="fade-left">
-
-                    <!-- if you are using youtube iframe -->
-                    <!--div class="video_youtube">
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/4To9AQ0J9bk?si=45EJvOv7kC2TBXtS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div-->
-
-                    <!-- if you are not using iframe -->
-                    <a href="#">
-                        <div class="video_no_youtube">
-                            <img src="{{ asset('assets/frontend/images/pic1.jpg') }}">
-                        </div>
-                    </a>
+        <div class="academy-intro__layout">
+            <div class="academy-intro__visual">
+                <div class="academy-intro__frame" data-aos="fade-left">
+                    <img src="{{ asset('assets/frontend/images/edtech_eqra.png') }}"
+                        alt="EdTech Eqra learning platform for students, parents and teachers">
                 </div>
             </div>
-
-            <div class="col-lg-7 col-md-7" style="z-index:2">
-                <div class="text aos-item" data-aos="fade-right" data-aos-delay="400">
-
-                    <h3>
-                        <txp:title />
-                    </h3>
+            <div class="academy-intro__copy">
+                <div class="text aos-item" data-aos="fade-right" data-aos-delay="120">
                     <h2>{{ __('home.title') }}</h2>
-                    <p>{{ __('home.description') }}</p>
+                    @foreach (array_chunk(preg_split('/(?<=[.!?؟۔])\s+/u', trim(__('home.description'))), 2) as $paragraph)
+                        <p>{{ implode(' ', $paragraph) }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
-
-</div>
+</section>
 <!-- About End -->
 
 
@@ -205,38 +138,46 @@
 
 
 <!-- News Vertical Start -->
-<div class="news-vertical">
-
+<section class="news-vertical news-showcase news-showcase--rtl">
     <div class="container">
+        <div class="news-showcase__heading">
+            <span class="news-showcase__eyebrow">EdTech</span>
+            @if($lang == 'da')
+                <h2>تازه‌ترین خبرها و اطلاعیه‌ها</h2>
+                <p>خبرها و رویدادهای تازه از جامعه آموزشی ما.</p>
+            @else
+                <h2>وروستي خبرونه او تازه معلومات</h2>
+                <p>زموږ د زده‌کړې ټولنې خبرونه او تازه معلومات.</p>
+            @endif
+        </div>
         <div class="row list">
 
             @php
             $data = ($lang == 'da') ? $newsDari : $newsPashto;
-            $pic = '1';
             @endphp
             @foreach($data as $n)
-            <div class="col-md-3 item" data-aos="fade-right">
-                <div class="image"><a href="#"><img
-                            src="{{ asset('storage/app/public/uploads/photo/' . $n->photo) }}"></a></div>
-                <!-- <img src="{{ asset('assets/frontend/images/pic1.jpg') }}" /></a></div> -->
+            <article class="col-md-3 item" data-aos="fade-up">
+                <div class="image"><img src="{{ asset('storage/uploads/photo/' . $n->photo) }}" alt="{{ $n->title }}" loading="lazy"></div>
                 <div class="content">
-                    <h4><a href="#">{{$n->title}}</a></h4>
+                    <h4>{{$n->title}}</h4>
                     <div class="posted">
-                        <i class="icon-clock"></i> {{$n->created_at}}<span class="user"><i class="icon-smile"></i>
+                        <i class="icon-clock"></i> {{ $n->created_at ? \Carbon\Carbon::parse($n->created_at)->format('Y-m-d') : '' }}<span class="user"><i class="icon-smile"></i>
                             توسطه: ادی تیک</span>
                     </div>
                     <p>{{$n->description}}</p>
-                    <a href="javascript:void(0)" class="btn btn-primary read-more-btn" data-title="{{ $n->title }}"
+                    <div class="news-showcase__spacer" aria-hidden="true"></div>
+                    <button type="button" class="btn btn-primary read-more-btn" data-title="{{ $n->title }}"
                         data-description="{{ $n->description }}"
                         data-image="{{ asset('storage/uploads/photo/' . $n->photo) }}">
-                        {{ __('home.read_more') }}
-                    </a>
+                        <span>{{ __('home.read_more') }}</span>
+                        <span class="news-showcase__arrow" aria-hidden="true">←</span>
+                    </button>
                 </div>
-            </div>
+            </article>
             @endforeach
         </div>
     </div>
-</div>
+</section>
 <!-- News End -->
 
 

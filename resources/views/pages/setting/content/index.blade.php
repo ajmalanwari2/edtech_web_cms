@@ -436,8 +436,8 @@ $(document).ready(function() {
 var table = $('#chapter').DataTable({
     dom: 'Bfrtip',
     lengthMenu: [
-        [10, 25, 50, -1],
-        ['10 rows', '25 rows', '50 rows', 'Show all']
+        [10, 25, 50, 100],
+        ['10 rows', '25 rows', '50 rows', '100 rows']
     ],
     buttons: ['pageLength', {
         extend: 'excelHtml5',
@@ -455,33 +455,41 @@ var table = $('#chapter').DataTable({
         }
     },
     columns: [{
-            data: null,
-            visible: false, // Hide the column
-            orderable: true, // Enable ordering on the column
-            render: function(data, type, row) {
-                return data.updated_at; // Return the value for ordering
-            }
+            data: 'updated_at',
+            name: 'c.updated_at',
+            visible: false,
+            searchable: false
         },
         {
-            data: 'number'
+            data: 'number',
+            name: 'c.number'
         },
         {
-            data: 'name'
+            data: 'name',
+            name: 'c.name'
         },
         {
-            data: 'subject_name'
+            data: 'subject_name',
+            name: 's.name'
         },
         {
-            data: 'grade_name'
+            data: 'grade_name',
+            name: 'g.name'
         },
         {
-            data: 'lesson_types'
+            data: 'lesson_types',
+            orderable: false,
+            searchable: false
         },
         {
-            data: 'quiz_included'
+            data: 'quiz_included',
+            orderable: false,
+            searchable: false
         },
         {
-            data: 'actions'
+            data: 'actions',
+            orderable: false,
+            searchable: false
         }
     ],
     processing: true,

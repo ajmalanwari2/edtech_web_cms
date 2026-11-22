@@ -1,57 +1,49 @@
-<!-- Footer Start -->
-<footer class="footer">
-    <div class="container" style="position:relative; z-index:2">
-      <div class="row">
-        <div class="col-md-5" data-aos="fade-right">
-          <h3>{{ __('footer.about_us') }}</h3>
-          <img class="logo" src="{{ asset('assets/frontend/images/logo.png') }}">
-          <p>{{ __('footer.description') }}</p>
-          <div class="about-list">
-            <a href="#" target="_blank"><i class="icon-facebook icon"></i></a>
-            <a href="#" target="_blank"><i class="icon-instagram icon"></i></a>
-            <a href="#" target="_blank"><i class="icon-twitter icon"></i></a>
-            <a href="#" target="_blank"><i class="icon-linkedin icon"></i></a>
-            <a href="#" target="_blank"><i class="icon-video icon"></i></a>
-          </div>
-        </div><!-- Column End -->
-        <div class="col-md-1"></div>
-        <div class="col-md-2 col-sm-6" data-aos="fade-up">
-          <h3>{{ __('footer.overview') }}</h3>
-          <ul>
-            <li><a href="/{{$lang}}">{{ __('footer.home') }}</a></li>
-            <!-- <li><a href="/front/{{$lang}}/aboutus">{{ __('footer.about_us') }}</a></li> -->
-            <!-- {{-- <li><a href="/front/{{$lang}}/">{{ __('footer.download') }}</a></li> --}} -->
-            <li><a href="/{{$lang}}/contactus">{{ __('footer.contact_us') }}</a></li>
-          </ul>
-        </div><!-- Column End -->
+<footer class="footer" id="site-footer">
+    <div class="container footer__inner">
+        <div class="row footer__main">
+            <section class="col-lg-5 col-md-6 footer__brand" aria-labelledby="footer-about-title">
+                <h3 id="footer-about-title">{{ __('footer.about_us') }}</h3>
+                <img class="logo" src="{{ asset('assets/frontend/images/logo.png') }}" alt="EdTech">
+                <p>{{ __('footer.description') }}</p>
+                <div class="about-list" aria-label="Social media">
+                    <a href="#" aria-label="Facebook" title="Facebook"><i class="icon-facebook icon" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Instagram" title="Instagram"><i class="icon-instagram icon" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Twitter" title="Twitter"><i class="icon-twitter icon" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="LinkedIn" title="LinkedIn"><i class="icon-linkedin icon" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="YouTube" title="YouTube"><i class="icon-video icon" aria-hidden="true"></i></a>
+                </div>
+            </section>
 
+            <nav class="col-lg-3 col-md-6 footer__links" aria-labelledby="footer-links-title">
+                <h3 id="footer-links-title">{{ __('footer.overview') }}</h3>
+                <ul>
+                    <li><a href="/{{ $lang }}">{{ __('footer.home') }}</a></li>
+                    <li><a href="/{{ $lang }}/content">{{ __('footer.contents') }}</a></li>
+                    <li><a href="/{{ $lang }}/course">{{ __('footer.courses') }}</a></li>
+                    <li><a href="/{{ $lang }}/contact">{{ __('footer.contact_us') }}</a></li>
+                    <li><a href="/{{ $lang }}/term_and_policy">{{ __('footer.terms_and_policy') }}</a></li>
+                </ul>
+            </nav>
 
-        <div class="col-md-3 col-sm-6" data-aos="fade-left">
-          <h3>{{ __('footer.contact_us') }}</h3>
-          <div class="contact-list">
-            <div class="item"><i class="icon icon-whatsapp"></i> +93780000000</div>
-            <div class="item"><i class="icon icon-mail"></i> info@edtecheqra.com</div>
-            <div class="item"><i class="icon icon-globe"></i>{{ __('footer.address') }}</div>
-          </div>
-        </div><!-- Column End -->
+            <section class="col-lg-4 col-md-12 footer__contact" aria-labelledby="footer-contact-title">
+                <h3 id="footer-contact-title">{{ __('footer.contact_us') }}</h3>
+                <div class="contact-list">
+                    <div class="item"><i class="icon icon-whatsapp" aria-hidden="true"></i><span>+93780000000</span></div>
+                    <div class="item"><i class="icon icon-mail" aria-hidden="true"></i><a href="mailto:info@edtecheqra.com">info@edtecheqra.com</a></div>
+                    <div class="item"><i class="icon icon-globe" aria-hidden="true"></i><span>{{ __('footer.address') }}</span></div>
+                </div>
+            </section>
+        </div>
 
+        <div class="footer__bottom">
+            <p>&copy; {{ __('footer.all_rights_reserved') }} <a target="_blank" rel="noopener" href="https://lifetech.af">LifeTech</a></p>
+            <a href="#top"><i class="icon-up-dir" aria-hidden="true"></i> {{ __('footer.go_up') }}</a>
+        </div>
+    </div>
+</footer>
 
-      </div>
-
-      <div class="end clearfix">
-        <p class="float-lg-start float-sm-none">&copy; {{ __('footer.all_rights_reserved') }}: <a target="_blank" style="" href="https://lifetech.af">LifeTech</a></p>
-          <p class="float-lg-start float-sm-none" style="margin-left: 42px"><a target="_blank" style="" href="/{{ $lang }}/term_and_policy"> {{ __('footer.terms_and_policy') }}</a></p>
-        <p class="float-lg-end float-sm-none"><a href="#top"><i class="icon-up-dir"></i> {{ __('footer.go_up') }}</a></p>
-      </div>
-  </footer>
-  <!-- Footer Endd -->
-
-
-  <script>
-    $(window).on("scroll", function () {
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-     });    
-  </script>
+<script>
+    if (window.AOS) {
+        AOS.init({ duration: 800, once: true });
+    }
+</script>

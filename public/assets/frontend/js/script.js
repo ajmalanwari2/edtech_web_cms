@@ -36,6 +36,7 @@ $(function() {
 
 // Slick Brands Started
 $(function() {
+  if (!$('.brands_slider').length || typeof $.fn.slick !== 'function') return;
   $('.brands_slider').slick({
     slidesToShow: 4,
     slidesToScroll: 2,

@@ -5,3 +5,4 @@
 <link href="{{ asset('assets/frontend/css/fontello.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/frontend/css/style.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/frontend/css/rtl.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/frontend/css/site-refresh.css') }}" rel="stylesheet" />

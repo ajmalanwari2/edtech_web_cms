@@ -17,6 +17,7 @@ use App\Rules\ExistsSchoolForeignKey;
 use App\Rules\ExistsGradeForeignKey;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\ContactUsMail;
 
 class FrontEndController extends Controller
@@ -433,52 +434,61 @@ $grade = Grade::find($id);
     public function subject($lang, $grade_id, $subject_id)
     {
         $lang = $this->getLang();
-        $query = 'SELECT
- 	ch.id as chapter_id,
-    g.name AS grade_name,
-    s.name AS subject_name,
-    ch.number AS chapter_number,
-    ch.name as chapter_name,
-    sl.title,
-    sl.body,
-    sl.type
-FROM chapters ch
-JOIN subjects s ON s.id = ch.subject_id
-JOIN subjects_in_grades sig ON s.id = sig.subject_id
-JOIN grades g ON g.id = sig.grade_id
-Left join subject_lessons as sl on sl.chapter_id = ch.id
-    where  s.status = \'1\'
-    and s.id = :subject_id
-    AND g.id = :grade_id';
+        $subject = DB::table('subjects as s')
+            ->join('subjects_in_grades as sig', 's.id', '=', 'sig.subject_id')
+            ->join('grades as g', 'g.id', '=', 'sig.grade_id')
+            ->where('s.id', $subject_id)
+            ->where('g.id', $grade_id)
+            ->where('s.status', '1')
+            ->select('s.name as subject_name', 'g.name as grade_name', 'g.id as grade_id')
+            ->first();
 
-$subjectContents = DB::select($query, ['subject_id' => $subject_id, 'grade_id' => $grade_id]);
-//         $subjectContents = DB::select('select
-//         sl.id,
-//         sl.chapter_id,
-//         sl.title,
-//         sl.body,
-//         sl.type,
-//         g.name as grade_name,
-//         s.name as subject_name,
-//         ch.number as chapter_number
-//     from subject_lessons sl 
-//     join chapters ch 
-//         on sl.chapter_id=ch.id 
-//     join subjects as s
-//         on s.id = ch.subject_id
-//     join subjects_in_grades as sig
-//     	on s.id = sig.subject_id
-//     join grades as g
-//         on g.id = sig.grade_id    
-//         where sl.type=\'video\' or sl.type=\'file\' 
-//         and s.id='.$subject_id.'
-//         and g.id='.$grade_id.'
-//    ');
-        if ($this->lang == 'en') {
-            return view('pages.frontend.subject', compact('lang', 'subjectContents'));
-        } else {
-            return view('pages.frontend.subject_rtl', compact('lang', 'subjectContents'));
+        abort_unless($subject, 404);
+
+        // Query chapters once, rather than repeating each chapter for every resource.
+        $chapters = DB::table('chapters as ch')
+            ->where('ch.subject_id', $subject_id)
+            ->where('ch.grade_id', $grade_id)
+            ->where('ch.status', '1')
+            ->select('ch.id as chapter_id', 'ch.name as chapter_name', 'ch.number as chapter_number');
+
+        foreach (['video_body' => ['video', 'body'], 'video_title' => ['video', 'title'], 'book_body' => ['file', 'body']] as $alias => [$type, $column]) {
+            $chapters->selectSub(function ($query) use ($type, $column) {
+                $query->from('subject_lessons as sl')
+                    ->select('sl.'.$column)
+                    ->whereColumn('sl.chapter_id', 'ch.id')
+                    ->where('sl.type', $type)
+                    ->whereNull('sl.deleted_at')
+                    ->whereNotNull('sl.body')
+                    ->where('sl.body', '<>', '')
+                    ->orderByDesc('sl.id')
+                    ->limit(1);
+            }, $alias);
         }
+
+        $subjectContents = $chapters->orderBy('ch.id')->get()
+            ->sort(fn ($first, $second) => strnatcmp($first->chapter_number, $second->chapter_number)
+                ?: $first->chapter_id <=> $second->chapter_id)
+            ->values()
+            ->map(function ($chapter) {
+                $path = trim($chapter->book_body ?? '');
+                $chapter->book_url = null;
+
+                if (preg_match('#^https?://#i', $path)) {
+                    $chapter->book_url = $path;
+                } elseif ($path !== '' && !preg_match('#^(?:[a-z][a-z0-9+.-]*:|//)#i', $path)) {
+                    $relativePath = ltrim($path, '/');
+                    $exists = !str_starts_with($relativePath, 'storage/')
+                        || Storage::disk('public')->exists(rawurldecode(substr($relativePath, 8)));
+                    if ($exists) {
+                        $chapter->book_url = asset($relativePath);
+                    }
+                }
+
+                return $chapter;
+            });
+
+        return view('pages.frontend.subject', compact('lang', 'subject', 'subjectContents'));
     }
 
     // public function showVideo(Request $request)
